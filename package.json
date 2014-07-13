@@ -1,0 +1,26 @@
+{
+    "name": "framework",
+    "version": "0.1.0",
+    "dependencies": {
+        "express": "~4.0.0",
+        "compression": "~1.0.2",
+        "cookie-parser": "~1.0.1",
+        "cookie-session": "~1.0.2",
+        "body-parser": "~1.0.2",
+        "method-override": "~1.0.0",
+        "morgan": "~1.0.1",
+        "errorhandler": "*",
+        "lodash": "~2.4.1",
+        "when": "*",
+        "dependable": "~0.2.5",
+        "di": "~0.0.1",
+        "ejs": "*",
+        "logz-js": "*",
+        "configz": "*"
+    },
+    "devDependencies": {
+    },
+    "engines": {
+        "node": ">=0.10.0"
+    }
+}
