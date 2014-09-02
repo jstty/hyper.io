@@ -8,6 +8,18 @@ var mainService = {
         keyboard: "cat"
     },
     routes: [
+        {
+            api: "/hello",
+            resolve: {
+                //testResolver: testResolver
+                //authResolver: authResolver
+            },
+            controller: "user", // default "<service.directory>/controllers/<controller>.js"
+            method: {
+                get: "info" // defined in controller module"
+            }
+        },
+        /*
         // [resolver] -> [input validator] -> controller method -> OUT (json)
         {
             api: "/api/user/info",
@@ -74,6 +86,7 @@ var mainService = {
             // TODO
             static: "client/sub"
         }
+        */
     ]
 };
 

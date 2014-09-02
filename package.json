@@ -1,7 +1,36 @@
 {
-    "name": "framework",
+    "name": "hyper",
     "version": "0.1.0",
+    "description": "Go go go!",
+    "keywords": [
+        "node.js",
+        "javascript",
+        "browser",
+        "log",
+        "logger",
+        "stumpy"
+    ],
+    "author": {
+        "name": "Joseph E. Sutton",
+        "email": "joe@jstty.com",
+        "web": "http://www.jstty.com"
+    },
+    "license": {
+        "type": "MIT"
+    },
+    "repository": {
+        "type": "git",
+        "url": "http://github.com/jstty/hyper.git"
+    },
     "dependencies": {
+        "lodash": "~2.4.1",
+        "when": "~3.4.4",
+        "stumpy": "~0.6.0",
+        "configz": "~0.1.0",
+        "ejs": "~1.0.0",
+        "dependable": "~0.2.5",
+        "di": "~0.0.1",
+
         "express": "~4.0.0",
         "compression": "~1.0.2",
         "cookie-parser": "~1.0.1",
@@ -10,17 +39,19 @@
         "method-override": "~1.0.0",
         "morgan": "~1.0.1",
         "errorhandler": "*",
-        "lodash": "~2.4.1",
-        "when": "*",
-        "dependable": "~0.2.5",
-        "di": "~0.0.1",
-        "ejs": "*",
-        "logz-js": "*",
-        "configz": "*"
+
+        "hapi": "~6.2.2",
+        "bucker": "~1.0.11"
     },
     "devDependencies": {
+        "uglify-js":   "~2.4.15",
+        "chai":        "~1.9.1",
+        "mocha":       "~1.21.3"
     },
     "engines": {
         "node": ">=0.10.0"
+    },
+    "scripts": {
+        "test":         "mocha"
     }
 }

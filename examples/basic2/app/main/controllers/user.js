@@ -9,13 +9,12 @@ function UserCtrl($service, options){
 
     this.options  = _.merge({
     }, options);
-
 }
 
 UserCtrl.prototype.info = function($input, $done, $error, $fatal, $rawRequest, $rawResponse, $next) {
-    console.log("info", $input, $done, $error, $fatal, $rawRequest, $rawResponse, $next);
+    //console.log("info", $input, $done, $error, $fatal, $rawRequest, $rawResponse, $next);
 
     if($done) {
-        $done();
+        $done("hello world");
     }
 };

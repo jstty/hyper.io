@@ -1,3 +1,9 @@
 module.exports = {
-    services: {}
+    env: "dev",
+    hyper: {
+        logger: { // logz options
+            name:    "HyperServiceManager"
+        },
+        httpFramework: 'express'
+    }
 };
