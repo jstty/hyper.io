@@ -1,30 +1,83 @@
 hyper
 =====
 
-## TODO
-* 0.5.0 - Release
-    * Resolvers
-        * Passport Auth
-        * Basic Auth
-    * Add Hapi Framework
-        * Sessions
-        * Cookies
-    * Write better README (like stumpy)
-* 1.0.0 - Release
+## Features
+* Order out of Chaos
+    * Encourage Modular based design
+        * Services
+        * Controllers
+        * Resolvers
+        * Resources
+* Modern design
+    * DI
+    * Promise based
+* Production Ready
+    * Stats collection
+    * Route Throttling
     * Input validation
-        * Hapi
-            * https://github.com/hapijs/joi
-        * Express
+    * API Doc generation
+    * Configuration management
+    * Logging management
+    * Data-store service
+    * optional service base architecture
+* Plugins
+    * Configuration management (default: configz)
+    * Logging (default: stumpy)
+    * Monitor Server Stats (default: statsd)
+    * Template Engines
+    * Authentication
+        * basic auth
+        * SSO (via passport)
+
+## TODO
+* 0.2.0 - Release
+    * Add Resolvers
+    * Add plugin system
+        * pre/post function
+        * Add basic auth plugin
+
+* 0.3.0 - Release
+    * Add SSO (passport) auth plugin
+    * Add status code rules
+        * For example: on 404 redirect to '/'
+        * For example: on 401 redirect to '/login'
+
+* 0.4.0 - Release
+    * Add Resource plugins
+        * MongoDB
+        * MySQL
+        * Twitter
+
+* 0.5.0 - Release
+    * Polish and bug fixes
+    * Write better README
+
+* 0.6.0 - Release
+    * Input validation
+       * Express
             * https://github.com/ctavan/express-validator
             * https://github.com/petreboy14/express-joi
+
+* 0.7.0 - Release
     * Route Throttling
-        * Hapi
-            * https://github.com/glaubinix/hapi-api-rate-limit
         * Express
             * https://github.com/ivolo/express-rate
+
+* 0.8.0 - Release
     * API Doc generation
         * Express
             * https://github.com/fliptoo/swagger-express
-        * Hapi
+
+* 0.9.0 - Release
+    * Add Dependency injection to remaining Functions
+
+* 1.0.0 - Release
+    * Add Hapi Framework
+        * Sessions
+        * Cookies
+        * Input validation
+            * https://github.com/hapijs/joi
+        * Route Throttling
+            * https://github.com/glaubinix/hapi-api-rate-limit
+        * API Doc generation
             * https://github.com/glennjones/hapi-swagger
-    * Add Dependency injection to All Called Functions

@@ -1,14 +1,16 @@
 {
     "name": "hyper",
-    "version": "0.1.0",
+    "version": "0.1.5",
     "description": "Go go go!",
     "keywords": [
         "node.js",
         "javascript",
-        "browser",
-        "log",
-        "logger",
-        "stumpy"
+        "hyper",
+        "MVC",
+        "MVVC",
+        "framework",
+        "express",
+        "hapi"
     ],
     "author": {
         "name": "Joseph E. Sutton",
@@ -28,6 +30,7 @@
         "stumpy": "~0.6.0",
         "configz": "~0.1.0",
         "ejs": "~1.0.0",
+        "handlebars": "~2.0.0",
         "dependable": "~0.2.5",
         "di": "~0.0.1",
 
