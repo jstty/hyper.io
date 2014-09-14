@@ -37,16 +37,16 @@ hyper
         * Add basic auth plugin
 
 * 0.3.0 - Release
-    * Add SSO (passport) auth plugin
+    * Add Resource plugins
+        * MongoDB
+        * MySQL
+        * Twitter
     * Add status code rules
         * For example: on 404 redirect to '/'
         * For example: on 401 redirect to '/login'
 
 * 0.4.0 - Release
-    * Add Resource plugins
-        * MongoDB
-        * MySQL
-        * Twitter
+    * Add SSO (passport) auth plugin
 
 * 0.5.0 - Release
     * Polish and bug fixes

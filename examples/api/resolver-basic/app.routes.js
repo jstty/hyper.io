@@ -37,9 +37,10 @@ module.exports = [
     },
     {
         static: 'static'
-    },
-    {
-        _otherwise: {
+    }
+    /*
+    ,{
+        otherwise: {
             // TODO: status code rules
             '4xx': {
                 redirect: {
@@ -48,4 +49,5 @@ module.exports = [
             }
         }
     }
+    */
 ];
