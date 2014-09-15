@@ -1,6 +1,6 @@
 {
     "name": "hyper",
-    "version": "0.1.5",
+    "version": "0.1.8",
     "description": "Go go go!",
     "keywords": [
         "node.js",
@@ -42,6 +42,7 @@
         "method-override": "~1.0.0",
         "morgan": "~1.0.1",
         "errorhandler": "*",
+        "basic-auth": "~1.0.0",
 
         "hapi": "~6.2.2",
         "bucker": "~1.0.11"

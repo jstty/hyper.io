@@ -33,17 +33,16 @@ hyper
 * 0.2.0 - Release
     * Add Resolvers
     * Add plugin system
-        * pre/post function
+        * Add required option to route
         * Add basic auth plugin
+        * Add framework plugins
 
 * 0.3.0 - Release
     * Add Resource plugins
         * MongoDB
         * MySQL
         * Twitter
-    * Add status code rules
-        * For example: on 404 redirect to '/'
-        * For example: on 401 redirect to '/login'
+    * Add pre/post plugin function
 
 * 0.4.0 - Release
     * Add SSO (passport) auth plugin
