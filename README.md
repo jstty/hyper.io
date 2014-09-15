@@ -31,11 +31,11 @@ hyper
 
 ## TODO
 * 0.2.0 - Release
-    * Add Resolvers
-    * Add plugin system
-        * Add required option to route
-        * Add basic auth plugin
-        * Add framework plugins
+    * [x] Add Resolvers
+    * [x] Add plugin system
+        * [x] Add required option to route
+        * [x] Add basic auth plugin
+        * [ ] Add framework plugins
 
 * 0.3.0 - Release
     * Add Resource plugins
@@ -51,6 +51,7 @@ hyper
     * Polish and bug fixes
     * Write better README
 
+### -----------------
 * 0.6.0 - Release
     * Input validation
        * Express
