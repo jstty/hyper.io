@@ -1,6 +1,6 @@
 {
     "name": "hyper.io",
-    "version": "0.1.8",
+    "version": "0.1.9",
     "description": "Go go go!",
     "keywords": [
         "node.js",
@@ -33,6 +33,7 @@
         "handlebars": "~2.0.0",
         "dependable": "~0.2.5",
         "di": "~0.0.1",
+        "glob": "~4.0.6",
 
         "express": "~4.0.0",
         "compression": "~1.0.2",
