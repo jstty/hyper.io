@@ -5,5 +5,13 @@ var hyper = require('../../../../index.js');
 // Load's config files
 var app = hyper();
 
-// Start web server
-app.start();
+// load routes
+app.load({
+    directory: "custom_path"
+}).then(function(){
+    // done loading
+    // Start web server
+    return  app.start();
+}).then(function(){
+    console.log("Server Started");
+});
