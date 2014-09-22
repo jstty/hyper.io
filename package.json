@@ -1,6 +1,6 @@
 {
     "name": "hyper.io",
-    "version": "0.1.12",
+    "version": "0.1.13",
     "description": "Go go go!",
     "keywords": [
         "node.js",
@@ -27,8 +27,8 @@
     "dependencies": {
         "lodash": "~2.4.1",
         "when": "~3.4.4",
-        "stumpy": "~0.6.0",
-        "configz": "~0.1.0",
+        "stumpy": "0.6.x",
+        "transfuser": "0.2.x",
         "ejs": "~1.0.0",
         "handlebars": "~2.0.0",
         "dependable": "~0.2.5",

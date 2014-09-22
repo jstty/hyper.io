@@ -20,32 +20,35 @@ hyper
     * Logging management
     * Data-store service
     * optional service base architecture
-* Plugins
-    * Configuration management (default: configz)
-    * Logging (default: stumpy)
-    * Monitor Server Stats (default: statsd)
+* Middleware
+    * Framework
+        * Configuration management (default: transfuser)
+        * Logging (default: stumpy)
+        * Monitor Server Stats (default: statsd)
     * Template Engines
     * Authentication
         * basic auth
         * SSO (via passport)
 
+### -----------------
 ## TODO
 * 0.2.0 - Release
     * [x] Add Resolvers
-    * [x] Add plugin system
-        * [x] Add required option to route
-        * [x] Add basic auth plugin
-        * [ ] Add framework plugins
+    * [/] Add middleware system
+        * [/] Add required option to route
+        * [/] Add basic auth middleware
 
 * 0.3.0 - Release
     * Add Resource plugins
         * MongoDB
         * MySQL
         * Twitter
-    * Add pre/post plugin function
+    * Add additional functions to Middleware
+        * pre/post route processing
+        * framework
 
 * 0.4.0 - Release
-    * Add SSO (passport) auth plugin
+    * Add SSO (passport) auth middleware
 
 * 0.5.0 - Release
     * Polish and bug fixes
