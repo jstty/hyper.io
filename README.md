@@ -1,5 +1,7 @@
-hyper
+hyper.io
 =====
+
+This project is in early alpha stage, wait until 1.0.0 for production use.
 
 ## Features
 * Order out of Chaos
@@ -30,7 +32,6 @@ hyper
         * basic auth
         * SSO (via passport)
 
-### -----------------
 ## TODO
 * 0.2.0 - Release
     * [x] Add Resolvers
@@ -84,3 +85,4 @@ hyper
             * https://github.com/glaubinix/hapi-api-rate-limit
         * API Doc generation
             * https://github.com/glennjones/hapi-swagger
+
