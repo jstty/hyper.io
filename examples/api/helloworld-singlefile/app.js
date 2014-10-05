@@ -2,11 +2,8 @@
 
 var hyper = require('../../../index.js');
 
-// Load's config files
-var app = hyper();
-
-// load routes
-app.load({
+// load config and routes
+hyper().load({
     routes: [
         {
             api: "/hello",

@@ -27,26 +27,27 @@ This project is in early alpha stage, wait until 1.0.0 for production use.
         * Configuration management (default: transfuser)
         * Logging (default: stumpy)
         * Monitor Server Stats (default: statsd)
-    * Template Engines
+    * Template Engines (default: ejs)
     * Authentication
         * basic auth
         * SSO (via passport)
 
-## TODO
+## Current Release
 * 0.2.0 - Release
-    * [x] Add Resolvers
-    * [/] Add middleware system
-        * [/] Add required option to route
-        * [/] Add basic auth middleware
+    * Add Resolvers
+    * Add middleware system
+        * Add required option to route
+        * Add basic auth middleware
 
+## TODO
 * 0.3.0 - Release
-    * Add Resource plugins
-        * MongoDB
-        * MySQL
-        * Twitter
-    * Add additional functions to Middleware
-        * pre/post route processing
-        * framework
+    * [ ] Add Resource Manager
+        * [ ] MongoDB
+        * [ ] MySQL
+        * [ ] Twitter
+    * [ ] Add additional functions to Middleware
+        * [ ] pre/post route processing
+        * [ ] move framework to middleware
 
 * 0.4.0 - Release
     * Add SSO (passport) auth middleware
@@ -86,3 +87,5 @@ This project is in early alpha stage, wait until 1.0.0 for production use.
         * API Doc generation
             * https://github.com/glennjones/hapi-swagger
 
+## Example
+See Examples directory

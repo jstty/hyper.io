@@ -1,9 +1,9 @@
 'use strict';
 
-var hyper = require('../../../index.js');
+var hyper     = require('../../../index.js');
+var authBasic = require('hyper.io-express-auth-basic');
 
-// Load's config files
-var app = hyper();
+hyper().use(authBasic);
 
-// Start web server
-app.start();
+// Load's config files and start web server
+hyper().start();
