@@ -1,11 +1,12 @@
 {
     "name": "hyper.io",
-    "version": "0.1.13",
+    "version": "0.2.0",
     "description": "Go go go!",
     "keywords": [
         "node.js",
         "javascript",
         "hyper",
+        "hyper.io",
         "MVC",
         "MVVC",
         "framework",
@@ -27,13 +28,13 @@
     "dependencies": {
         "lodash": "~2.4.1",
         "when": "~3.4.4",
-        "stumpy": "0.6.x",
-        "transfuser": "0.2.x",
-        "ejs": "~1.0.0",
-        "handlebars": "~2.0.0",
         "dependable": "~0.2.5",
         "di": "~0.0.1",
         "glob": "~4.0.6",
+
+        "stumpy": "0.6.x",
+        "transfuser": "0.2.x",
+        "hyper.io-ejs": "*",
 
         "express": "~4.0.0",
         "compression": "~1.0.2",
@@ -43,7 +44,6 @@
         "method-override": "~1.0.0",
         "morgan": "~1.0.1",
         "errorhandler": "*",
-        "basic-auth": "~1.0.0",
 
         "hapi": "~6.2.2",
         "bucker": "~1.0.11"

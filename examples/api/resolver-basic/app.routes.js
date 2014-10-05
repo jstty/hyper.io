@@ -1,11 +1,13 @@
 
 /*
  * API:
- *      [required (plugin)] -> [input validator] -> [plugin-pre] -> [resolve] -> controller method -> [plugin-post] -> OUT (json)
+ *      [required (middleware)] -> [input validator] -> [pre (middleware)] -> [resolve] -> controller method -> [post (middleware)] -> OUT (json)
  *
  * View:
- *      [required (plugin)] -> [input validator] -> [plugin-pre] -> [resolve] -> controller method -> [plugin-post] -> template -> OUT (html)
+ *      [required (middleware)] -> [input validator] -> [pre (middleware)] -> [resolve] -> controller method -> [post (middleware)] -> template (middleware) -> OUT (html)
  */
+
+// required 'auth-basic' will auto require 'hyper.io-express-auth-basic'
 
 // Routes
 module.exports = [
