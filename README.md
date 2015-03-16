@@ -4,33 +4,40 @@ hyper.io
 This project is in early alpha stage, wait until 1.0.0 for production use.
 
 ## Features
-* Order out of Chaos
-    * Encourage Modular based design
-        * Services
-        * Controllers
-        * Resolvers
-        * Resources
-* Modern design
+* Auto Service Discovery
+* Encourage Modular based design
+    * Services
+    * Controllers
+    * Resolvers
+    * Resources
+* Modern
     * DI
-    * Promise based
+    * **Streams**
+    * **Promises**
 * Production Ready
-    * Stats collection
-    * Route Throttling
-    * Input validation
-    * API Doc generation
-    * Configuration management
-    * Logging management
-    * Data-store service
-    * optional service base architecture
-* Middleware
-    * Framework
-        * Configuration management (default: transfuser)
-        * Logging (default: stumpy)
-        * Monitor Server Stats (default: statsd)
+    * Session Management
+    * SSL Support
+    * Configuration Management
+    * Logging Management
+    * Secure
+    * **Stats Collection**
+    * **Throttling/Service Protection**
+    * **Input Validation**
+    * **API Doc Generation**
+* Middleware Plugins
+    * Configuration management (default: transfuser)
+    * Logging (default: stumpy)
     * Template Engines (default: ejs)
+    * **Monitor Server Stats (default: statsd)**
     * Authentication
         * basic auth
-        * SSO (via passport)
+        * **SSO (default: passport)**
+* CLI
+   * **Keep Alive** (default: forever)
+   * **Scaffolding Generator**
+   * **Build/Package/Deploy**
+
+Note: **Bolded items** are on the roadmap, not in the current release.
 
 ## Current Release
 * 0.2.0 - Release
@@ -39,53 +46,71 @@ This project is in early alpha stage, wait until 1.0.0 for production use.
         * Add required option to route
         * Add basic auth middleware
 
-## TODO
+## Next Release
 * 0.3.0 - Release
-    * [ ] Add Resource Manager
-        * [ ] MongoDB
-        * [ ] MySQL
-        * [ ] Twitter
     * [ ] Add additional functions to Middleware
-        * [ ] pre/post route processing
-        * [ ] move framework to middleware
+        * [ ] General middleware plugins
+            * [NPM install plugins based on config](https://docs.npmjs.com/api/install)
+        * [ ] pre/post route processing (one or list of handlers)
+	        * Possible make the route pipeline more dynamic
+	        * Global (All routes) pre/post route processing
 
+## Road Map
 * 0.4.0 - Release
-    * Add SSO (passport) auth middleware
+    * Add Resource Handler Type
+    * Move Express out of the framework to its own plugin (hyper.io-express)
+    * Resource Examples
+	    * 	MongoDB
+	    *  MySQL
+	    *  Twitter
 
 * 0.5.0 - Release
+    * Add SSO (passport) auth middleware
     * Polish and bug fixes
-    * Write better README
+    * API documentation
+    * Plugin manager support private NPM repos
 
-### -----------------
+---
 * 0.6.0 - Release
     * Input validation
-       * Express
+        * Express
             * https://github.com/ctavan/express-validator
             * https://github.com/petreboy14/express-joi
+    * Support External Session Stores
+        * Redis
+            * https://github.com/tj/connect-redis
 
 * 0.7.0 - Release
     * Route Throttling
         * Express
             * https://github.com/ivolo/express-rate
-
+    * Add CLI
+        * Keep Alive
+            * Forever - https://github.com/foreverjs/forever
+            * PM2 - https://github.com/Unitech/pm2
+    
 * 0.8.0 - Release
     * API Doc generation
         * Express
             * https://github.com/fliptoo/swagger-express
+    * CLI
+        * Add API Doc generation
 
 * 0.9.0 - Release
-    * Add Dependency injection to remaining Functions
+    * CLI
+        * Create Route for a Controller
+        * Create Basic Server with Service
+        * Build/Package/Deploy
+    * Support Clustering
 
+---
 * 1.0.0 - Release
-    * Add Hapi Framework
-        * Sessions
-        * Cookies
-        * Input validation
-            * https://github.com/hapijs/joi
-        * Route Throttling
-            * https://github.com/glaubinix/hapi-api-rate-limit
-        * API Doc generation
-            * https://github.com/glennjones/hapi-swagger
+    * Benchmarking Tools
+    * Polish and bug fixes
+    * More Documentation
+        * How To 
+            * Server production setup
+        * Update API
 
 ## Example
-See Examples directory
+See [Examples](https://github.com/jstty/hyper.io/tree/master/examples) directory
