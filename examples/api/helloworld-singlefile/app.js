@@ -15,7 +15,7 @@ hyper().load({
             }
         }
     ]
-}).then(function(){
+}).then(function(app){
     // done loading
     // Start web server
     return  app.start();

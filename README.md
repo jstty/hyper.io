@@ -48,21 +48,26 @@ Note: **Bolded items** are on the roadmap, not in the current release.
 
 ## Next Release
 * 0.3.0 - Release
-    * [ ] Add additional functions to Middleware
-        * [ ] General middleware plugins
-            * [NPM install plugins based on config](https://docs.npmjs.com/api/install)
-        * [ ] pre/post route processing (one or list of handlers)
-	        * Possible make the route pipeline more dynamic
-	        * Global (All routes) pre/post route processing
+    * [x] Add Resource type
+        * [x] Add Resource Example
+    * [x] Add Multi Service Example
+        * [x] Single File
+        * [x] Multi File
+    * [ ] Replace Middleware with yanpm plugin manager
 
 ## Road Map
 * 0.4.0 - Release
-    * Add Resource Handler Type
+    * General route pipeline
     * Move Express out of the framework to its own plugin (hyper.io-express)
     * Resource Examples
-	    * 	MongoDB
-	    *  MySQL
-	    *  Twitter
+	    * MongoDB
+	    * MySQL
+	    * Twitter
+	* Input Examples
+	    * POST - $input.body
+        * GET  - $input.query
+        * GET  - $input.hash
+        * GET  - $input.params
 
 * 0.5.0 - Release
     * Add SSO (passport) auth middleware
@@ -114,3 +119,22 @@ Note: **Bolded items** are on the roadmap, not in the current release.
 
 ## Example
 See [Examples](https://github.com/jstty/hyper.io/tree/master/examples) directory
+
+
+## API
+
+### Functions Dependency Injection
+* $rawRequest: route request
+* $rawResponse: route response
+* $next: route next function
+* $done: route done function
+* $error: route error function
+* $fatal: route fatal function
+* $session: req.session
+* $cookies: req.cookies
+* $input
+    * $input.body: POST data
+    * $input.hash: GET hash data
+    * $input.query: GET query data
+    * $input.params: GET query data
+
