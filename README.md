@@ -49,34 +49,35 @@ Note: **Bolded items** are on the roadmap, not in the current release.
 ## Next Release
 * 0.3.0 - Release
     * [x] Add Resource type
-        * [x] Add Resource Example
+        * [x] Resource Examples
+            * [x] Basic
+            * [x] SQLite
     * [x] Add Multi Service Example
         * [x] Single File
         * [x] Multi File
-    * [ ] Replace Middleware with yanpm plugin manager
+    * [ ] Add Auth middleware
+        * [ ] Passport
+        * [ ] Example
 
 ## Road Map
 * 0.4.0 - Release
+    * Replace Middleware with yanpm plugin manager
     * General route pipeline
     * Move Express out of the framework to its own plugin (hyper.io-express)
-    * Resource Examples
-	    * MongoDB
-	    * MySQL
-	    * Twitter
-	* Input Examples
-	    * POST - $input.body
+
+* 0.5.0 - Release
+    * Polish and bug fixes
+    * API documentation
+    * Plugin manager support private NPM repos
+    * Input Examples
+        * POST - $input.body
         * GET  - $input.query
         * GET  - $input.hash
         * GET  - $input.params
 
-* 0.5.0 - Release
-    * Add SSO (passport) auth middleware
-    * Polish and bug fixes
-    * API documentation
-    * Plugin manager support private NPM repos
-
 ---
 * 0.6.0 - Release
+    * Refactor Service Manager - breaking it into smaller modules
     * Input validation
         * Express
             * https://github.com/ctavan/express-validator

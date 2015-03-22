@@ -11,14 +11,15 @@ app.load({
         method: {
             get: function world($done, hello)
             {
-                $done( hello.world() );
+                hello.world()
+                    .then(function(data){
+                        $done(data);
+                    });
             }
         }
     }]
 });
 
 app.resource('hello', require('./resource.hello.js'));
-//app.resource('hello', './resource.hello.js');
-//app.resource('hello');
 
 app.start();
