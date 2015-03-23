@@ -7,11 +7,12 @@ var app = hyper();
 
 // load routes
 app.load({
+    name:      "app",
     directory: "custom_path"
 }).then(function(){
     // done loading
     // Start web server
-    return  app.start();
+    return app.start();
 }).then(function(){
     console.log("Server Started");
 });

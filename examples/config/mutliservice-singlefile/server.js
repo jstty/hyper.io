@@ -5,31 +5,29 @@ var hyper = require('../../../index.js');
 // load config and routes
 var app = hyper();
 
-app.load({
+app.start({
     services: {
-        "s1": {
+        "service1": {
             routes: [{
                 api: "/service1/hello",
                 method: {
-                    get: function hello($done)
+                    get: function hello($done, $config)
                     {
-                        $done( { hello: new Date()} );
+                        $done( { "source":"service1", "ts": new Date(), config: $config } );
                     }
                 }
             }]
         },
-        "s2": {
+        "service2": {
             routes: [{
                 api: "/service2/hello",
                 method: {
-                    get: function hello($done)
+                    get: function hello($done, $config)
                     {
-                        $done( { world: new Date()} );
+                        $done( { "source":"service2", "ts": new Date(), config: $config } );
                     }
                 }
             }]
         }
     }
 });
-
-app.start();

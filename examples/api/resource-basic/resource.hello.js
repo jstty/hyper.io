@@ -7,7 +7,7 @@ function resourceHello() {
 
 resourceHello.prototype.world = function() {
     return {
-        hello: "world",
+        hello: "world resource",
         ts: new Date()
     };
 };

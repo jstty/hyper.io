@@ -55,15 +55,25 @@ Note: **Bolded items** are on the roadmap, not in the current release.
     * [x] Add Multi Service Example
         * [x] Single File
         * [x] Multi File
-    * [ ] Add Auth middleware
+    * [x] Add Basic Auth Example
+    * [x] Add Config Examples
+    * [ ] Add Advanced Auth middleware
         * [ ] Passport
         * [ ] Example
 
 ## Road Map
 * 0.4.0 - Release
-    * Replace Middleware with yanpm plugin manager
+    * Tests
+        * Services
+        * Controllers
+        * Routes
+        * Resolvers
+        * Require
+        * Config
     * General route pipeline
+    * Replace Middleware with yanpm plugin manager
     * Move Express out of the framework to its own plugin (hyper.io-express)
+    * Move Hapi out of the framework to its own plugin (hyper.io-hapi)
 
 * 0.5.0 - Release
     * Polish and bug fixes
@@ -111,6 +121,7 @@ Note: **Bolded items** are on the roadmap, not in the current release.
 
 ---
 * 1.0.0 - Release
+    * Load tests
     * Benchmarking Tools
     * Polish and bug fixes
     * More Documentation

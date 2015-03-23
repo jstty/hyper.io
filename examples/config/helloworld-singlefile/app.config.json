@@ -1,0 +1,6 @@
+{
+    "env": "dev",
+    "app": {
+        "hello": "from config"
+    }
+}
