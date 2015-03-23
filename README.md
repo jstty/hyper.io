@@ -61,6 +61,7 @@ Note: **Bolded items** are on the roadmap, not in the current release.
     * [x] Add Basic Auth Example
     * [x] Add Config Examples
     * [x] Add DI to Services and Controllers Constructors
+    * [ ] Add services.get(&lt;name&gt;) using ServiceHandler passed through DI
     * [ ] Add Advanced Auth middleware
         * [ ] Passport
         * [ ] Example
