@@ -24,6 +24,8 @@ This project is in early alpha stage, wait until 1.0.0 for production use.
     * **Throttling/Service Protection**
     * **Input Validation**
     * **API Doc Generation**
+    * **Load tests**
+    * **Benchmarking Tools**
 * Middleware Plugins
     * Configuration management (default: transfuser)
     * Logging (default: stumpy)
@@ -70,8 +72,10 @@ Note: **Bolded items** are on the roadmap, not in the current release.
         * Controllers
         * Routes
         * Resolvers
-        * Require
-        * Config
+        * Requires
+        * Configs
+        * Factories
+        * Singletons
     * General route pipeline
     * Replace Middleware with yanpm plugin manager
     * Move Express out of the framework to its own plugin (hyper.io-express)
