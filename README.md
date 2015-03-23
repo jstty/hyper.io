@@ -54,6 +54,7 @@ Note: **Bolded items** are on the roadmap, not in the current release.
         * [x] Resource Examples
             * [x] Basic
             * [x] SQLite
+        * [x] Add Resource per Service
     * [x] Add Multi Service Example
         * [x] Single File
         * [x] Multi File
