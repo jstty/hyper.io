@@ -57,12 +57,14 @@ Note: **Bolded items** are on the roadmap, not in the current release.
         * [x] Multi File
     * [x] Add Basic Auth Example
     * [x] Add Config Examples
+    * [x] Add DI to Services and Controllers Constructors
     * [ ] Add Advanced Auth middleware
         * [ ] Passport
         * [ ] Example
 
 ## Road Map
 * 0.4.0 - Release
+    * Add Factory, Singleton type
     * Tests
         * Services
         * Controllers
