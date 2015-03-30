@@ -61,29 +61,32 @@ Note: **Bolded items** are on the roadmap, not in the current release.
     * [x] Add Basic Auth Example
     * [x] Add Config Examples
     * [x] Add DI to Services and Controllers Constructors
-    * [ ] Add services.get(&lt;name&gt;) using ServiceHandler passed through DI
     * [ ] Add Advanced Auth middleware
         * [ ] Passport
         * [ ] Example
 
 ## Road Map
 * 0.4.0 - Release
-    * Add Factory, Singleton type
-    * Tests
-        * Services
-        * Controllers
-        * Routes
-        * Resolvers
-        * Requires
-        * Configs
-        * Factories
-        * Singletons
-    * General route pipeline
-    * Replace Middleware with yanpm plugin manager
-    * Move Express out of the framework to its own plugin (hyper.io-express)
-    * Move Hapi out of the framework to its own plugin (hyper.io-hapi)
+    * [ ] Add $services DI
+        [ ] .forward(&lt;service name&gt;, &lt;method&gt;, &lt;route&gt;, [&lt;options&gt;])
+        [ ] .get(&lt;service name&gt;, [&lt;controller name&gt;])
+    * [ ] Add $di DI attribute to inject dependencies into a function.
+    * [ ] Add Factory, Singleton type
+    * [ ] Tests
+        * [ ] Services
+        * [ ] Controllers
+        * [ ] Routes
+        * [ ] Resolvers
+        * [ ] Requires
+        * [ ] Configs
+        * [ ] Factories
+        * [ ] Singletons
+    * [ ] General route pipeline
+    * [ ] Replace Middleware with yanpm plugin manager
+    * [ ] Move Express out of the framework to its own plugin (hyper.io-express)
 
 * 0.5.0 - Release
+    * Error checks (bullet proof)
     * Polish and bug fixes
     * API documentation
     * Plugin manager support private NPM repos

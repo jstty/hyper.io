@@ -1,62 +1,60 @@
 {
-    "name": "hyper.io",
-    "version": "0.2.12",
-    "description": "Go go go!",
-    "keywords": [
-        "node.js",
-        "javascript",
-        "hyper",
-        "hyper.io",
-        "MVC",
-        "MVVC",
-        "framework",
-        "express",
-        "hapi"
-    ],
-    "author": {
-        "name": "Joseph E. Sutton",
-        "email": "joe@jstty.com",
-        "web": "http://www.jstty.com"
-    },
-    "license": {
-        "type": "MIT"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/jstty/hyper.io.git"
-    },
-    "dependencies": {
-        "lodash": "~2.4.1",
-        "when": "~3.4.4",
-        "dependable": "~0.2.5",
-        "di": "~0.0.1",
-        "glob": "~4.0.6",
-
-        "stumpy": "0.6.x",
-        "transfuser": "0.2.x",
-        "hyper.io-ejs": "*",
-
-        "express": "~4.0.0",
-        "compression": "~1.0.2",
-        "cookie-parser": "~1.0.1",
-        "cookie-session": "~1.0.2",
-        "body-parser": "~1.0.2",
-        "method-override": "~1.0.0",
-        "morgan": "~1.0.1",
-        "errorhandler": "*",
-
-        "hapi": "~6.2.2",
-        "bucker": "~1.0.11"
-    },
-    "devDependencies": {
-        "uglify-js":   "~2.4.15",
-        "chai":        "~1.9.1",
-        "mocha":       "~1.21.3"
-    },
-    "engines": {
-        "node": ">=0.10.0"
-    },
-    "scripts": {
-        "test":         "mocha"
-    }
+  "name": "hyper.io",
+  "version": "0.2.12",
+  "description": "Go go go!",
+  "keywords": [
+    "node.js",
+    "javascript",
+    "hyper",
+    "hyper.io",
+    "MVC",
+    "MVVC",
+    "framework",
+    "express",
+    "hapi"
+  ],
+  "author": {
+    "name": "Joseph E. Sutton",
+    "email": "joe@jstty.com",
+    "web": "http://www.jstty.com"
+  },
+  "license": {
+    "type": "MIT"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jstty/hyper.io.git"
+  },
+  "dependencies": {
+    "lodash": "~2.4.1",
+    "when": "~3.4.4",
+    "dependable": "~0.2.5",
+    "di": "~0.0.1",
+    "glob": "~4.0.6",
+    "stumpy": "0.6.x",
+    "transfuser": "0.2.x",
+    "hyper.io-ejs": "*",
+    "express": "~4.0.0",
+    "compression": "~1.0.2",
+    "cookie-parser": "~1.0.1",
+    "cookie-session": "~1.0.2",
+    "body-parser": "~1.0.2",
+    "method-override": "~1.0.0",
+    "morgan": "~1.0.1",
+    "errorhandler": "*",
+    "hapi": "~6.2.2",
+    "bucker": "~1.0.11"
+  },
+  "devDependencies": {
+    "chai": "~1.9.1",
+    "mocha": "~1.21.3",
+    "supertest": "^0.15.0",
+    "uglify-js": "~2.4.15"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  }
 }
