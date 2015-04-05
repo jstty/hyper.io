@@ -1,18 +1,22 @@
 'use strict';
+var Hyper = require('../../../../index.js');
 
-var hyper = require('../../../../index.js');
+// !-- FOR TESTS
+var options = {};
+try {
+    options = JSON.parse(process.env.HYPER_OPTIONS);
+} catch(err){}
+// --!
 
 // Load's config files
-var app = hyper();
+var hyper = new Hyper(options);
 
 // load routes
-app.load({
+var app = hyper.load({
     name:      "app",
     directory: "custom_path"
-}).then(function(){
-    // done loading
-    // Start web server
-    return app.start();
-}).then(function(){
-    console.log("Server Started");
 });
+
+// !-- FOR TESTS
+module.exports = app;
+// --!

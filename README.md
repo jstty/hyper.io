@@ -61,6 +61,9 @@ Note: **Bolded items** are on the roadmap, not in the current release.
     * [x] Add Basic Auth Example
     * [x] Add Config Examples
     * [x] Add DI to Services and Controllers Constructors
+    * [x] Add Some Tests
+        * [x] Basic API - routes
+        * [x] Basic Services
     * [ ] Add Advanced Auth middleware
         * [ ] Passport
         * [ ] Example
@@ -146,9 +149,120 @@ See [Examples](https://github.com/jstty/hyper.io/tree/master/examples) directory
 
 ## API
 
+
+## General Pipeline
+
+* API:
+    * [required (middleware)] -> [input validator] -> [pre (middleware)] -> [resolve] -> controller method -> [post (middleware)] -> OUT (json)
+* View:
+    * [required (middleware)] -> [input validator] -> [pre (middleware)] -> [resolve] -> controller method -> [post (middleware)] -> template (middleware) -> OUT (html)
+
+```json
+{
+    pipeline: {
+        00: "router",
+        09: "inputValidator",
+        19: "resolver",
+        20: {
+            module: "passport", // default load require("hyper.io-"+ module name)
+            config: {
+                strategy: "basic",
+                session: false, // if basic, default: false
+                options: {}, // default: {}
+                users: [ // only for "basic" strategy
+                    { username: 'hello', password: 'world' }
+                ]
+                message: 'Login with user:"hello" pass:"world"'
+                // if basic, responseHandler is added to provide basic users DB check
+            }
+        },
+        21: {
+            module: require("hyper.io-passport"),
+            config: {
+                strategy: "google",
+                session: true,  // if !basic, default: true
+                options: {
+                    realm: "http://localhost:3000/", // default to current server
+                    returnURL: "http://localhost:3000/", // default realm + route.callback
+                },
+                responseHandler: function(identifier, profile, done) {
+                    // asynchronous verification, for effect...
+                    process.nextTick(function () {
+                        profile.identifier = identifier;
+                        return done(null, profile);
+                    });
+                },
+                routes: {
+                    logout: "/logout",      // default /logout
+                    auth: "/auth/google",   // default /auth/ + strategy name
+                    callback: "/auth/google/return" // default /auth/ + strategy name + /return
+                }
+            }
+        },
+        22: {
+            module: require("hyper.io-passport"),
+            config: {
+                strategy: "local",
+                responseHandler: function(username, password, done) {
+                   User.findOne({ username: username }, function(err, user) {
+                     if (err) { return done(err); }
+                     if (!user) { return done(null, false, { message: 'Unknown user ' + username }); }
+                     user.comparePassword(password, function(err, isMatch) {
+                       if (err) return done(err);
+                       if(isMatch) {
+                         return done(null, user);
+                       } else {
+                         return done(null, false, { message: 'Invalid password' });
+                       }
+                     });
+                   });
+                 },
+                serializeUser: function(user, done) {
+                   done(null, user.id);
+               },
+               deserializeUser: function(id, done) {
+                   User.findById(id, function (err, user) {
+                       done(err, user);
+                   });
+               }
+            }
+        },
+        97: "error",
+        98: "api",
+        99: "view"
+    },
+    routes: [
+        {
+            api: "/hello",
+            authBasicRequired: true,
+            method: {
+                get: function world($done)
+                {
+                    $done( { hello: "world1" } );
+                }
+            }
+        },
+        {
+            api: "/world",
+            authSSORequired: true,
+            method: {
+                get: function world($done)
+                {
+                    $done( { hello: "world2" } );
+                }
+            }
+        }
+    ]
+}
+```
+
 ### Functions Dependency Injection
-* $rawRequest: route request
-* $rawResponse: route response
+* $hyper: instance of the current hyper server
+* $q: promise library used in hyper (default: when)
+* _: util library used in hyper (default: lodash)
+* $logger: logger library used in hyper (default: stumpy)
+* $rawRequest: raw route request from httpFramework
+* $rawResponse: raw route response from httpFramework
 * $next: route next function
 * $done: route done function
 * $error: route error function

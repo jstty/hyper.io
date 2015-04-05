@@ -1,2 +1,3 @@
 'use strict';
-require('./custom_path/app.js');
+
+module.exports = require('./custom_path/app.js');

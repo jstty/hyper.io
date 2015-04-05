@@ -1,11 +1,17 @@
 'use strict';
+var Hyper = require('../../../index.js');
 
-var hyper = require('../../../index.js');
+// !-- FOR TESTS
+var options = {};
+try {
+    options = JSON.parse(process.env.HYPER_OPTIONS);
+} catch(err){}
+// --!
 
 // load config and routes
-var app = hyper();
+var hyper = new Hyper(options);
 
-app.load({
+var app = hyper.start({
     services: {
         "s1": {
             routes: [{
@@ -13,7 +19,7 @@ app.load({
                 method: {
                     get: function hello($done)
                     {
-                        $done( { hello: new Date()} );
+                        $done( { hello: "world", ts: new Date()} );
                     }
                 }
             }]
@@ -24,7 +30,7 @@ app.load({
                 method: {
                     get: function hello($done)
                     {
-                        $done( { world: new Date()} );
+                        $done( { hello: "world", ts: new Date()} );
                     }
                 }
             }]
@@ -32,4 +38,6 @@ app.load({
     }
 });
 
-app.start();
+// !-- FOR TESTS
+module.exports = app;
+// --!
