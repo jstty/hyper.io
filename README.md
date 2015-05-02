@@ -10,16 +10,17 @@ This project is in early alpha stage, wait until 1.0.0 for production use.
     * Controllers
     * Resolvers
     * Resources
+    * Factories
 * Modern
     * DI
+    * Promises
     * **Streams**
-    * **Promises**
 * Production Ready
-    * Session Management
-    * SSL Support
+    * **Session Management**
+    * **SSL Support**
     * Configuration Management
     * Logging Management
-    * Secure
+    * **Secure**
     * **Stats Collection**
     * **Throttling/Service Protection**
     * **Input Validation**
@@ -27,6 +28,7 @@ This project is in early alpha stage, wait until 1.0.0 for production use.
     * **Load tests**
     * **Benchmarking Tools**
 * Middleware Plugins
+    * Plugin manager (yanpm)
     * Configuration management (default: transfuser)
     * Logging (default: stumpy)
     * Template Engines (default: ejs)
@@ -38,44 +40,60 @@ This project is in early alpha stage, wait until 1.0.0 for production use.
    * **Keep Alive** (default: forever)
    * **Scaffolding Generator**
    * **Build/Package/Deploy**
+   * **Load tests**
+   * **Benchmarking Tools**
 
 Note: **Bolded items** are on the roadmap, not in the current release.
 
-## Current Release
-* 0.2.0 - Release
-    * Add Resolvers
-    * Add middleware system
-        * Add required option to route
-        * Add basic auth middleware
+### Releases
+## **Current Release**
+* 0.3.0 - Release
+    * Add Resource type
+        * Resource Examples
+            * Basic
+            * SQLite
+        * Add Resource per Service
+    * Add Multi Service Example
+        * Single File
+        * Multi File
+    * Add Basic Auth Example
+    * Add Config Examples
+    * Add DI to Services and Controllers Constructors
+    * API Tests
+        * Routes
+        * Controllers
+        * Services
+        * Resolvers
+        * Resources
+        * Custom paths
 
 ## Next Release
-* 0.3.0 - Release
-    * [x] Add Resource type
-        * [x] Resource Examples
-            * [x] Basic
-            * [x] SQLite
-        * [x] Add Resource per Service
-    * [x] Add Multi Service Example
-        * [x] Single File
-        * [x] Multi File
-    * [x] Add Basic Auth Example
-    * [x] Add Config Examples
-    * [x] Add DI to Services and Controllers Constructors
-    * [x] Add Some Tests
-        * [x] Basic API - routes
-        * [x] Basic Services
-    * [ ] Add Advanced Auth middleware
-        * [ ] Passport
-        * [ ] Example
+* 0.4.0 - Release
+    * [ ] General route pipeline
+    * [ ] Replace Middleware with yanpm plugin manager
+    * [ ] Move Express out of the framework to its own plugin (hyper.io-express)
+    * [ ] Add session store plugin
+    * [ ] Examples
+        * [ ] Session Store
+        * [ ] Auth middleware
+            * [ ] Basic
+            * [ ] JWT
+            * [ ] Passport
+        * [ ] Input
+            * POST - $input.body
+            * GET  - $input.query
+            * GET  - $input.hash
+            * GET  - $input.params
+    * [ ] Add $di DI attribute to inject dependencies into a function
+    * [ ] Add Factory, Singleton type
 
 ## Road Map
-* 0.4.0 - Release
+* 0.5.0 - Release
+    * [ ] Plugin manager support private NPM repos
     * [ ] Add $services DI
         [ ] .forward(&lt;service name&gt;, &lt;method&gt;, &lt;route&gt;, [&lt;options&gt;])
         [ ] .get(&lt;service name&gt;, [&lt;controller name&gt;])
-    * [ ] Add $di DI attribute to inject dependencies into a function.
-    * [ ] Add Factory, Singleton type
-    * [ ] Tests
+    * [ ] Unit Tests
         * [ ] Services
         * [ ] Controllers
         * [ ] Routes
@@ -84,20 +102,9 @@ Note: **Bolded items** are on the roadmap, not in the current release.
         * [ ] Configs
         * [ ] Factories
         * [ ] Singletons
-    * [ ] General route pipeline
-    * [ ] Replace Middleware with yanpm plugin manager
-    * [ ] Move Express out of the framework to its own plugin (hyper.io-express)
-
-* 0.5.0 - Release
-    * Error checks (bullet proof)
-    * Polish and bug fixes
-    * API documentation
-    * Plugin manager support private NPM repos
-    * Input Examples
-        * POST - $input.body
-        * GET  - $input.query
-        * GET  - $input.hash
-        * GET  - $input.params
+    * [ ] Error checks (bullet proof)
+    * [ ] Polish and bug fixes
+    * [ ] API documentation
 
 ---
 * 0.6.0 - Release
@@ -274,4 +281,12 @@ See [Examples](https://github.com/jstty/hyper.io/tree/master/examples) directory
     * $input.hash: GET hash data
     * $input.query: GET query data
     * $input.params: GET query data
+
+
+### Prev Release(s)
+* 0.2.0 - Release
+    * Add Resolvers
+    * Add middleware system
+        * Add required option to route
+        * Add basic auth middleware
 

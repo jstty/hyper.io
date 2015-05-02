@@ -14,22 +14,24 @@ var hyper = new Hyper(options);
 // load config and routes
 var app = hyper();
 
+// setup routes
 app.load({
     routes: [{
         api: "/hello",
         method: {
             get: function world($done, hello)
             {
-                hello.world()
-                    .then(function(data){
-                        $done(data);
-                    });
+                $done( hello.world() );
             }
         }
     }]
 });
 
 app.resource('hello', require('./resource.hello.js'));
+// OR
+// app.resource('hello', './resource.hello.js');
+// OR
+// app.resource('hello');
 
 app.start();
 

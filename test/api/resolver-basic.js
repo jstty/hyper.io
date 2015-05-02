@@ -6,9 +6,9 @@ module.exports = [
     function (server, done) {
         expect(server).to.not.be.null;
 
-        if (server) {
+        if(server) {
             request(server)
-                .get('/hello')
+                .get('/hello.new')
                 .expect('Content-Type', /json/)
                 .expect(200)
                 .end(function (err, res) {

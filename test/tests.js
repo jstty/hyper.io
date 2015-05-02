@@ -1,3 +1,4 @@
+var _       = require('lodash');
 var hyper   = require('../index.js');
 var path    = require('path');
 
@@ -6,44 +7,53 @@ var port = 9000;
 var servers = [];
 
 var list = {
-    "api": [
-        'helloworld-singlefile',
-        'helloworld-multifile',
-        'helloworld-custompath',
-        'multiservice-singlefile'
-    ]
+    "api": {
+          'helloworld-singlefile': 'app'
+        , 'helloworld-multifile':  'app'
+        , 'helloworld-custompath': 'app'
+
+        , 'multiservice-singlefile': 'app'
+        , 'multiservice-multifile':  'app'
+
+        , 'resolver-basic': 'app'
+
+        , 'resource-singlefile': 'app'
+        , 'resource-multifile':  'app'
+        , 'resource-sqlite':     'app'
+    },
+    "config": {
+          'helloworld-singlefile':   'app'
+        , 'helloworld-multifile':    'myserver'
+        , 'multiservice-singlefile': 'server'
+    }
 };
 
 // iterate over all test groups
-for(var item in list) {
+_.forEach(list, function(testList, item){
     // create group for each test
     describe(item, function() {
-        var testList = list[item];
-
         // iterate over all tests in group
-        testList.forEach(function(name) {
+        _.forEach(testList, function(appName, name) {
 
             // create sub-group for each test
-            describe(name, function() {
+            it(name, function() {
                 var _port = null;
-                var tests = require(path.join(rootDir, '.' + path.sep + 'test' + path.sep + item + path.sep + name +'.js'));
+                var dt = path.join(rootDir, '.' + path.sep + 'test' + path.sep + item + path.sep + name +'.js');
+                //console.log("dt:", dt, "\n");
+                var tests = require(dt);
 
                 // initialize server for test
                 before(function(done){
-                    var dir = testList.shift();
-                    // no more shortcut, exit
-                    if(!dir) { return done(); }
-
                     _port = port++;
 
-                    var d = path.join(rootDir, 'examples' + path.sep + item + path.sep + dir);
+                    var d = path.join(rootDir, 'examples' + path.sep + item + path.sep + name);
                     //console.log("d:", d, "\n");
                     process.chdir(d);
-                    //console.log("cwd:", process.cwd(), "\n");
+                    console.log("cwd:", process.cwd(), "\n");
 
                     servers[_port] = {};
                     servers[_port].config = config = {
-                        appName: "app",
+                        appName: appName,
                         env: "dev",
                         silent: true,
                         port: _port
@@ -54,17 +64,10 @@ for(var item in list) {
                     var app = null;
                     // try to load app.js file
                     try {
-                        var appFile = path.resolve('./app.js');
+                        var appFile = path.resolve('.' + path.sep + appName + '.js');
+                        console.log("appFile:", appFile, "\n");
                         app = require(appFile);
                     } catch(err) {}
-
-                    // if failed toload app.js file, try index.js
-                    if(!app) {
-                        try {
-                            var appFile = path.resolve('./index.js');
-                            app = require(appFile);
-                        } catch(err) {}
-                    }
 
                     if(app) {
                         app.then(function (_app) {
@@ -78,12 +81,12 @@ for(var item in list) {
 
                 // iterated over all sub-tests for a single group test
                 tests.forEach(function(test, idx) {
-                    it("Test "+idx, function(done) {
-                        test(servers[_port].server, done);
+                    it("Test "+idx, function() {
+                        test(servers[_port].server)
                     });
                 });
             });
         });
 
     });
-}
+});

@@ -15,10 +15,10 @@ module.exports = [
                     expect(err).to.be.null;
                     expect(res.body).to.have.keys("hello");
                     expect(res.body.hello).to.equal("world");
-                    done();
+                    if(done) done();
                 });
         } else {
-            done();
+            if(done) done();
         }
     }
 ];

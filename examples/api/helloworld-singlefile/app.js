@@ -10,6 +10,7 @@ try {
 
 // Load config and routes
 var hyper = new Hyper(options);
+
 var app = hyper
     .start({
         routes: [

@@ -1,9 +1,20 @@
 'use strict';
+var Hyper = require('../../../index.js');
 
-var hyper = require('../../../index.js');
+// !-- FOR TESTS
+var options = {};
+try {
+    options = JSON.parse(process.env.HYPER_OPTIONS);
+} catch(err){}
+// --!
+
+// Load config and routes
+var hyper = new Hyper(options);
+
+var app = hyper();
 
 // load config and routes
-hyper().start({
+app.start({
     routes: [
         {
             api: "/hello",
@@ -17,3 +28,7 @@ hyper().start({
         }
     ]
 });
+
+// !-- FOR TESTS
+module.exports = app;
+// --!
