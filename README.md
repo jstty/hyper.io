@@ -11,6 +11,7 @@ This project is in early alpha stage, wait until 1.0.0 for production use.
     * Resolvers
     * Resources
     * Factories
+    * Adapters
 * Modern
     * DI
     * Promises

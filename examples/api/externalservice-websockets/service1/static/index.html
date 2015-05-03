@@ -1,0 +1,21 @@
+<html>
+    <head>
+        <script src="http://localhost:12003/socket.io/socket.io.js"></script>
+        <script>
+            var socket = io.connect('http://localhost:12003');
+            socket.on('event', function (data) {
+                console.log('server event:', data);
+            });
+
+            // http://localhost:8000/service2/hello
+            function sendService2Hello() {
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', '/service2/hello', true);
+                xhr.send();
+            }
+        </script>
+    </head>
+    <body>
+        <button onclick="sendService2Hello()">Send</button>
+    </body>
+</html>

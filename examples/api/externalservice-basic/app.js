@@ -45,7 +45,7 @@ var app1 = hyper1.start({
             {
                 api: "/service2/world",
                 method: {
-                    get: function hello($done, $logger, $input)
+                    get: function world($done, $logger, $input)
                     {
                         var data = {
                             hello2: $input.query.hello,

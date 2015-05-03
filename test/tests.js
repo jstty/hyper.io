@@ -71,7 +71,7 @@ _.forEach(list, function(testList, item){
 
                     if(app) {
                         app.then(function (_app) {
-                            servers[_port].server = _app.httpFramework().getServer();
+                            servers[_port].server = _app.httpFramework().app();
                             done();
                         });
                     } else {

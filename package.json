@@ -10,8 +10,7 @@
     "MVC",
     "MVVC",
     "framework",
-    "express",
-    "hapi"
+    "express"
   ],
   "author": {
     "name": "Joseph E. Sutton",
