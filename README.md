@@ -69,10 +69,17 @@ Note: **Bolded items** are on the roadmap, not in the current release.
 
 ## Next Release
 * 0.4.0 - Release
+    * [x] Add Service Router
+        * [x] Add HTTP Adapter
+            * [x] GET
+            * [x] POST
+            * [x] PUT
+            * [x] DELETE
     * [x] Add $services DI
         * [/] .add(&lt;service name&gt;, [&lt;options&gt;]) `TODO: this is just a logical rep, needs to be add to the hyper managed services`
         * [x] .find(&lt;service name&gt;)
         * [x] .get(&lt;route&gt;, [&lt;query/hash data [URL format](https://nodejs.org/docs/latest/api/url.html#url_url)&gt;])
+    * [ ] Refactor Service Manager to support add service and General route pipeline
     * [ ] General route pipeline
     * [ ] Replace Middleware with yanpm plugin manager
     * [ ] Move Express out of the framework to its own plugin (hyper.io-express)
