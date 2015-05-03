@@ -1,6 +1,6 @@
 {
   "name": "hyper.io",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Go go go!",
   "keywords": [
     "node.js",
@@ -26,24 +26,25 @@
     "url": "https://github.com/jstty/hyper.io.git"
   },
   "dependencies": {
-    "lodash": "~2.4.1",
-    "when": "~3.4.4",
-    "dependable": "~0.2.5",
-    "di": "~0.0.1",
-    "glob": "~4.0.6",
-    "stumpy": "0.6.x",
-    "transfuser": "0.2.x",
-    "hyper.io-ejs": "*",
-    "express": "~4.0.0",
+    "body-parser": "~1.0.2",
+    "bucker": "~1.0.11",
     "compression": "~1.0.2",
     "cookie-parser": "~1.0.1",
     "cookie-session": "~1.0.2",
-    "body-parser": "~1.0.2",
+    "dependable": "~0.2.5",
+    "di": "~0.0.1",
+    "errorhandler": "*",
+    "express": "~4.0.0",
+    "glob": "~4.0.6",
+    "hapi": "~6.2.2",
+    "hyper.io-ejs": "*",
+    "lodash": "~2.4.1",
     "method-override": "~1.0.0",
     "morgan": "~1.0.1",
-    "errorhandler": "*",
-    "hapi": "~6.2.2",
-    "bucker": "~1.0.11"
+    "request": "^2.55.0",
+    "stumpy": "0.6.x",
+    "transfuser": "0.2.x",
+    "when": "~3.4.4"
   },
   "devDependencies": {
     "chai": "~1.9.1",

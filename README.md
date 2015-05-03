@@ -69,11 +69,16 @@ Note: **Bolded items** are on the roadmap, not in the current release.
 
 ## Next Release
 * 0.4.0 - Release
+    * [x] Add $services DI
+        * [/] .add(&lt;service name&gt;, [&lt;options&gt;]) `TODO: this is just a logical rep, needs to be add to the hyper managed services`
+        * [x] .find(&lt;service name&gt;)
+        * [x] .get(&lt;route&gt;, [&lt;query/hash data [URL format](https://nodejs.org/docs/latest/api/url.html#url_url)&gt;])
     * [ ] General route pipeline
     * [ ] Replace Middleware with yanpm plugin manager
     * [ ] Move Express out of the framework to its own plugin (hyper.io-express)
     * [ ] Add session store plugin
-    * [ ] Examples
+    * [/] Examples
+        * [x] External Services
         * [ ] Session Store
         * [ ] Auth middleware
             * [ ] Basic
@@ -90,9 +95,6 @@ Note: **Bolded items** are on the roadmap, not in the current release.
 ## Road Map
 * 0.5.0 - Release
     * [ ] Plugin manager support private NPM repos
-    * [ ] Add $services DI
-        [ ] .forward(&lt;service name&gt;, &lt;method&gt;, &lt;route&gt;, [&lt;options&gt;])
-        [ ] .get(&lt;service name&gt;, [&lt;controller name&gt;])
     * [ ] Unit Tests
         * [ ] Services
         * [ ] Controllers
