@@ -1,0 +1,10 @@
+#header {
+    font-size: 32px;
+    font-weight: bold;
+    text-align: center;
+    font-family: arial, sans-serif;
+    background: lightblue;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px;
+}

@@ -1,0 +1,10 @@
+#header {
+    font-size: 48px;
+    font-weight: bold;
+    text-align: center;
+    font-family: arial, sans-serif;
+    background: lightgray;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px;
+}
