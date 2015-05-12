@@ -10,7 +10,9 @@
     "MVC",
     "MVVC",
     "framework",
-    "express"
+    "express",
+    "microservices",
+    "microservice"
   ],
   "author": {
     "name": "Joseph E. Sutton",
