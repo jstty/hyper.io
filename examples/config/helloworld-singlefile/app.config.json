@@ -1,5 +1,6 @@
 {
     "env": "dev",
+    "port": "8001",
     "app": {
         "hello": "from config"
     }

@@ -9,10 +9,7 @@ try {
 // --!
 
 // Load config and routes
-var hyper = new Hyper(options);
-
-// Load's config files
-var app = hyper();
+var app = new Hyper(options);
 
 // Start web server
 app.start();
