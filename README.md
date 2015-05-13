@@ -71,6 +71,7 @@ Note: **Bolded items** are on the roadmap, not in the current release.
 
 ## Next Release
 * 0.4.0 - Release
+    * [x] Update Dependencies
     * [x] Add Service Router
         * [x] Add HTTP Adapter
             * [x] GET
@@ -116,6 +117,7 @@ Note: **Bolded items** are on the roadmap, not in the current release.
     * [ ] Error checks (bullet proof)
     * [ ] Polish and bug fixes
     * [ ] API documentation
+    * [ ] Websocket service router adapter
 
 ---
 * 0.6.0 - Release
@@ -160,6 +162,7 @@ Note: **Bolded items** are on the roadmap, not in the current release.
         * How To 
             * Server production setup
         * Update API
+    * Push to Service Store
 
 ## Example
 See [Examples](https://github.com/jstty/hyper.io/tree/master/examples) directory
