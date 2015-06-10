@@ -42,9 +42,9 @@
     "morgan": "~1.5.3",
     "request": "^2.55.0",
     "when": "~3.7.3",
-    "hyper.io-ejs": "0.0.x",
-    "stumpy": "0.6.x",
-    "transfuser": "0.2.x"
+    "hyper.io-ejs": "~0.0.1",
+    "stumpy": "~0.6.7",
+    "transfuser": "~0.2.0"
   },
   "devDependencies": {
     "chai": "~2.3.0",
