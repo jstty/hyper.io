@@ -1,6 +1,6 @@
 {
   "name": "hyper.io",
-  "version": "0.3.7",
+  "version": "0.3.8",
   "description": "Go go go!",
   "keywords": [
     "node.js",
@@ -43,7 +43,7 @@
     "request": "^2.55.0",
     "when": "~3.7.3",
     "hyper.io-ejs": "0.0.x",
-    "stumpy": "0.6.x",
+    "stumpy": "~0.6.8",
     "transfuser": "0.2.x"
   },
   "devDependencies": {
