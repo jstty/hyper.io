@@ -11,11 +11,8 @@ try {
 // load config and routes
 var hyper = new Hyper(options);
 
-// load config and routes
-var app = hyper();
-
 // setup routes
-app.load({
+hyper.load({
     routes: [{
         api: "/hello",
         method: {
@@ -27,14 +24,14 @@ app.load({
     }]
 });
 
-app.resource('hello', require('./resource.hello.js'));
+hyper.resource('hello', require('./resource.hello.js'));
 // OR
 // app.resource('hello', './resource.hello.js');
 // OR
 // app.resource('hello');
 
-app.start();
+hyper.start();
 
 // !-- FOR TESTS
-module.exports = app;
+module.exports = hyper;
 // --!
