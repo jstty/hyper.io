@@ -1,12 +1,21 @@
 'use strict';
-
-var hyper = require('../../../index.js');
+var Hyper = require('../../../index.js');
 var authBasic = require('hyper.io-express-auth-basic');
 
-hyper().use(authBasic);
+// !-- FOR TESTS
+var options = {};
+try {
+    options = JSON.parse(process.env.HYPER_OPTIONS);
+} catch(err){}
+// --!
+
+// Load config and routes
+var hyper = new Hyper(options);
+
+hyper.use(authBasic);
 
 // load config and routes
-hyper().start({
+hyper.start({
     routes: [
         {
             api: "/hello",
@@ -26,3 +35,8 @@ hyper().start({
         }
     ]
 });
+
+
+// !-- FOR TESTS
+module.exports = app;
+// --!

@@ -57,8 +57,8 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "prepublish": "node_modules/babel/bin/babel-node lib-es6 --out-dir lib",
-    "pretest": "",
+    "prepublish": "node node_modules/babel/bin/babel/index.js lib.es6 --out-dir lib",
+    "pretest": "node node_modules/babel/bin/babel/index.js lib.es6 --out-dir lib",
     "test": "mocha"
   }
 }
