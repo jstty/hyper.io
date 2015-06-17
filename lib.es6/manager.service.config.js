@@ -45,7 +45,11 @@ export default class ServiceManagerConfig {
         }
         else if ( _.isObject(config) && config.hasOwnProperty('services') ) {
             // has sub services
-            _.forEach(config.services, function (service) {
+            _.forEach(config.services, function (service, key) {
+                if(!service.hasOwnProperty('name')) {
+                    service.name = key;
+                }
+
                 this._normalizeService(service);
             }.bind(this));
         }
@@ -114,17 +118,20 @@ export default class ServiceManagerConfig {
 
         // if config does not contain routes
         // try to load a routes file using app name
-        if (!service.hasOwnProperty('routes')) {
+        if ( !service.hasOwnProperty('routes') ||
+             !(_.isArray(service.routes) && service.routes.length) ) {
             try {
                 // use directory as root to look for routes file
                 var fileSearchPath =
                     path.resolve(process.cwd(), service.directory.service)
                     + path.sep + '**' + path.sep
-                    + appName + '.routes.js';
+                    + service.name + '.routes.js';
+                //logger.log("fileSearchPath:", fileSearchPath);
                 var globs = glob.sync(fileSearchPath);
 
                 // remove all node_modules
                 globs = util.filterNodeModules(globs);
+                //logger.log("globs:", globs);
 
                 if (globs.length == 0) {
                     logger.info("Could not find a routes files and service defined (%s)", fileSearchPath);
