@@ -11,12 +11,9 @@ try {
 // load config and routes
 var hyper = new Hyper(options);
 
-// Load's config files
-var app = hyper();
-
 // Start web server
-app.start(['service1', 'service2']);
+hyper.start(['service1', 'service2']);
 
 // !-- FOR TESTS
-module.exports = app;
+module.exports = hyper;
 // --!

@@ -171,20 +171,30 @@ See [Examples](https://github.com/jstty/hyper.io/tree/master/examples) directory
 ## API
 
 
-## General Pipeline
+# Route + Pipeline Middleware
+    * input validator
+    * resolve -> setupResolver
+    * api || view -> setupDynamicRoute
+        * exec controller method
+        * template middleware
+    * static -> setupStaticRoute
+    * redirect -> setupRedirectRoute
+    * otherwise || default -> setupDefaultRoute
 
+
+## Dynamic Route Middleware Pipeline
 * API:
-    * [required (middleware)] -> [input validator] -> [pre (middleware)] -> [resolve] -> controller method -> [post (middleware)] -> OUT (json)
+    * [input validator] -> [resolve] -> [controller method] -> OUT (json)
 * View:
-    * [required (middleware)] -> [input validator] -> [pre (middleware)] -> [resolve] -> controller method -> [post (middleware)] -> template (middleware) -> OUT (html)
+    * [input validator] -> [resolve] -> [controller method] -> [template (middleware)] -> OUT (html)
 
 ```json
 {
-    pipeline: {
-        00: "router",
-        09: "inputValidator",
-        19: "resolver",
-        20: {
+    pipeline: [
+        "router",
+        "inputValidator",
+        "resolver",
+        {
             module: "passport", // default load require("hyper.io-"+ module name)
             config: {
                 strategy: "basic",
@@ -197,7 +207,7 @@ See [Examples](https://github.com/jstty/hyper.io/tree/master/examples) directory
                 // if basic, responseHandler is added to provide basic users DB check
             }
         },
-        21: {
+        {
             module: require("hyper.io-passport"),
             config: {
                 strategy: "google",
@@ -220,7 +230,7 @@ See [Examples](https://github.com/jstty/hyper.io/tree/master/examples) directory
                 }
             }
         },
-        22: {
+        {
             module: require("hyper.io-passport"),
             config: {
                 strategy: "local",
@@ -248,9 +258,9 @@ See [Examples](https://github.com/jstty/hyper.io/tree/master/examples) directory
                }
             }
         },
-        97: "error",
-        98: "api",
-        99: "view"
+        "error",
+        "api",
+        "view"
     },
     routes: [
         {

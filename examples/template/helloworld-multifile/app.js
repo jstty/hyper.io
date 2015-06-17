@@ -1,12 +1,18 @@
 'use strict';
+var Hyper = require('../../../index.js');
 
-var hyper = require('../../../index.js');
+// !-- FOR TESTS
+var options = {};
+try {
+    options = JSON.parse(process.env.HYPER_OPTIONS);
+} catch(err){}
+// --!
 
-// Load's config files
-var app = hyper();
+// Load config and routes
+var hyper = new Hyper(options);
 
 // Start web server
-app.start();
+hyper.start();
 
 // state will auto load all files
 // default app name is 'app'
@@ -15,3 +21,7 @@ app.start();
 //     /controllers/hello.js
 //     /views/hello.ejs
 //
+
+// !-- FOR TESTS
+module.exports = app;
+// --!

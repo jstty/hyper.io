@@ -13,11 +13,11 @@ var hyper = new Hyper(options);
 
 var authBasic = require('hyper.io-express-auth-basic');
 
-hyper().use(authBasic);
+hyper.use(authBasic);
 
 // Load's config files and start web server
-hyper().start();
+hyper.start();
 
 // !-- FOR TESTS
-module.exports = hyper();
+module.exports = hyper;
 // --!
