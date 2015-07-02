@@ -1,6 +1,6 @@
-var request = require('supertest');
-var chai    = require('chai');
-var expect  = chai.expect;
+var common  = require('../util/common.js');
+var request = common.request;
+var expect  = common.expect;
 
 module.exports = [
     function (server, done) {

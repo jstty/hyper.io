@@ -12,8 +12,8 @@ try {
 var hyper = new Hyper(options);
 
 // Start web server
-hyper.start(['service1', 'service2']);
+var app = hyper.start(['service1', 'service2']);
 
 // !-- FOR TESTS
-module.exports = hyper;
+module.exports = app;
 // --!

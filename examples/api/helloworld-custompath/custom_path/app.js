@@ -12,7 +12,7 @@ try {
 var hyper = new Hyper(options);
 
 // load routes
-var app = hyper.load({
+var app = hyper.start({
     name:      "app",
     directory: "custom_path"
 });

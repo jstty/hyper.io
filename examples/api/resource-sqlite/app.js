@@ -28,8 +28,8 @@ hyper.load({
 
 hyper.resource('hello', require('./resource.hello.js'));
 
-hyper.start();
+var app = hyper.start();
 
 // !-- FOR TESTS
-module.exports = hyper;
+module.exports = app;
 // --!

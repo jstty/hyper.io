@@ -9,17 +9,17 @@ try {
 // --!
 
 // Load config and routes
-var app = new Hyper(options || { port: 8002 } );
+var hyper = new Hyper(options || { port: 8002 } );
 
 // load config and routes
-app.start({
+var app = hyper.start({
     routes: [
         {
             api: "/hello",
             method: {
                 get: function world($done, $config, $logger)
                 {
-                    $logger.log('hello world!');
+                    $logger.log('hello world config:', $config);
                     $done( $config );
                 }
             }

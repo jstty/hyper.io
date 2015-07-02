@@ -30,8 +30,8 @@ hyper.resource('hello', require('./resource.hello.js'));
 // OR
 // app.resource('hello');
 
-hyper.start();
+var app = hyper.start();
 
 // !-- FOR TESTS
-module.exports = hyper;
+module.exports = app;
 // --!
