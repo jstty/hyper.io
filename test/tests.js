@@ -23,23 +23,29 @@ var list = {
 
         , 'resource-singlefile': 'app'
         , 'resource-multifile':  'app'
-        //, 'resource-sqlite':     'app' // TODO: fix this example
+        , 'resource-sqlite':     'app'
     }
     ,"config": {
-          //'helloworld-singlefile':   'app' // TODO: fix this example
-        //, 'helloworld-multifile':    'myserver' // TODO: fix this example
-        //, 'multiservice-singlefile': 'server' // TODO: fix this example
+          'helloworld-singlefile':   'app'
+        , 'helloworld-multifile':    'myserver'
+        , 'multiservice-singlefile': 'server'
     }
 };
+
+// increase listener limit
+process.setMaxListeners(0);
 
 // iterate over all test groups
 _.forEach(list, function(testList, item){
     // create group for each test
     describe(item, function() {
+        this.timeout(10 * 1000);
+
         // iterate over all tests in group
         _.forEach(testList, function(appName, name) {
 
             describe(name + " Tests", function() {
+
                 // create sub-group for each test
                 var _port = null;
                 var dt = path.join(rootDir, '.' + path.sep + 'test' + path.sep + item + path.sep + name +'.js');
@@ -71,19 +77,30 @@ _.forEach(list, function(testList, item){
                         var appFile = path.resolve('.' + path.sep + appName + '.js');
                         //console.log("appFile:", appFile, "\n");
                         app = require(appFile);
-                    } catch(err) {}
+                    } catch(err) {
+                        expect(err).not.to.be.null;
+                        console.error(err);
+                    }
 
                     //console.log("app:", !!app, "\n");
                     expect(app).not.to.be.null;
                     if(app) {
                         expect(app.then).not.to.be.null;
                         app.then(function (_app) {
+                            servers[_port].app = _app;
                             servers[_port].server = _app.httpFramework().app();
                             done();
                         });
                     } else {
                         done();
                     }
+                });
+
+                after(function(done){
+                    servers[_port].app.stop()
+                        .then(function(){
+                            done();
+                        });
                 });
 
                 // iterated over all sub-tests for a single group test

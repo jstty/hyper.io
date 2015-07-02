@@ -9,10 +9,10 @@ try {
 // --!
 
 // Load config and routes
-var app = new Hyper(options);
+var hyper = new Hyper(options);
 
 // Start web server
-app.start();
+var app = hyper.start();
 
 // !-- FOR TESTS
 module.exports = app;
