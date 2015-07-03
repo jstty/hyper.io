@@ -3,7 +3,7 @@
 [![Build Status](https://secure.travis-ci.org/jstty/hyper.io.png)](http://travis-ci.org/jstty/hyper.io) 
 [![Dependency Status](https://david-dm.org/jstty/hyper.io.png?theme=shields.io)](https://david-dm.org/jstty/hyper.io) 
 [![devDependency Status](https://david-dm.org/jstty/hyper.io/dev-status.png?theme=shields.io)](https://david-dm.org/jstty/hyper.io#info=devDependencies) 
-[![License](https://img.shields.io/npm/l/hyper.io.svg)
+![License](https://img.shields.io/npm/l/hyper.io.svg)
 [![NPM](https://nodei.co/npm/hyper.io.png)](https://nodei.co/npm/hyper.io/)
 =====
 
