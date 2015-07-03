@@ -1,5 +1,8 @@
 # hyper.io - MicroServices so fast they've gone plaid!
-[![Build Status](https://secure.travis-ci.org/jstty/hyper.io.png)](http://travis-ci.org/jstty/hyper.io) [![Dependency Status](https://david-dm.org/jstty/hyper.io.png?theme=shields.io)](https://david-dm.org/jstty/hyper.io) [![devDependency Status](https://david-dm.org/jstty/hyper.io/dev-status.png?theme=shields.io)](https://david-dm.org/jstty/hyper.io#info=devDependencies) [![NPM](https://nodei.co/npm/hyper.io.png)](https://nodei.co/npm/hyper.io/)
+[![bitHound Score](https://www.bithound.io/github/jstty/hyper.io/badges/score.svg)](https://www.bithound.io/github/jstty/hyper.io)
+[![Build Status](https://secure.travis-ci.org/jstty/hyper.io.png)](http://travis-ci.org/jstty/hyper.io) 
+[![Dependency Status](https://david-dm.org/jstty/hyper.io.png?theme=shields.io)](https://david-dm.org/jstty/hyper.io) [![devDependency Status](https://david-dm.org/jstty/hyper.io/dev-status.png?theme=shields.io)](https://david-dm.org/jstty/hyper.io#info=devDependencies) [![NPM](https://nodei.co/npm/hyper.io.png)](https://nodei.co/npm/hyper.io/)
+![License](https://img.shields.io/npm/l/hyper.io.svg)
 =====
 
 This project is in early alpha stage, wait until 1.0.0 for production use.
@@ -303,4 +306,9 @@ See [Examples](https://github.com/jstty/hyper.io/tree/master/examples) directory
     * Add middleware system
         * Add required option to route
         * Add basic auth middleware
+
+## License
+
+[MIT licence information](LICENSE).
+
 
