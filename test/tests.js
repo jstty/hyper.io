@@ -10,7 +10,7 @@ var request = common.request;
 var expect  = common.expect;
 
 var rootDir = process.cwd();
-var timeoutSec = 30;
+var timeoutSec = 90;
 
 var list = require('./tests-list.json');
 
