@@ -12,7 +12,7 @@ try {
 var hyper = new Hyper(options);
 
 // Start web server
-hyper.start();
+var app = hyper.start();
 
 // state will auto load all files
 // default app name is 'app'

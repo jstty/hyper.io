@@ -12,6 +12,8 @@ module.exports = [
                 .expect(200)
                 .end(function (err, res) {
                     expect(err).to.be.null;
+                    expect(res.body).to.be.a('object');
+
                     expect(res.body).to.have.keys("hello", "source");
                     expect(res.body.hello).to.equal("world");
                     expect(res.body.source).to.equal("service1");
@@ -30,6 +32,8 @@ module.exports = [
                 .expect(200)
                 .end(function (err, res) {
                     expect(err).to.be.null;
+                    expect(res.body).to.be.a('object');
+
                     expect(res.body).to.have.keys("hello", "source");
                     expect(res.body.hello).to.equal("world");
                     expect(res.body.source).to.equal("service2");

@@ -12,6 +12,8 @@ module.exports = [
                 .expect(200)
                 .end(function (err, res) {
                     expect(err).to.be.null;
+                    expect(res.body).to.be.a('object');
+
                     expect(res.body).to.have.keys(["config", "ts", "source"]);
                     expect(res.body.source).to.equal("service1");
                     expect(res.body.config.from).to.not.be.null;
@@ -31,6 +33,8 @@ module.exports = [
                 .expect(200)
                 .end(function (err, res) {
                     expect(err).to.be.null;
+                    expect(res.body).to.be.a('object');
+
                     expect(res.body).to.have.keys(["config", "ts", "source"]);
                     expect(res.body.source).to.equal("service2");
                     expect(res.body.config.from).to.not.be.null;

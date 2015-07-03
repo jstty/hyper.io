@@ -10,8 +10,8 @@ function HelloCtrl($logger){
 HelloCtrl.prototype.hello = function($done, $services)
 {
     $services.find('service2')
-        .get('/service2/world', { query: { hello: 'service2'} })
+        .get('/service2/world', { query: { hello: 'world1'} })
         .then(function(data){
-            $done( data );
+            $done( JSON.parse(data) );
         });
 };

@@ -5,7 +5,6 @@ var expect  = common.expect;
 module.exports = [
     function (server, done) {
         expect(server).to.not.be.null;
-
         if(server) {
             request(server)
                 .get('/service1/hello')
@@ -15,8 +14,8 @@ module.exports = [
                     expect(err).to.be.null;
                     expect(res.body).to.be.a('object');
 
-                    expect(res.body).to.have.keys(["hello", "ts"]);
-                    expect(res.body.hello).to.equal("world service 1 resource");
+                    expect(res.body).to.have.keys("hello2", "ts");
+                    expect(res.body.hello2).to.equal("world1");
                     if(done) done();
                 });
         } else {
@@ -25,7 +24,6 @@ module.exports = [
     },
     function (server, done) {
         expect(server).to.not.be.null;
-
         if(server) {
             request(server)
                 .get('/service2/hello')
@@ -35,12 +33,17 @@ module.exports = [
                     expect(err).to.be.null;
                     expect(res.body).to.be.a('object');
 
-                    expect(res.body).to.have.keys(["hello", "ts"]);
-                    expect(res.body.hello).to.equal("world service 2 resource");
+                    expect(res.body).to.have.keys("statusCode");
+                    expect(res.body.statusCode).to.equal(200);
                     if(done) done();
                 });
         } else {
             if(done) done();
         }
+    },
+
+    function (server, done) {
+        // TODO: Test Websocket connection
+        if(done) done();
     }
 ];

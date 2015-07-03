@@ -8,15 +8,14 @@ module.exports = [
 
         if(server) {
             request(server)
-                .get('/hello.new')
-                .expect('Content-Type', /json/)
+                .get('/hello')
+                .expect('Content-Type', /html/)
                 .expect(200)
                 .end(function (err, res) {
                     expect(err).to.be.null;
-                    expect(res.body).to.be.a('object');
+                    expect(res.text).to.be.a('string');
 
-                    expect(res.body).to.have.keys(["hello", "ts"]);
-                    expect(res.body.hello).to.equal("world");
+                    expect(res.text).to.match(/hello world - ([0-9])\w+/);
                     if(done) done();
                 });
         } else {
