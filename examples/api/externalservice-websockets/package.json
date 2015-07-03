@@ -1,0 +1,8 @@
+{
+  "name": "examples",
+  "version": "0.0.1",
+  "dependencies": {
+    "freeport": "^1.0.5",
+    "socket.io": "^1.3.5"
+  }
+}

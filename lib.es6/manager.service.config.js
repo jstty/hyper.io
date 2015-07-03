@@ -133,14 +133,14 @@ export default class ServiceManagerConfig {
                 globs = util.filterNodeModules(globs);
                 //logger.log("globs:", globs);
 
-                if (globs.length == 0) {
+                if (globs.length === 0) {
                     logger.info("Could not find a routes files and service defined (%s)", fileSearchPath);
                 }
                 else if (globs.length > 1) {
                     logger.warn("More than one route file found", globs);
                 }
 
-                if (globs.length == 1) {
+                if (globs.length === 1) {
                     var file = path.resolve(globs[0]);
                     service.routes = require(file);
                 }
@@ -174,11 +174,11 @@ export default class ServiceManagerConfig {
 
         // find it
         var file = "";
-
+        var globs = null;
         if(type === "service") {
             // look for service/app file
             file = path.sep + "service." + serviceName + ".js";
-            var globs = glob.sync('**' + file);
+            globs = glob.sync('**' + file);
 
             // remove all node_modules
             globs = util.filterNodeModules(globs);
@@ -193,7 +193,7 @@ export default class ServiceManagerConfig {
             }
 
             file = path.sep + serviceName + ".js";
-            var globs = glob.sync('**' + file);
+            globs = glob.sync('**' + file);
             // remove all node_modules
             globs = util.filterNodeModules(globs);
 
@@ -210,7 +210,7 @@ export default class ServiceManagerConfig {
             return process.cwd() + path.sep + "lib";
         } else {
             // start in service dir
-            var globs = glob.sync(serviceDir + path.sep + '**' + path.sep + type);
+            globs = glob.sync(serviceDir + path.sep + '**' + path.sep + type);
             // remove all node_modules
             globs = util.filterNodeModules(globs);
 
@@ -225,6 +225,6 @@ export default class ServiceManagerConfig {
             // default "<service.directory>/<type>"
             return serviceDir + path.sep + type;
         }
-    };
+    }
 }
 

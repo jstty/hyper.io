@@ -12,7 +12,7 @@ try {
 var hyper = new Hyper(options);
 
 // load routes
-hyper.start({
+var app = hyper.start({
     routes: [
         {
             view: "/hello",
@@ -22,7 +22,7 @@ hyper.start({
                 {
                     $done( {
                         hello: "world",
-                        ts: new Date()
+                        ts: Date.now()
                     } );
                 }
             }

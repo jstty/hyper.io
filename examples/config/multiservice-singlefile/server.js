@@ -9,9 +9,9 @@ try {
 // --!
 
 // Load config and routes
-var app = new Hyper(options);
+var hyper = new Hyper(options);
 
-app.start({
+var app = hyper.start({
     services: {
         "service1": {
             routes: [{

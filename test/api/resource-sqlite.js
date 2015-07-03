@@ -13,7 +13,9 @@ module.exports = [
                 .expect(200)
                 .end(function (err, res) {
                     expect(err).to.be.null;
-                    expect(res.body).to.have.keys("hello");
+                    expect(res.body).to.be.a('object');
+
+                    expect(res.body).to.have.keys(["hello", "ts"]);
                     expect(res.body.hello).to.equal("world");
                     if(done) done();
                 });

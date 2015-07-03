@@ -10,6 +10,6 @@ HelloCtrl.prototype.world = function($done)
 {
     $done( {
         hello: "world",
-        ts: new Date()
+        ts: Date.now()
     } );
 };
