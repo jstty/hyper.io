@@ -87,38 +87,31 @@ Note: **Bolded items** are on the roadmap, not in the current release.
         * [/] .add(&lt;service name&gt;, [&lt;options&gt;]) `TODO: this is just a logical rep, needs to be add to the hyper managed services`
         * [x] .find(&lt;service name&gt;)
         * [x] .get(&lt;route&gt;, [&lt;query/hash data [URL format](https://nodejs.org/docs/latest/api/url.html#url_url)&gt;])
-    * [ ] Refactor Service Manager to support add service and General route pipeline
-    * [ ] General route pipeline
-    * [ ] Replace Middleware with yanpm plugin manager
-    * [ ] Move Express out of the framework to its own plugin (hyper.io-express)
+    * [x] Add tests for all examples
+    * [x] Add auto-exec $init function waiting on return promise
     * [ ] Add session store plugin
     * [/] Examples
         * [x] External Services
         * [ ] Session Store
+        * [ ] Input
+            * [ ] POST - $input.body
+            * [ ] GET  - $input.query
+            * [ ] GET  - $input.hash
+            * [ ] GET  - $input.params
+
+## Road Map
+* 0.5.0 - Release
+    * [ ] Refactor Service Manager - breaking it into smaller modules
+    * [ ] Refactor Service Manager to support add service and General route pipeline
+    * [ ] General route pipeline
+    * [ ] Replace Middleware with yanpm plugin manager
+    * [ ] Move Express out of the framework to its own plugin (hyper.io-express)
+    * [ ] Plugin manager support private NPM repos
+    * Examples:
         * [ ] Auth middleware
             * [ ] Basic
             * [ ] JWT
             * [ ] Passport
-        * [ ] Input
-            * POST - $input.body
-            * GET  - $input.query
-            * GET  - $input.hash
-            * GET  - $input.params
-    * [ ] Add $di DI attribute to inject dependencies into a function
-    * [ ] Add Factory, Singleton type
-
-## Road Map
-* 0.5.0 - Release
-    * [ ] Plugin manager support private NPM repos
-    * [ ] Unit Tests
-        * [ ] Services
-        * [ ] Controllers
-        * [ ] Routes
-        * [ ] Resolvers
-        * [ ] Requires
-        * [ ] Configs
-        * [ ] Factories
-        * [ ] Singletons
     * [ ] Error checks (bullet proof)
     * [ ] Polish and bug fixes
     * [ ] API documentation
@@ -126,7 +119,9 @@ Note: **Bolded items** are on the roadmap, not in the current release.
 
 ---
 * 0.6.0 - Release
-    * Refactor Service Manager - breaking it into smaller modules
+    * Add $di DI attribute to inject dependencies into a function
+    * Add Factory, Singleton type
+    * Unit Tests
     * Input validation
         * Express
             * https://github.com/ctavan/express-validator

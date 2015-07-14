@@ -1,6 +1,6 @@
 {
   "name": "hyper.io",
-  "version": "0.3.11",
+  "version": "0.3.12",
   "description": "Go go go!",
   "keywords": [
     "node.js",
@@ -58,8 +58,6 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "prepublish": "node node_modules/babel/bin/babel/index.js lib.es6 --out-dir lib",
-    "pretest": "node node_modules/babel/bin/babel/index.js lib.es6 --out-dir lib",
     "test": "mocha"
   }
 }

@@ -27,6 +27,8 @@
     "helloworld-multifile":       "app"
   },
   "static": {
-    "helloworld-basic":           "app"
+    "helloworld-basic":           "app",
+    "helloworld-fromto":          "app",
+    "helloworld-otherwise":       "app"
   }
 }
