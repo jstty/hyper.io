@@ -93,11 +93,10 @@ Note: **Bolded items** are on the roadmap, not in the current release.
     * [/] Examples
         * [x] External Services
         * [ ] Session Store
-        * [ ] Input
-            * [ ] POST - $input.body
-            * [ ] GET  - $input.query
-            * [ ] GET  - $input.hash
-            * [ ] GET  - $input.params
+        * [x] Input
+            * [x] POST - $input.body
+            * [x] GET  - $input.query
+            * [x] GET  - $input.params
 
 ## Road Map
 * 0.5.0 - Release
@@ -292,7 +291,6 @@ See [Examples](https://github.com/jstty/hyper.io/tree/master/examples) directory
 * $cookies: req.cookies
 * $input
     * $input.body: POST data
-    * $input.hash: GET hash data
     * $input.query: GET query data
     * $input.params: GET query data
 
