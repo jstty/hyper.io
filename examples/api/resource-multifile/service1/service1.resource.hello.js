@@ -10,14 +10,14 @@ function resourceHello() {
 resourceHello.prototype.$init = function($q, $logger) {
     var deferer = $q.defer();
 
-    $logger.log('resourceHello Init Running...');
+    $logger.log('service1.resourceHello Init Running...');
     setTimeout(function() {
         this._data = {
             hello: "world service 1 resource",
             ts: new Date()
         };
 
-        $logger.log('resourceHello Init Done...');
+        $logger.log('service1.resourceHello Init Done.');
         deferer.resolve();
     }.bind(this), 2 * 1000);
 

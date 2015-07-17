@@ -12,6 +12,6 @@ HelloCtrl.prototype.hello = function($done, $services)
     $services.find('service2')
         .get('/service2/world', { query: { hello: 'world1'} })
         .then(function(data){
-            $done( JSON.parse(data) );
+            $done( data );
         });
 };

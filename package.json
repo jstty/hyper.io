@@ -1,7 +1,8 @@
 {
   "name": "hyper.io",
-  "version": "0.3.12",
+  "version": "0.3.13",
   "description": "Go go go!",
+  "homepage": "https://github.com/jstty/hyper.io#readme",
   "keywords": [
     "node.js",
     "javascript",
@@ -14,17 +15,26 @@
     "microservices",
     "microservice"
   ],
-  "author": {
-    "name": "Joseph E. Sutton",
-    "email": "joe@jstty.com",
-    "web": "http://www.jstty.com"
-  },
-  "license": {
-    "type": "MIT"
+  "bugs": {
+    "url": "https://github.com/jstty/hyper.io/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jstty/hyper.io.git"
+    "url": "git+https://github.com/jstty/hyper.io.git"
+  },
+  "author": {
+    "name": "Joseph E. Sutton",
+    "email": "joe@jstty.com",
+    "url": "http://www.jstty.com"
+  },
+  "maintainers": [
+    {
+      "name": "jstty",
+      "email": "joe@jstty.com"
+    }
+  ],
+  "license": {
+    "type": "MIT"
   },
   "dependencies": {
     "body-parser": "~1.13.1",
@@ -42,10 +52,10 @@
     "request": "^2.58.0",
     "stumpy": "~0.6.9",
     "transfuser": "0.2.x",
-    "when": "~3.7.3"
+    "when": "~3.7.3",
+    "babel": "^5.6.14"
   },
   "devDependencies": {
-    "babel": "^5.6.14",
     "chai": "~3.0.0",
     "cheerio": "^0.19.0",
     "freeport": "^1.0.5",
@@ -54,10 +64,10 @@
     "supertest": "~1.0.1",
     "uglify-js": "~2.4.23"
   },
-  "engines": {
-    "node": ">=0.10.0"
-  },
   "scripts": {
     "test": "mocha"
+  },
+  "engines": {
+    "node": ">=0.10.0"
   }
 }

@@ -128,10 +128,11 @@ export default class ServiceManagerConfig {
                     + service.name + '.routes.js';
                 //logger.log("fileSearchPath:", fileSearchPath);
                 var globs = glob.sync(fileSearchPath);
+                //logger.log("globs list:", globs);
 
                 // remove all node_modules
                 globs = util.filterNodeModules(globs);
-                //logger.log("globs:", globs);
+                //logger.log("globs after filter:", globs);
 
                 if (globs.length === 0) {
                     logger.info("Could not find a routes files and service defined (%s)", fileSearchPath);

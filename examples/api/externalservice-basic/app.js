@@ -23,7 +23,7 @@ hyper1.load({
                         $services.find('service2')
                             .get('/service2/world', { query: { hello: 'world1'} })
                             .then(function(data){
-                                $done( JSON.parse(data) );
+                                $done( data );
                             });
                     }
                 }
@@ -38,7 +38,7 @@ hyper1.load({
                         $services.find('service3')
                             .get('/service3/world', { query: { hello: 'world2'} } )
                             .then(function(data){
-                                $done( JSON.parse(data) );
+                                $done( data );
                             });
                     }
                 }

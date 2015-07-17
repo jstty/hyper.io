@@ -13,7 +13,7 @@ HelloCtrl.prototype.hello = function($done, $services)
     $services.find('wsService')
         .get('/ws/event/update', { query: { hello: 'wsService', ts1: (new Date()).getTime()} } )
         .then(function(data){
-            $done( JSON.parse(data) );
+            $done( data );
         });
 };
 
