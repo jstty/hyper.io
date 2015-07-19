@@ -17,7 +17,8 @@
     "externalservice-basic":      "app",
     "externalservice-websockets": "app",
 
-    "input-basic":                "app"
+    "input-basic":                "app",
+    "session-basic":              "app"
   },
   "config": {
     "helloworld-singlefile":      "app",

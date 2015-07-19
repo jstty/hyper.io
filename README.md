@@ -84,15 +84,13 @@ Note: **Bolded items** are on the roadmap, not in the current release.
             * [x] PUT
             * [x] DELETE
     * [x] Add $services DI
-        * [/] .add(&lt;service name&gt;, [&lt;options&gt;]) `TODO: this is just a logical rep, needs to be add to the hyper managed services`
         * [x] .find(&lt;service name&gt;)
         * [x] .get(&lt;route&gt;, [&lt;query/hash data [URL format](https://nodejs.org/docs/latest/api/url.html#url_url)&gt;])
     * [x] Add tests for all examples
     * [x] Add auto-exec $init function waiting on return promise
-    * [ ] Add session store plugin
-    * [/] Examples
+    * [x] Examples
         * [x] External Services
-        * [ ] Session Store
+        * [x] Sessions
         * [x] Input
             * [x] POST - $input.body
             * [x] GET  - $input.query
