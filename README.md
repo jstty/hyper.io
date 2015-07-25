@@ -1,13 +1,16 @@
 # hyper.io - MicroServices so fast they've gone plaid!
+[![Build Status](https://secure.travis-ci.org/jstty/hyper.io.png)](http://travis-ci.org/jstty/hyper.io)
 [![bitHound Score](https://www.bithound.io/github/jstty/hyper.io/badges/score.svg)](https://www.bithound.io/github/jstty/hyper.io)
-[![Build Status](https://secure.travis-ci.org/jstty/hyper.io.png)](http://travis-ci.org/jstty/hyper.io) 
-[![Dependency Status](https://david-dm.org/jstty/hyper.io.png?theme=shields.io)](https://david-dm.org/jstty/hyper.io) 
+[![Coverage Status](https://coveralls.io/repos/jstty/hyper.io/badge.svg?branch=master&service=github)](https://coveralls.io/github/jstty/hyper.io?branch=master)
+
+[![Dependency Status](https://david-dm.org/jstty/hyper.io.png?theme=shields.io)](https://david-dm.org/jstty/hyper.io)
 [![devDependency Status](https://david-dm.org/jstty/hyper.io/dev-status.png?theme=shields.io)](https://david-dm.org/jstty/hyper.io#info=devDependencies) 
+
 ![License](https://img.shields.io/npm/l/hyper.io.svg)
 [![NPM](https://nodei.co/npm/hyper.io.png)](https://nodei.co/npm/hyper.io/)
-=====
+----
 
-This project is in early alpha stage, wait until 1.0.0 for production use.
+**This project is in early alpha stage, wait until 0.5.0 for production use.**
 
 ## Features
 * Auto Service Discovery
@@ -23,7 +26,7 @@ This project is in early alpha stage, wait until 1.0.0 for production use.
     * Promises
     * **Streams**
 * Production Ready
-    * **Session Management**
+    * Session Management
     * **SSL Support**
     * Configuration Management
     * Logging Management
@@ -54,49 +57,21 @@ Note: **Bolded items** are on the roadmap, not in the current release.
 
 ### Releases
 ## **Current Release**
-* 0.3.0 - Release
-    * Add Resource type
-        * Resource Examples
-            * Basic
-            * SQLite
-        * Add Resource per Service
-    * Add Multi Service Example
-        * Single File
-        * Multi File
-    * Add Basic Auth Example
-    * Add Config Examples
-    * Add DI to Services and Controllers Constructors
-    * API Tests
-        * Routes
-        * Controllers
-        * Services
-        * Resolvers
-        * Resources
-        * Custom paths
+* 0.4.0 - Release
+    * Update Dependencies
+    * Add Service Router
+        * Add HTTP Adapter
+    * Add $services DI
+        * .find(&lt;service name&gt;)
+        * .get(&lt;route&gt;, [&lt;query/hash data [URL format](https://nodejs.org/docs/latest/api/url.html#url_url)&gt;])
+    * Add tests for all examples
+    * Add auto-exec $init function waiting on return promise
+    * Examples
+        * External Services
+        * Sessions
+        * Input
 
 ## Next Release
-* 0.4.0 - Release
-    * [x] Update Dependencies
-    * [x] Add Service Router
-        * [x] Add HTTP Adapter
-            * [x] GET
-            * [x] POST
-            * [x] PUT
-            * [x] DELETE
-    * [x] Add $services DI
-        * [x] .find(&lt;service name&gt;)
-        * [x] .get(&lt;route&gt;, [&lt;query/hash data [URL format](https://nodejs.org/docs/latest/api/url.html#url_url)&gt;])
-    * [x] Add tests for all examples
-    * [x] Add auto-exec $init function waiting on return promise
-    * [x] Examples
-        * [x] External Services
-        * [x] Sessions
-        * [x] Input
-            * [x] POST - $input.body
-            * [x] GET  - $input.query
-            * [x] GET  - $input.params
-
-## Road Map
 * 0.5.0 - Release
     * [ ] Refactor Service Manager - breaking it into smaller modules
     * [ ] Refactor Service Manager to support add service and General route pipeline
@@ -114,6 +89,7 @@ Note: **Bolded items** are on the roadmap, not in the current release.
     * [ ] API documentation
     * [ ] Websocket service router adapter
 
+## Road Map
 ---
 * 0.6.0 - Release
     * Add $di DI attribute to inject dependencies into a function
@@ -164,115 +140,7 @@ Note: **Bolded items** are on the roadmap, not in the current release.
 ## Example
 See [Examples](https://github.com/jstty/hyper.io/tree/master/examples) directory
 
-
 ## API
-
-
-## General Pipeline
-
-* API:
-    * [required (middleware)] -> [input validator] -> [pre (middleware)] -> [resolve] -> controller method -> [post (middleware)] -> OUT (json)
-* View:
-    * [required (middleware)] -> [input validator] -> [pre (middleware)] -> [resolve] -> controller method -> [post (middleware)] -> template (middleware) -> OUT (html)
-
-```json
-{
-    pipeline: {
-        00: "router",
-        09: "inputValidator",
-        19: "resolver",
-        20: {
-            module: "passport", // default load require("hyper.io-"+ module name)
-            config: {
-                strategy: "basic",
-                session: false, // if basic, default: false
-                options: {}, // default: {}
-                users: [ // only for "basic" strategy
-                    { username: 'hello', password: 'world' }
-                ]
-                message: 'Login with user:"hello" pass:"world"'
-                // if basic, responseHandler is added to provide basic users DB check
-            }
-        },
-        21: {
-            module: require("hyper.io-passport"),
-            config: {
-                strategy: "google",
-                session: true,  // if !basic, default: true
-                options: {
-                    realm: "http://localhost:3000/", // default to current server
-                    returnURL: "http://localhost:3000/", // default realm + route.callback
-                },
-                responseHandler: function(identifier, profile, done) {
-                    // asynchronous verification, for effect...
-                    process.nextTick(function () {
-                        profile.identifier = identifier;
-                        return done(null, profile);
-                    });
-                },
-                routes: {
-                    logout: "/logout",      // default /logout
-                    auth: "/auth/google",   // default /auth/ + strategy name
-                    callback: "/auth/google/return" // default /auth/ + strategy name + /return
-                }
-            }
-        },
-        22: {
-            module: require("hyper.io-passport"),
-            config: {
-                strategy: "local",
-                responseHandler: function(username, password, done) {
-                   User.findOne({ username: username }, function(err, user) {
-                     if (err) { return done(err); }
-                     if (!user) { return done(null, false, { message: 'Unknown user ' + username }); }
-                     user.comparePassword(password, function(err, isMatch) {
-                       if (err) return done(err);
-                       if(isMatch) {
-                         return done(null, user);
-                       } else {
-                         return done(null, false, { message: 'Invalid password' });
-                       }
-                     });
-                   });
-                 },
-                serializeUser: function(user, done) {
-                   done(null, user.id);
-               },
-               deserializeUser: function(id, done) {
-                   User.findById(id, function (err, user) {
-                       done(err, user);
-                   });
-               }
-            }
-        },
-        97: "error",
-        98: "api",
-        99: "view"
-    },
-    routes: [
-        {
-            api: "/hello",
-            authBasicRequired: true,
-            method: {
-                get: function world($done)
-                {
-                    $done( { hello: "world1" } );
-                }
-            }
-        },
-        {
-            api: "/world",
-            authSSORequired: true,
-            method: {
-                get: function world($done)
-                {
-                    $done( { hello: "world2" } );
-                }
-            }
-        }
-    ]
-}
-```
 
 ### Functions Dependency Injection
 * $hyper: instance of the current hyper server
@@ -299,6 +167,26 @@ See [Examples](https://github.com/jstty/hyper.io/tree/master/examples) directory
     * Add middleware system
         * Add required option to route
         * Add basic auth middleware
+
+* 0.3.0 - Release
+    * Add Resource type
+        * Resource Examples
+            * Basic
+            * SQLite
+        * Add Resource per Service
+    * Add Multi Service Example
+        * Single File
+        * Multi File
+    * Add Basic Auth Example
+    * Add Config Examples
+    * Add DI to Services and Controllers Constructors
+    * API Tests
+        * Routes
+        * Controllers
+        * Services
+        * Resolvers
+        * Resources
+        * Custom paths
 
 ## License
 

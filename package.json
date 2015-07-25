@@ -1,6 +1,6 @@
 {
   "name": "hyper.io",
-  "version": "0.3.14",
+  "version": "0.3.15",
   "description": "Go go go!",
   "homepage": "https://github.com/jstty/hyper.io#readme",
   "keywords": [
@@ -33,9 +33,7 @@
       "email": "joe@jstty.com"
     }
   ],
-  "license": {
-    "type": "MIT"
-  },
+  "license": "MIT",
   "dependencies": {
     "babel": "^5.6.14",
     "body-parser": "~1.13.1",
@@ -57,16 +55,19 @@
     "when": "~3.7.3"
   },
   "devDependencies": {
-    "chai": "~3.1.0",
+    "chai": "~3.2.0",
     "cheerio": "^0.19.0",
+    "coveralls": "^2.11.3",
     "freeport": "^1.0.5",
+    "istanbul": "^0.3.17",
     "mocha": "~2.2.5",
     "shelljs": "^0.5.1",
     "supertest": "~1.0.1",
     "uglify-js": "~2.4.23"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "istanbul --config=test/.istanbul.yml cover _mocha -- --check-leaks -t 5000 -b -R spec test/tests.js",
+    "posttest": "cat ./test/coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./test/coverage"
   },
   "engines": {
     "node": ">=0.10.0"
