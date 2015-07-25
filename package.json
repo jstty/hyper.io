@@ -67,7 +67,7 @@
   },
   "scripts": {
     "test": "istanbul --config=test/.istanbul.yml cover _mocha -- --check-leaks -t 5000 -b -R spec test/tests.js",
-    "posttest": "cat ./test/coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./test/coverage"
+    "coveralls": "cat ./test/coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
   },
   "engines": {
     "node": ">=0.10.0"
