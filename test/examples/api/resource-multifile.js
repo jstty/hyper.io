@@ -1,8 +1,6 @@
-var common  = require('../util/common.js');
+var common  = require('../../util/common.js');
 var request = common.request;
 var expect  = common.expect;
-
-var cheerio = require('cheerio');
 
 module.exports = [
     function (server, done) {
@@ -10,18 +8,15 @@ module.exports = [
 
         if(server) {
             request(server)
-                .get('/')
-                .expect('Content-Type', /html/)
+                .get('/service1/hello')
+                .expect('Content-Type', /json/)
                 .expect(200)
                 .end(function (err, res) {
                     expect(err).to.be.null;
-                    expect(res.text).to.be.a('string');
-                    expect(res.text).to.have.length.above(10);
-                    //console.log('helloworld-basic data:', res.text);
+                    expect(res.body).to.be.a('object');
 
-                    var $ = cheerio.load(res.text);
-                    expect($('#header').text()).to.equal("Hello World!");
-
+                    expect(res.body).to.have.keys(["hello", "ts"]);
+                    expect(res.body.hello).to.equal("world service 1 resource");
                     if(done) done();
                 });
         } else {
@@ -33,19 +28,19 @@ module.exports = [
 
         if(server) {
             request(server)
-                .get('/main.css')
-                .expect('Content-Type', /text/)
+                .get('/service2/hello')
+                .expect('Content-Type', /json/)
                 .expect(200)
                 .end(function (err, res) {
                     expect(err).to.be.null;
-                    expect(res.text).to.be.a('string');
-                    expect(res.text).to.have.length.above(10);
-                    //console.log('helloworld-basic data:', res.text);
+                    expect(res.body).to.be.a('object');
 
+                    expect(res.body).to.have.keys(["hello", "ts"]);
+                    expect(res.body.hello).to.equal("world service 2 resource");
                     if(done) done();
                 });
         } else {
             if(done) done();
         }
-    },
+    }
 ];

@@ -1,4 +1,4 @@
-var common  = require('../util/common.js');
+var common  = require('../../util/common.js');
 var request = common.request;
 var expect  = common.expect;
 
@@ -14,10 +14,8 @@ module.exports = [
                     expect(err).to.be.null;
                     expect(res.body).to.be.a('object');
 
-                    expect(res.body).to.have.keys(["config", "ts", "source"]);
-                    expect(res.body.source).to.equal("service1");
-                    expect(res.body.config.from).to.not.be.null;
-                    expect(res.body.config.from).to.equal("Service 1");
+                    expect(res.body).to.have.keys("hello2", "ts");
+                    expect(res.body.hello2).to.equal("world1");
                     if(done) done();
                 });
         } else {
@@ -35,15 +33,17 @@ module.exports = [
                     expect(err).to.be.null;
                     expect(res.body).to.be.a('object');
 
-                    expect(res.body).to.have.keys(["config", "ts", "source"]);
-                    expect(res.body.source).to.equal("service2");
-                    expect(res.body.config.from).to.not.be.null;
-                    expect(res.body.config.from).to.equal("Service 2");
+                    expect(res.body).to.have.keys("statusCode");
+                    expect(res.body.statusCode).to.equal(200);
                     if(done) done();
                 });
         } else {
             if(done) done();
         }
-    }
+    },
 
+    function (server, done) {
+        // TODO: Test Websocket connection
+        if(done) done();
+    }
 ];

@@ -1,6 +1,4 @@
 # hyper.io
-## MicroServices so fast they've gone plaid!
-
 [![Build Status](https://secure.travis-ci.org/jstty/hyper.io.png)](http://travis-ci.org/jstty/hyper.io)
 [![bitHound Score](https://www.bithound.io/github/jstty/hyper.io/badges/score.svg)](https://www.bithound.io/github/jstty/hyper.io)
 [![Coverage Status](https://coveralls.io/repos/jstty/hyper.io/badge.svg?branch=master&service=github)](https://coveralls.io/github/jstty/hyper.io?branch=master)
@@ -54,7 +52,7 @@
    * **Load tests**
    * **Benchmarking Tools**
 
-Note: **Bolded items** are on the roadmap, not in the current release.
+Note: **Bold items** are on the roadmap, not in the current release.
 
 ### Releases
 ## **Current Release**
@@ -73,7 +71,7 @@ Note: **Bolded items** are on the roadmap, not in the current release.
         * Input
 
 ## Next Release
-* 0.5.0 - Refactor and polish
+* 0.5.0 - Refactor and polish (0% completed)
     * [ ] Refactor Service Manager - breaking it into smaller modules
     * [ ] Refactor Service Manager to support add service and General route pipeline
     * [ ] General route pipeline

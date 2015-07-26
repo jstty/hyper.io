@@ -1,4 +1,4 @@
-var common  = require('../util/common.js');
+var common  = require('../../util/common.js');
 var request = common.request;
 var expect  = common.expect;
 
@@ -6,7 +6,7 @@ module.exports = [
     function (server, done) {
         expect(server).to.not.be.null;
 
-        if(server) {
+        if (server) {
             request(server)
                 .get('/hello')
                 .expect('Content-Type', /json/)

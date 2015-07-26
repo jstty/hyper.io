@@ -13,7 +13,9 @@
     "framework",
     "express",
     "microservices",
-    "microservice"
+    "microservice",
+    "micro service",
+    "micro-service"
   ],
   "bugs": {
     "url": "https://github.com/jstty/hyper.io/issues"

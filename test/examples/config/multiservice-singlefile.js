@@ -1,4 +1,4 @@
-var common  = require('../util/common.js');
+var common  = require('../../util/common.js');
 var request = common.request;
 var expect  = common.expect;
 
@@ -14,8 +14,10 @@ module.exports = [
                     expect(err).to.be.null;
                     expect(res.body).to.be.a('object');
 
-                    expect(res.body).to.have.keys("hello", "ts");
-                    expect(res.body.hello).to.equal("world");
+                    expect(res.body).to.have.keys(["config", "ts", "source"]);
+                    expect(res.body.source).to.equal("service1");
+                    expect(res.body.config.from).to.not.be.null;
+                    expect(res.body.config.from).to.equal("Service 1");
                     if(done) done();
                 });
         } else {
@@ -33,8 +35,10 @@ module.exports = [
                     expect(err).to.be.null;
                     expect(res.body).to.be.a('object');
 
-                    expect(res.body).to.have.keys("hello", "ts");
-                    expect(res.body.hello).to.equal("world");
+                    expect(res.body).to.have.keys(["config", "ts", "source"]);
+                    expect(res.body.source).to.equal("service2");
+                    expect(res.body.config.from).to.not.be.null;
+                    expect(res.body.config.from).to.equal("Service 2");
                     if(done) done();
                 });
         } else {

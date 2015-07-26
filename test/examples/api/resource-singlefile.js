@@ -1,4 +1,4 @@
-var common  = require('../util/common.js');
+var common  = require('../../util/common.js');
 var request = common.request;
 var expect  = common.expect;
 
@@ -15,8 +15,8 @@ module.exports = [
                     expect(err).to.be.null;
                     expect(res.body).to.be.a('object');
 
-                    expect(res.body).to.have.keys("hello");
-                    expect(res.body.hello).to.equal("world");
+                    expect(res.body).to.have.keys(["hello", "ts"]);
+                    expect(res.body.hello).to.equal("world resource");
                     if(done) done();
                 });
         } else {

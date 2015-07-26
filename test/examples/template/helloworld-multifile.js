@@ -1,4 +1,4 @@
-var common  = require('../util/common.js');
+var common  = require('../../util/common.js');
 var request = common.request;
 var expect  = common.expect;
 
@@ -9,14 +9,13 @@ module.exports = [
         if(server) {
             request(server)
                 .get('/hello')
-                .expect('Content-Type', /json/)
+                .expect('Content-Type', /html/)
                 .expect(200)
                 .end(function (err, res) {
-                    expect(err).to.be.null
-                    expect(res.body).to.be.a('object');
+                    expect(err).to.be.null;
+                    expect(res.text).to.be.a('string');
 
-                    expect(res.body).to.have.keys("hello");
-                    expect(res.body.hello).to.equal("world");
+                    expect(res.text).to.match(/hello world - ([0-9])\w+/);
                     if(done) done();
                 });
         } else {
