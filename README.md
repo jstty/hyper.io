@@ -1,8 +1,4 @@
-# hyper.io
-[![Build Status](https://secure.travis-ci.org/jstty/hyper.io.png)](http://travis-ci.org/jstty/hyper.io)
-[![bitHound Score](https://www.bithound.io/github/jstty/hyper.io/badges/score.svg)](https://www.bithound.io/github/jstty/hyper.io)
-[![Coverage Status](https://coveralls.io/repos/jstty/hyper.io/badge.svg?branch=master&service=github)](https://coveralls.io/github/jstty/hyper.io?branch=master)
-![License](https://img.shields.io/npm/l/hyper.io.svg)
+# hyper.io [![Build Status](https://secure.travis-ci.org/jstty/hyper.io.png)](http://travis-ci.org/jstty/hyper.io) [![bitHound Score](https://www.bithound.io/github/jstty/hyper.io/badges/score.svg)](https://www.bithound.io/github/jstty/hyper.io) [![Coverage Status](https://coveralls.io/repos/jstty/hyper.io/badge.svg?branch=master&service=github)](https://coveralls.io/github/jstty/hyper.io?branch=master) [![Coverage Status](http://coveralls.io/repos/jstty/hyper.io/badge.svg?service=github)](http://coveralls.io/github/jstty/hyper.io) ![License](https://img.shields.io/npm/l/hyper.io.svg)
 
 [![Dependency Status](https://david-dm.org/jstty/hyper.io.png?theme=shields.io)](https://david-dm.org/jstty/hyper.io)
 [![devDependency Status](https://david-dm.org/jstty/hyper.io/dev-status.png?theme=shields.io)](https://david-dm.org/jstty/hyper.io#info=devDependencies) 
@@ -72,10 +68,10 @@ Note: **Bold items** are on the roadmap, not in the current release.
 
 ## Next Release
 * 0.5.0 - Refactor and polish (0% completed)
+    * [ ] Replace Middleware with yanpm plugin manager
     * [ ] Refactor Service Manager - breaking it into smaller modules
     * [ ] Refactor Service Manager to support add service and General route pipeline
     * [ ] General route pipeline
-    * [ ] Replace Middleware with yanpm plugin manager
     * [ ] Move Express out of the framework to its own plugin (hyper.io-express)
     * [ ] Plugin manager support private NPM repos
     * Examples:
