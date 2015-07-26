@@ -5,11 +5,12 @@ var freeport = require('freeport');
 require('shelljs/global');
 
 var hyper   = require('../../index.js');
-var common  = require('../../util/common.js');
+var common  = require('../util/common.js');
 var request = common.request;
 var expect  = common.expect;
 
-var rootDir = __dirname;//process.cwd();
+var rootDir = __dirname;
+//console.log("root dir:", rootDir, "\n");
 var timeoutSec = 90;
 
 var list = require('./tests-list.json');
@@ -31,15 +32,17 @@ _.forEach(list, function(testList, item){
                 // create sub-group for each test
                 var server = null;
                 var dt = path.join(rootDir, '.' + path.sep + item + path.sep + name +'.js');
-                //console.log("dt:", dt, "\n");
+                //console.log("example test dir:", dt, "\n");
                 var tests = require(dt);
 
                 // initialize server for test
                 before(function(done){
                     freeport(function(err, port){
 
-                        var d = path.join(rootDir, 'examples' + path.sep + item + path.sep + name);
-                        //console.log("d:", d, "\n");
+                        var d = path.join(rootDir,
+                            '..' + path.sep + '..' + path.sep + 'examples' + path.sep +
+                            item + path.sep + name);
+                        //console.log("example dir:", d, "\n");
                         process.chdir(d);
                         exec('npm install', { silent: true });
                         //console.log("cwd:", process.cwd(), "\n");
