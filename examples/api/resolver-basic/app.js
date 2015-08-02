@@ -11,9 +11,7 @@ try {
 // load config and routes
 var hyper = new Hyper(options);
 
-var authBasic = require('hyper.io-express-auth-basic');
-
-hyper.use(authBasic);
+hyper.use('hyper.io-express-auth-basic');
 
 // Load's config files and start web server
 var app = hyper.start();
