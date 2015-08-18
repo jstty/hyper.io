@@ -1,6 +1,7 @@
 'use strict';
 var Hyper = require('../../../index.js');
-var freeport = require('freeport');
+var when = require('when/node');
+var freeport = when.lift( require('freeport') );
 
 // !-- FOR TESTS
 var options1 = {};
@@ -62,47 +63,50 @@ hyper1.load({
     }
 });
 
-var app1 = hyper1.start();
+var app1 = hyper1.start()
+    .then(function(){
+        return freeport()
+            .then(function(port){
+            // server3 options
+            var options2 = {
+                port: port,
+                silent: true
+            };
 
-freeport(function(err, port){
-    // server3 options
-    var options2 = {
-        port: port,
-        silent: true
-    };
+            hyper1.services().add({
+                name:     'service3',
+                adapter:  'http', // can be a object, for custom adapters
+                options: {
+                    hostname: '127.0.0.1',
+                    port: options2.port
+                }
+            });
 
-    hyper1.services().add({
-        name:     'service3',
-        adapter:  'http', // can be a object, for custom adapters
-        options: {
-            hostname: '127.0.0.1',
-            port: options2.port
-        }
-    });
+            // load config and routes
+            var hyper2 = new Hyper(options2);
 
-    // load config and routes
-    var hyper2 = new Hyper(options2);
-
-    hyper2.start({
-        services: {
-            "service3": {
-                routes: [{
-                    api: "/service3/world",
-                    method: {
-                        get: function hello($done, $input)
-                        {
-                            var data = {
-                                hello3: $input.query.hello,
-                                ts: new Date()
-                            };
-                            $done( data );
-                        }
+            return hyper2.start({
+                services: {
+                    "service3": {
+                        routes: [{
+                            api: "/service3/world",
+                            method: {
+                                get: function hello($done, $input)
+                                {
+                                    var data = {
+                                        hello3: $input.query.hello,
+                                        ts: new Date()
+                                    };
+                                    $done( data );
+                                }
+                            }
+                        }]
                     }
-                }]
-            }
-        }
+                }
+            });
+
+        });
     });
-});
 
 // !-- FOR TESTS
 module.exports = app1;

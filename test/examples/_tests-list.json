@@ -17,7 +17,11 @@
     "externalservice-basic":      "app",
     "externalservice-websockets": "app",
 
-    "input-basic":                "app"
+    "input-basic":                "app",
+    "session-basic":              "app",
+
+    "es6-generator-singlefile":   "app",
+    "es6-generator-multifile":    "app"
   },
   "config": {
     "helloworld-singlefile":      "app",

@@ -8,7 +8,7 @@ module.exports = [
         if(server) {
             request(server)
                 .get('/service1/hello')
-                .expect('Content-Type', /json/)
+                //.expect('Content-Type', /json/)
                 .expect(200)
                 .end(function (err, res) {
                     expect(err).to.be.null;
@@ -27,7 +27,7 @@ module.exports = [
         if(server) {
             request(server)
                 .get('/service2/hello')
-                .expect('Content-Type', /json/)
+                //.expect('Content-Type', /json/)
                 .expect(200)
                 .end(function (err, res) {
                     expect(err).to.be.null;
@@ -46,7 +46,7 @@ module.exports = [
         if(server) {
             request(server)
                 .get('/service2/world?hello=world3')
-                .expect('Content-Type', /json/)
+                //.expect('Content-Type', /json/)
                 .expect(200)
                 .end(function (err, res) {
                     expect(err).to.be.null;
