@@ -63,50 +63,54 @@ hyper1.load({
     }
 });
 
-var app1 = hyper1.start()
-    .then(function(){
-        return freeport()
-            .then(function(port){
-            // server3 options
-            var options2 = {
-                port: port,
-                silent: true
-            };
+var app1 = hyper1.start();
 
-            hyper1.services().add({
-                name:     'service3',
-                adapter:  'http', // can be a object, for custom adapters
-                options: {
-                    hostname: '127.0.0.1',
-                    port: options2.port
-                }
-            });
+app1.then(function() {
+    return freeport().then(function(port) {
+        // server3 options
+        var options2 = {
+            port: port,
+            silent: true
+        };
 
-            // load config and routes
-            var hyper2 = new Hyper(options2);
+        hyper1.services().add({
+            name:     'service3',
+            adapter:  'http', // can be a object, for custom adapters
+            options: {
+                hostname: '127.0.0.1',
+                port: options2.port
+            }
+        });
 
-            return hyper2.start({
-                services: {
-                    "service3": {
-                        routes: [{
-                            api: "/service3/world",
-                            method: {
-                                get: function hello($done, $input)
-                                {
-                                    var data = {
-                                        hello3: $input.query.hello,
-                                        ts: new Date()
-                                    };
-                                    $done( data );
-                                }
+        // load config and routes
+        var hyper2 = new Hyper(options2);
+
+        var app2 = hyper2.start({
+            services: {
+                "service3": {
+                    routes: [{
+                        api: "/service3/world",
+                        method: {
+                            get: function hello($done, $input)
+                            {
+                                var data = {
+                                    hello3: $input.query.hello,
+                                    ts: new Date()
+                                };
+                                $done( data );
                             }
-                        }]
-                    }
+                        }
+                    }]
                 }
-            });
+            }
+        });
 
+        return app2.then(function(){
+            // need to pass hyper back so tess will work
+            return hyper1;
         });
     });
+});
 
 // !-- FOR TESTS
 module.exports = app1;
