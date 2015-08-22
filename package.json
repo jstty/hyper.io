@@ -51,7 +51,7 @@
     "method-override": "~2.3.3",
     "morgan": "~1.6.0",
     "request": "^2.58.0",
-    "yanpm": "^0.4.2",
+    "yanpm": "^0.6.1",
     "stumpy": "~0.6.9",
     "transfuser": "0.2.x",
     "when": "~3.7.3"
