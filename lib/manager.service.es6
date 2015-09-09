@@ -25,6 +25,91 @@ var logger = null;
 
 module.exports = ServiceManager;
 
+/** ---------------------------------------------------
+ * Public Functions
+ * --------------------------------------------------- */
+class Service {
+    /**
+     * initialize service
+     */
+    init() {
+        // TODO
+    }
+
+    /**
+     * load service routes into http framework
+     */
+    load() {
+        // TODO
+    }
+
+    /**
+     * adds route to http framework
+     * @param routeConfig
+     */
+    addRoute(routeConfig) {
+        // TODO
+    }
+
+    /**
+     * adds resource to service
+     * @param resourceConfig
+     */
+    addResource(resourceConfig) {
+        // TODO
+    }
+}
+
+class ServiceManager {
+    /**
+     * initialize services
+     * load config
+     * normalize service configs
+     * check files exist
+     * any prep before loading the service into the http framework
+     */
+    init() {
+        // TODO
+
+        // load service plugins
+        //   - dynamic (api)
+        //   - template (view)
+        //   - static
+        //   - redirect
+        //   - otherwise
+        //   - auth
+        //   - ...
+    }
+
+    /**
+     * load services routes into http framework
+     * mostly a config to -> addService helper
+     */
+    load() {
+        // TODO
+    }
+
+    /**
+     * adds a service to the manager
+     * adds all routes defined in the config to http framework
+     * @param serviceConfig
+     * @returns Service Object
+     */
+    add(serviceConfig) {
+        // TODO
+    }
+
+    /**
+     * get Service Object from serviceId
+     * @param serviceId
+     * @returns Service Object
+     */
+    get(serviceId) {
+        // TODO
+    }
+}
+
+
 /* ---------------------------------------------------
  * Constructor
  * --------------------------------------------------- */
