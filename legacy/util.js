@@ -7,10 +7,10 @@
  *   when - https://github.com/cujojs/when
  *
  */
-var path   = require('path');
+var path = require('path');
 //
-var when   = require('when');
-var _      = require('lodash');
+var when = require('when');
+var _ = require('lodash');
 var stumpy = require('stumpy');
 
 // singleton logger
@@ -33,8 +33,8 @@ function randomString(len) {
     return out;
 }
 
-function promiseContinue(val){
-    return when.promise( function(resolve){
+function promiseContinue(val) {
+    return when.promise(function (resolve) {
         resolve(val);
     });
 }
@@ -43,25 +43,25 @@ function promiseContinue(val){
 function buildUri(options, path) {
     var uri = "";
 
-    if(options.protocol) {
-        uri += options.protocol+"//";
+    if (options.protocol) {
+        uri += options.protocol + "//";
     } else {
         uri += "http://";
     }
 
-    if(options.host) {
+    if (options.host) {
         uri += options.host;
     } else {
         uri += "localhost";
     }
 
-    if(options.port) {
-        uri += ":"+options.port;
+    if (options.port) {
+        uri += ":" + options.port;
     }
 
-    if(path && _.isString(path)) {
+    if (path && _.isString(path)) {
         // make sure first char is a slash
-        if(path.charAt(0) != '/') {
+        if (path.charAt(0) != '/') {
             uri += "/";
         }
         uri += path;
@@ -70,15 +70,14 @@ function buildUri(options, path) {
     return uri;
 }
 
-function logger(options){
-    if(_.isString(options)) {
+function logger(options) {
+    if (_.isString(options)) {
         _loggerOptions.name = options;
-    }
-    else if(_.isObject(options)) {
+    } else if (_.isObject(options)) {
         _loggerOptions = _.merge(_loggerOptions, options);
     }
 
-    if(!_logger) {
+    if (!_logger) {
         _logger = stumpy(_loggerOptions);
         return _logger;
     } else {
@@ -91,21 +90,20 @@ function logger(options){
 }
 
 function filterNodeModules(list) {
-    return _.filter(list, function(item){
+    return _.filter(list, function (item) {
         item = item.replace(process.cwd(), '');
-        return (item.indexOf('node_modules') == -1);
+        return item.indexOf('node_modules') == -1;
     });
 }
 
 // http://stackoverflow.com/questions/10865347/node-js-get-file-extension
 function getFileExtension(filename) {
-    var ext = path.extname(filename||'').split('.');
+    var ext = path.extname(filename || '').split('.');
     return ext[ext.length - 1];
 }
 
-
-function version(cVersion){
-    if(cVersion) {
+function version(cVersion) {
+    if (cVersion) {
         _currentVersion = cVersion;
     }
 
@@ -115,24 +113,23 @@ function version(cVersion){
 function isES6() {
     try {
         eval('class testES6{ constructor(){} }');
-    } catch(err) {
+    } catch (err) {
         return false;
     }
 
     return true;
 }
 
-
 module.exports = {
-    promiseContinue:   promiseContinue,
-    buildURI:          buildUri,
+    promiseContinue: promiseContinue,
+    buildURI: buildUri,
     string: {
-        capitalize:    capitalize,
-        random:        randomString
+        capitalize: capitalize,
+        random: randomString
     },
-    logger:            logger,
-    getFileExtension:  getFileExtension,
+    logger: logger,
+    getFileExtension: getFileExtension,
     filterNodeModules: filterNodeModules,
-    version:           version,
-    isES6:             isES6
+    version: version,
+    isES6: isES6
 };
