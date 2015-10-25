@@ -187,7 +187,7 @@ function ServiceManager(hyperCore, appConfig, servicesManifest, middleware, http
     this._resources = {};
 
     this._serviceMiddlewareManager = new ServiceMiddlewareManager(logger, this._httpFramework);
-    this._serviceMiddlewareManager.add('DefaultRoutes');
+    this._serviceMiddlewareManager.add('defaultRoutes');
 }
 
 /* ---------------------------------------------------
