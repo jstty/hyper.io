@@ -7,10 +7,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var logger = null;
 
 var ServiceMiddleware = (function () {
-  function ServiceMiddleware(_logger, _httpFramework) {
+  function ServiceMiddleware(_logger, _httpFramework, _middleware, _serviceManager) {
     _classCallCheck(this, ServiceMiddleware);
 
     logger = _logger;
+    this._serviceManager = _serviceManager;
+    this._middleware = _middleware;
     this._httpFramework = _httpFramework;
   }
 

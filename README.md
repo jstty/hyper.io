@@ -70,15 +70,12 @@ Note: **Bold items** are on the roadmap, not in the current release.
         * Input
 
 ## Next Release
-* 0.5.0 - Refactor and polish (0% completed)
+* 0.5.0 - Refactor and polish (50% completed)
     * [x] Replace Middleware with yanpm plugin manager
-    * [ ] Refactor Service Manager - breaking it into smaller modules
-    * [ ] Refactor Service Manager to support add service and General route pipeline
-    * [ ] General route pipeline
-    * [ ] Move Express out of the framework to its own plugin (hyper.io-express)
+    * [x] Refactor Service Manager - breaking it into smaller modules
     * Examples:
-        * [ ] Auth middleware
-            * [ ] Basic
+        * [/] Auth middleware
+            * [x] Basic
             * [ ] JWT
             * [ ] Passport
     * [ ] Error checks (bullet proof)
@@ -88,9 +85,10 @@ Note: **Bold items** are on the roadmap, not in the current release.
 ## Road Map
 ---
 * 0.6.0 - Release
-    * Add $di DI attribute to inject dependencies into a function
-    * Add Websocket service router adapter
-    * Input validation
+    * [ ] Add $di DI attribute to inject dependencies into a function
+    * [ ] Move Express out of the framework to its own plugin (hyper.io-express)
+    * [ ] General route pipeline
+    * [ ] Input validation
         * Express
             * https://github.com/ctavan/express-validator
             * https://github.com/petreboy14/express-joi
@@ -98,6 +96,7 @@ Note: **Bold items** are on the roadmap, not in the current release.
 * 0.7.0 - Release
     * add Koa support
     * Plugin manager support private NPM repos
+    * Add Websocket service router adapter
     * Unit Tests
     * Route Throttling
         * Express

@@ -10,6 +10,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== 'function' 
 
 var _ = require('lodash');
 var fs = require('fs');
+var path = require('path');
 
 var ServiceMiddleware = require('./service.middleware.js');
 
@@ -18,33 +19,47 @@ var logger = null;
 var DefaultRoutes = (function (_ServiceMiddleware) {
   _inherits(DefaultRoutes, _ServiceMiddleware);
 
-  function DefaultRoutes(_logger, _httpFramework) {
+  function DefaultRoutes(_logger, _httpFramework, _middleware, _serviceManager) {
     _classCallCheck(this, DefaultRoutes);
 
-    _get(Object.getPrototypeOf(DefaultRoutes.prototype), 'constructor', this).call(this, _logger, _httpFramework);
+    _get(Object.getPrototypeOf(DefaultRoutes.prototype), 'constructor', this).call(this, _logger, _httpFramework, _middleware, _serviceManager);
     logger = _logger;
 
-    this.handles = ['otherwise', 'default'];
+    this.handles = ['otherwise', 'default', 'static', 'redirect'];
   }
 
   /**
    * Setup DefaultRoutes
+   * TODO: make return a promise
    * @param service
    * @param defaultConfig
    */
 
   _createClass(DefaultRoutes, [{
     key: 'setup',
-    value: function setup(defaultConfig, service, controller, route) {
-      //logger.log('start DefaultRoutes setup defaultConfig:', defaultConfig);
+    value: function setup(handleKey, defaultConfig, service, controller, route) {
+      //logger.log('start DefaultRoutes handleKey:', handleKey);
 
-      if (defaultConfig.hasOwnProperty('static')) {
+      if (handleKey === 'static') {
+        logger.group("Static Route");
+        //logger.log('defaultConfig:', JSON.stringify(defaultConfig, null, 2));
+        this._addStaticRoute(service, defaultConfig);
+        logger.groupEnd('');
+      } else if (defaultConfig.hasOwnProperty('static')) {
+        logger.group("Static Route");
+        //logger.log('defaultConfig static:', JSON.stringify(defaultConfig.static, null, 2));
         this._addStaticRoute(service, defaultConfig['static']);
+        logger.groupEnd('');
+      } else if (handleKey === 'redirect') {
+        if (!defaultConfig.from) {
+          defaultConfig.from = '/*';
+        }
+        this._setupRedirectRoute(service, defaultConfig);
       } else if (defaultConfig.hasOwnProperty('redirect')) {
         if (!defaultConfig.redirect.from) {
           defaultConfig.redirect.from = '/*';
         }
-        this._setupRedirectRoute(service, defaultConfig);
+        this._setupRedirectRoute(service, defaultConfig.redirect);
       } else if (defaultConfig.hasOwnProperty('root')) {
         logger.log("Root:", defaultConfig.root);
         this._addStaticRoute(service, defaultConfig.root, "/");
@@ -54,6 +69,29 @@ var DefaultRoutes = (function (_ServiceMiddleware) {
         logger.log("Default:", defaultConfig.root);
         this._httpFramework.addStaticFileDefault(defaultConfig.root);
       }
+    }
+
+    /**
+     * Setup Redirect Route
+     * @param service
+     * @param route
+     * @private
+     */
+  }, {
+    key: '_setupRedirectRoute',
+    value: function _setupRedirectRoute(service, redirect) {
+      logger.log("Redirect Route:", redirect.from, "->", redirect.to);
+
+      if (!redirect.hasOwnProperty('from')) {
+        logger.warn(service.name, "Service Route - Redirect missing 'from'");
+        return;
+      }
+      if (!redirect.hasOwnProperty('to')) {
+        logger.warn(service.name, "Service Route - Redirect missing 'to'");
+        return;
+      }
+
+      this._httpFramework.addRedirect(redirect.from, redirect.to);
     }
 
     /**
@@ -135,25 +173,13 @@ var DefaultRoutes = (function (_ServiceMiddleware) {
           }
         } catch (err) {
           logger.warn("Add Static Route Error:", err);
+          //logger.info("Service:", JSON.stringify(service, null, 2) );
+          logger.info("route:", JSON.stringify(route, null, 2));
+          logger.info("staticContent:", JSON.stringify(staticContent, null, 2));
+
           return false;
         }
       }
-    }
-  }, {
-    key: '_setupRedirectRoute',
-    value: function _setupRedirectRoute(service, route) {
-      logger.log("Redirect Route:", route.redirect.from, "->", route.redirect.to);
-
-      if (!route.redirect.hasOwnProperty('from')) {
-        logger.warn(service.name, "Service Route - Redirect missing 'from'");
-        return;
-      }
-      if (!route.redirect.hasOwnProperty('to')) {
-        logger.warn(service.name, "Service Route - Redirect missing 'to'");
-        return;
-      }
-
-      this._httpFramework.addRedirect(route.redirect.from, route.redirect.to);
     }
   }]);
 

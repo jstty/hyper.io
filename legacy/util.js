@@ -120,6 +120,10 @@ function isES6() {
     return true;
 }
 
+function isES6Function(func) {
+    return func && func.constructor && func.constructor.name === 'GeneratorFunction';
+}
+
 module.exports = {
     promiseContinue: promiseContinue,
     buildURI: buildUri,
@@ -131,5 +135,6 @@ module.exports = {
     getFileExtension: getFileExtension,
     filterNodeModules: filterNodeModules,
     version: version,
-    isES6: isES6
+    isES6: isES6,
+    isES6Function: isES6Function
 };
