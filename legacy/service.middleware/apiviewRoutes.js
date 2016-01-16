@@ -15,6 +15,7 @@ var when = require('when');
 var whenKeys = require('when/keys');
 var di = require('di');
 var co = require('co');
+var mime = require('mime');
 
 var util = require('../util.js');
 
@@ -190,20 +191,36 @@ var ApiViewRoutes = (function (_ServiceMiddleware) {
                 out = templateFunc(out);
               }
 
+              if (headers.filename) {
+                var mimetype = mime.lookup(headers.filename);
+                if (!headers.hasOwnProperty('Content-type')) {
+                  headers['Content-type'] = mimetype;
+                }
+                if (!headers.hasOwnProperty('Content-disposition')) {
+                  headers['Content-disposition'] = 'attachment; filename=' + headers.filename;
+                }
+              }
+
               if (_.isObject(out)) {
                 // assume JSON
                 outContentType = outContentType || "application/json";
                 out = JSON.stringify(out);
-              } else {
+              } else if (_.isString(out)) {
                 // assume HTML
                 outContentType = outContentType || "text/html";
-              }
+              } else {}
+              // ???
 
               // merge default content-type with headers
               res.writeHead(code, _.merge({
                 "Content-Type": outContentType
               }, headers));
+
+              //if(_.isFunction(out.values)) {
+              //
+              //} else {
               res.end(out);
+              //}
             }
 
             // TODO: dependency injection
@@ -217,6 +234,18 @@ var ApiViewRoutes = (function (_ServiceMiddleware) {
             // TODO: dependency injection
             var fatal = function fatal(out, code, headers) {
               responseFunc(out, code || 500, headers);
+            };
+            // TODO: dependency injection
+            var custom = function custom(data) {
+              if (data.hasOwnProperty('filename')) {
+                if (!data.header) {
+                  data.headers = {};
+                }
+                data.headers.filename = data.filename;
+                delete data.filename;
+              }
+
+              responseFunc(data.data, data.code || 200, data.headers);
             };
             // ---------------------------------------
 
@@ -254,6 +283,7 @@ var ApiViewRoutes = (function (_ServiceMiddleware) {
                 '$done': ['value', done],
                 '$error': ['value', error],
                 '$fatal': ['value', fatal],
+                '$custom': ['value', custom],
                 '$session': ['value', req.session],
                 '$cookies': ['value', req.cookies],
                 '$input': ['factory', this._httpFramework.buildInputs],

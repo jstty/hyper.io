@@ -14,7 +14,6 @@ var http = require('http');
 var path = require('path');
 //
 var _ = require('lodash');
-var whenKeys = require('when/keys');
 var when = require('when');
 var di = require('di');
 var glob = require('glob');
