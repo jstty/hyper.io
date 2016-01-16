@@ -73,6 +73,7 @@ Note: **Bold items** are on the roadmap, not in the current release.
 * 0.5.0 - Refactor and polish (50% completed)
     * [x] Replace Middleware with yanpm plugin manager
     * [x] Refactor Service Manager - breaking it into smaller modules
+    * [x] Custom binary responses
     * Examples:
         * [/] Auth middleware
             * [x] Basic

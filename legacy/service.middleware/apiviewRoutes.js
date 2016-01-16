@@ -183,8 +183,14 @@ var ApiViewRoutes = (function (_ServiceMiddleware) {
               }
 
               responded = true;
-              var outContentType = route.outContentType;
-              //logger.log("responseFunc out:", out);s
+              if (!headers || !_.isObject(headers)) {
+                headers = {};
+              }
+
+              if (!headers.hasOwnProperty('Content-type') && route.outContentType) {
+                headers['Content-Type'] = route.outContentType;
+              }
+              //logger.log("responseFunc out:", out);
 
               // if view compile template
               if (type == "view" && templateFunc) {
@@ -201,26 +207,31 @@ var ApiViewRoutes = (function (_ServiceMiddleware) {
                 }
               }
 
-              if (_.isObject(out)) {
+              // is not buffer and is object
+              if (!Buffer.isBuffer(out) && _.isObject(out)) {
+
                 // assume JSON
-                outContentType = outContentType || "application/json";
+                if (!headers.hasOwnProperty('Content-type')) {
+                  headers['Content-Type'] = "application/json";
+                }
+                // convert object to string
                 out = JSON.stringify(out);
               } else if (_.isString(out)) {
                 // assume HTML
-                outContentType = outContentType || "text/html";
+                if (!headers.hasOwnProperty('Content-type')) {
+                  headers['Content-Type'] = "text/html";
+                }
               } else {}
               // ???
 
               // merge default content-type with headers
-              res.writeHead(code, _.merge({
-                "Content-Type": outContentType
-              }, headers));
+              res.writeHead(code, headers);
 
-              //if(_.isFunction(out.values)) {
-              //
-              //} else {
-              res.end(out);
-              //}
+              if (Buffer.isBuffer(out)) {
+                res.end(out, 'binary');
+              } else {
+                res.end(out);
+              }
             }
 
             // TODO: dependency injection
@@ -237,15 +248,19 @@ var ApiViewRoutes = (function (_ServiceMiddleware) {
             };
             // TODO: dependency injection
             var custom = function custom(data) {
-              if (data.hasOwnProperty('filename')) {
-                if (!data.header) {
-                  data.headers = {};
+              if (_.isObject(data)) {
+                if (data.hasOwnProperty('filename')) {
+                  if (!data.header) {
+                    data.headers = {};
+                  }
+                  data.headers.filename = data.filename;
+                  delete data.filename;
                 }
-                data.headers.filename = data.filename;
-                delete data.filename;
-              }
 
-              responseFunc(data.data, data.code || 200, data.headers);
+                responseFunc(data.data, data.code || 200, data.headers);
+              } else {
+                logger.error('custom response input must be object');
+              }
             };
             // ---------------------------------------
 
