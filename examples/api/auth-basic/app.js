@@ -15,7 +15,7 @@ var hyper = new Hyper(options);
 hyper.use(authBasic);
 
 // load config and routes
-hyper.start({
+var app = hyper.start({
     routes: [
         {
             api: "/hello",
