@@ -16,13 +16,27 @@ var app = hyper
     .start({
         routes: [
             {
+                // http://localhost:8000/login?username=joe
+                api: "/login",
+                method: {
+                    get: function login($done, $session, $input)
+                    {
+                        $session.username = $input.query.username;
+                        $done( {
+                            hello: $session.username
+                        } );
+                    }
+                }
+            },
+            {
+                // http://localhost:8000/hello
                 api: "/hello",
                 method: {
-                    get: function world($done, $session, $logger)
+                    get: function world($done, $session)
                     {
                         $done( {
                             hello: "world",
-                            cookie: $session.cookie
+                            session: $session
                         } );
                     }
                 }
