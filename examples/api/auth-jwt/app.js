@@ -11,9 +11,11 @@ try {
 // Load config and routes
 var hyper = new Hyper(options);
 
+
+//
 function authJWT(_config) {
     this._config = _config;
-    this.handles = ['authRequired'];
+    this.handles = ['authRequired', 'authLogin'];
 }
 
 authJWT.prototype.init = function(_logger, _httpFramework, _middleware, _serviceManager) {
@@ -22,11 +24,61 @@ authJWT.prototype.init = function(_logger, _httpFramework, _middleware, _service
     this._middleware     = _middleware;
     this._httpFramework  = _httpFramework;
 
-    this._jwt = require('express-jwt');
+    this._secret = "keyboard cat";
+
+    this._jwt = require('jsonwebtoken');
 };
 
 authJWT.prototype.setup = function(handleKey, defaultConfig, service, controller, route) {
+
+    function getToken(req) {
+        if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+            return req.headers.authorization.split(' ')[1];
+        } else if (req.query && req.query.token) {
+            return req.query.token;
+        }
+        return null;
+    }
+
     if( route.hasOwnProperty('api') &&
+        handleKey === 'authLogin' &&
+        defaultConfig === true) {
+        this._logger.log('Enable Auth Login for Route:', route.api);
+
+        if(!route.resolve) {
+            route.resolve = {};
+        }
+
+        //TODO: needs to be a factory instead of value DI
+        // authData should be instance per request
+        var authData = {
+            user: {},
+            authenticated: false
+        };
+        route.resolve['$auth'] = function() {
+            return authData;
+        };
+
+        for(var method in route.method) {
+            var func = route.method[method];
+
+            // TODO: needs to make this generic (NOT express specific)
+            this._httpFramework.app()[method](
+                route.api,
+                func,
+                function(req, res, next){
+                    var token = this._jwt.sign(authData, this._secret, {
+                        expiresIn: 60*60*5
+                    });
+
+                    res.json({
+                        token: token
+                    });
+                }.bind(this)
+            );
+        }
+    }
+    else if( route.hasOwnProperty('api') &&
         handleKey === 'authRequired' &&
         defaultConfig === true) {
         this._logger.log('Enable Auth for Route:', route.api);
@@ -34,11 +86,29 @@ authJWT.prototype.setup = function(handleKey, defaultConfig, service, controller
         for(var method in route.method) {
             var func = route.method[method];
 
-            // TODO: this needs to be cleaner
+            // TODO: needs to make this generic (NOT express specific)
             this._httpFramework.app()[method](
                 route.api,
-                this._jwt(this._config),
-                func);
+                function(req, res, next){
+                    console.log('auth before');
+                    // TODO validate token
+
+                    var token = getToken(req);
+                    if(token !== null) {
+                        this._jwt.verify(token, this._secret, function(err, decoded) {
+                            if(!err) {
+                                // TODO decode data should set the DI auth value for the next
+                                // TODO DI breaks here
+                                func(req, res, next);
+                            } else {
+                                res.end('invalid token');
+                            }
+                        }.bind(this));
+                    } else {
+                        res.end("error");
+                    }
+                }.bind(this)
+            );
         }
     }
 };
@@ -52,26 +122,32 @@ var app = hyper.start({
             api: "/secure",
             authRequired: true,
             method: {
-                get: function secure($done)
+                get: function secure(req, res, next, $done)
                 {
-                    $done( { secure: "123" } );
+                    // TODO DI is not passing through need to fix this
+                    //$done( { secure: "world" } );
+                    res.json( { secure: "world" } );
                 }
             }
         },
         {
             api: "/login",
-            authRequired: false,
+            authLogin: true,
             method: {
-                post: function login($input, $auth)
+                post: function login($input, $auth, $next, $error)
                 {
                     if( $input.body.user === 'test' &&
                         $input.body.pass === '123' ) {
+
+                        $auth.authenticated = true;
                         $auth.user = {
-                            admin: true
+                            group: 'admin'
                         };
-                        $auth.done( { login: "ok" } );
+
+                        // TODO fix this, the data should flow down the pipeline
+                        $next();
                     } else {
-                        $auth.error( { login: "fail" } )
+                        $error( { "error": "invalid user/pass" }  );
                     }
                 }
             }
@@ -81,7 +157,7 @@ var app = hyper.start({
             method: {
                 get: function hello($done)
                 {
-                    $done( { hello: "world" } );
+                    $done( { notSecret: "hello" } );
                 }
             }
         }

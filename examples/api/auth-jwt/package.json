@@ -2,6 +2,6 @@
   "name": "examples",
   "version": "0.0.1",
   "dependencies": {
-    "express-jwt": "*"
+    "jsonwebtoken": "^5.7.0"
   }
 }
