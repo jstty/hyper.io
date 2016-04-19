@@ -15,14 +15,12 @@ module.exports = [
                     expect(err).to.be.null;
                     expect(res.body).to.be.a('object');
 
-                    expect(res.body).to.have.keys(["hello", "cookie"]);
+                    expect(res.body).to.have.keys(["hello", "session"]);
 
                     expect(res.body.hello).to.be.a('string');
                     expect(res.body.hello).to.equal("world");
 
-                    expect(res.body.cookie).to.be.a('object');
-                    expect(res.body.cookie.httpOnly).to.be.a('boolean');
-                    expect(res.body.cookie.httpOnly).to.equal(true);
+                    expect(res.body.session).to.be.a('object');
 
                     if(done) done();
                 });

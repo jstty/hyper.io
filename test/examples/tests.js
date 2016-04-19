@@ -14,7 +14,7 @@ var rootDir = __dirname;
 //console.log("root dir:", rootDir, "\n");
 var timeoutSec = 200;
 
-var list = require('./tests-list.json');
+var list = require('./tests-list.js');
 
 // increase listener limit
 process.setMaxListeners(0);

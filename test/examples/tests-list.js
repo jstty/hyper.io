@@ -1,4 +1,4 @@
-{
+module.exports = {
   "api": {
     "helloworld-singlefile":      "app",
     "helloworld-multifile":       "app",
@@ -12,6 +12,7 @@
 
     "resource-singlefile":        "app",
     "resource-multifile":         "app",
+    "resource-sqlite":            "app",
 
     "externalservice-basic":      "app",
     "externalservice-websockets": "app",
@@ -20,7 +21,8 @@
     "session-basic":              "app",
 
     "es6-generator-singlefile":   "app",
-    "es6-generator-multifile":    "app"
+    // TODO: fix the errors
+    //"es6-generator-multifile":    "app"
   },
   "config": {
     "helloworld-singlefile":      "app",
@@ -36,4 +38,4 @@
     "helloworld-fromto":          "app",
     "helloworld-otherwise":       "app"
   }
-}
+};

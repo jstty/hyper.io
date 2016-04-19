@@ -19,23 +19,27 @@ var logger = null;
 var DefaultRoutes = (function (_ServiceMiddleware) {
   _inherits(DefaultRoutes, _ServiceMiddleware);
 
-  function DefaultRoutes(_logger, _httpFramework, _middleware, _serviceManager) {
+  function DefaultRoutes() {
     _classCallCheck(this, DefaultRoutes);
 
-    _get(Object.getPrototypeOf(DefaultRoutes.prototype), 'constructor', this).call(this, _logger, _httpFramework, _middleware, _serviceManager);
-    logger = _logger;
-
+    _get(Object.getPrototypeOf(DefaultRoutes.prototype), 'constructor', this).call(this);
     this.handles = ['otherwise', 'default', 'static', 'redirect'];
   }
 
-  /**
-   * Setup DefaultRoutes
-   * TODO: make return a promise
-   * @param service
-   * @param defaultConfig
-   */
-
   _createClass(DefaultRoutes, [{
+    key: 'init',
+    value: function init(_logger, _httpFramework, _middleware, _serviceManager) {
+      _get(Object.getPrototypeOf(DefaultRoutes.prototype), 'init', this).call(this, _logger, _httpFramework, _middleware, _serviceManager);
+      logger = _logger;
+    }
+
+    /**
+     * Setup DefaultRoutes
+     * TODO: make return a promise
+     * @param service
+     * @param defaultConfig
+     */
+  }, {
     key: 'setup',
     value: function setup(handleKey, defaultConfig, service, controller, route) {
       //logger.log('start DefaultRoutes handleKey:', handleKey);

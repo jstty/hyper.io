@@ -10,26 +10,44 @@ var when = require('when');
 var logger = null;
 
 var ServiceMiddlewareManager = (function () {
-  function ServiceMiddlewareManager(_logger, _httpFramework, _middleware, _serviceManager) {
+  function ServiceMiddlewareManager() {
     _classCallCheck(this, ServiceMiddlewareManager);
 
-    logger = _logger;
-
-    this._httpFramework = _httpFramework;
-    this._middleware = _middleware;
-    this._serviceManager = _serviceManager;
+    this._httpFramework = null;
+    this._middleware = null;
+    this._serviceManager = null;
 
     this._list = {};
     this._allHandles = {};
   }
 
   _createClass(ServiceMiddlewareManager, [{
-    key: 'add',
-    value: function add(name) {
-      try {
-        var Middleware = require('./' + name + '.js');
+    key: 'init',
+    value: function init(_logger, _httpFramework, _middleware, _serviceManager) {
+      logger = _logger;
 
-        var middleware = new Middleware(logger, this._httpFramework, this._middleware, this._serviceManager);
+      this._httpFramework = _httpFramework;
+      this._middleware = _middleware;
+      this._serviceManager = _serviceManager;
+
+      _.forEach(this._list, (function (item) {
+        item.init(logger, this._httpFramework, this._middleware, this._serviceManager);
+      }).bind(this));
+    }
+  }, {
+    key: 'add',
+    value: function add(name, config) {
+      try {
+        var Middleware = null;
+        if (_.isString(name)) {
+          Middleware = require('./' + name + '.js');
+        } else if (_.isObject(name)) {
+          Middleware = name;
+        } else {
+          //throw Error('Invalid Middleware Type:', name);
+        }
+
+        var middleware = new Middleware(config);
         this._list[name] = middleware;
 
         if (middleware.handles) {

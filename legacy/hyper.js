@@ -17,6 +17,7 @@ var HttpFramework_Express = require('./http.framework.express.js');
 //
 var PluginManager = require('yanpm');
 var ServiceManager = require('./manager.service.js');
+var ServiceMiddlewareManager = require('./service.middleware/service.middleware.manager.js');
 var util = require('./util.js');
 
 //
@@ -99,6 +100,11 @@ function Hyper(options) {
     this._pluginManager = new PluginManager({
         logger: logger
     });
+
+    this._serviceMiddlewareManager = new ServiceMiddlewareManager();
+    // default service middleware
+    this._serviceMiddlewareManager.add('defaultRoutes');
+    this._serviceMiddlewareManager.add('apiviewRoutes');
 
     // add catch all, just in case
     process.on('uncaughtException', function (err) {
@@ -286,8 +292,12 @@ Hyper.prototype.stop = function () {
     // end promise wrapper
 };
 
+// TODO: merge use and middleware
 Hyper.prototype.use = function (MiddlewareGroup, MiddlewareName, option) {
     this._pluginManager.add(MiddlewareGroup, MiddlewareName, option);
+};
+Hyper.prototype.middleware = function (serviceMiddleware, serviceMiddlewareConfig) {
+    this._serviceMiddlewareManager.add(serviceMiddleware, serviceMiddlewareConfig);
 };
 
 Hyper.prototype.httpFramework = function () {
@@ -317,5 +327,5 @@ Hyper.prototype._initHttpFramework = function () {
 
 Hyper.prototype._initServiceManager = function () {
     // service manager
-    this._serviceManager = new ServiceManager(this, this._config, this._servicesManifest, this._pluginManager, this._httpFramework, this._defaultAppName);
+    this._serviceManager = new ServiceManager(this, this._config, this._servicesManifest, this._pluginManager, this._serviceMiddlewareManager, this._httpFramework, this._defaultAppName);
 };

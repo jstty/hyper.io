@@ -26,22 +26,26 @@ var logger = null;
 var ApiViewRoutes = (function (_ServiceMiddleware) {
   _inherits(ApiViewRoutes, _ServiceMiddleware);
 
-  function ApiViewRoutes(_logger, _httpFramework, _middleware, _serviceManager) {
+  function ApiViewRoutes() {
     _classCallCheck(this, ApiViewRoutes);
 
-    _get(Object.getPrototypeOf(ApiViewRoutes.prototype), 'constructor', this).call(this, _logger, _httpFramework, _middleware, _serviceManager);
-    logger = _logger;
-
+    _get(Object.getPrototypeOf(ApiViewRoutes.prototype), 'constructor', this).call(this);
     this.handles = ['api', 'view'];
   }
 
-  /**
-   * Setup ApiViewRoutes
-   * @param service
-   * @param defaultConfig
-   */
-
   _createClass(ApiViewRoutes, [{
+    key: 'init',
+    value: function init(_logger, _httpFramework, _middleware, _serviceManager) {
+      _get(Object.getPrototypeOf(ApiViewRoutes.prototype), 'init', this).call(this, _logger, _httpFramework, _middleware, _serviceManager);
+      logger = _logger;
+    }
+
+    /**
+     * Setup ApiViewRoutes
+     * @param service
+     * @param defaultConfig
+     */
+  }, {
     key: 'setup',
     value: function setup(handleKey, defaultConfig, service, controller, route) {
       //logger.log('start DefaultRoutes handleKey:', handleKey);
@@ -232,6 +236,9 @@ var ApiViewRoutes = (function (_ServiceMiddleware) {
               } else {
                 res.end(out);
               }
+
+              // TOOD: duplicate setHeader error with proper pipeline
+              //next();
             }
 
             // TODO: dependency injection

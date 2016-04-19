@@ -25,8 +25,6 @@ var ServiceManagerConfig = require('./manager.service.config.js'); // Normalize 
 var ServiceRouter = require('./router.service.js');
 var ResourceHandler = require('./handler.resource.js');
 
-var ServiceMiddlewareManager = require('./service.middleware/service.middleware.manager.js');
-
 var logger = null;
 
 module.exports = ServiceManager;
@@ -152,7 +150,7 @@ var _ServiceManager = (function () {
     return _ServiceManager;
 })();
 
-function ServiceManager(hyperCore, appConfig, servicesManifest, middleware, httpFramework, defaultAppName) {
+function ServiceManager(hyperCore, appConfig, servicesManifest, middleware, serviceMiddlewareManager, httpFramework, defaultAppName) {
 
     var serviceManagerConfig = appConfig.serviceManager;
     this._displayDebuggerInfo = serviceManagerConfig.displayDebuggerInfo;
@@ -183,9 +181,11 @@ function ServiceManager(hyperCore, appConfig, servicesManifest, middleware, http
     this._services = {};
     this._resources = {};
 
-    this._serviceMiddlewareManager = new ServiceMiddlewareManager(logger, httpFramework, middleware, this);
-    this._serviceMiddlewareManager.add('defaultRoutes');
-    this._serviceMiddlewareManager.add('apiviewRoutes');
+    this._serviceMiddlewareManager = serviceMiddlewareManager;
+    this._serviceMiddlewareManager.init(logger, httpFramework, middleware, this);
+    //this._serviceMiddlewareManager = new ServiceMiddlewareManager(logger, httpFramework, middleware, this);
+    //this._serviceMiddlewareManager.add('defaultRoutes');
+    //this._serviceMiddlewareManager.add('apiviewRoutes');
 }
 
 /* ---------------------------------------------------
@@ -586,7 +586,9 @@ ServiceManager.prototype._setupController = function (service, route) {
         if (fs.existsSync(file)) {
             try {
                 controller = require(file);
-            } catch (err) {}
+            } catch (err) {
+                logger.error("Loading Service \"" + service.name + "\" controller (" + route.controller + ") Error:", err);
+            }
         }
 
         if (!controller) {
@@ -597,7 +599,9 @@ ServiceManager.prototype._setupController = function (service, route) {
                 // need to add the current cwd because require is relative to this file
                 try {
                     controller = require(file);
-                } catch (err) {}
+                } catch (err) {
+                    logger.error("Loading Service \"" + service.name + "\" controller (" + route.controller + ") Error:", err);
+                }
             }
         }
 
@@ -706,7 +710,8 @@ ServiceManager.prototype._injectionDependency = function (module, service, paren
             var InjectedWrapper = function InjectedWrapper() {
                 return injector.invoke(parent.module, this);
             };
-            InjectedWrapper.prototype = _.merge(InjectedWrapper.prototype, parent.module.prototype);
+            //InjectedWrapper.prototype = _.merge(InjectedWrapper.prototype, parent.module.prototype);
+            InjectedWrapper.prototype = Object.create(parent.module.prototype);
 
             return InjectedWrapper;
         }

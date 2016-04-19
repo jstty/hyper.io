@@ -7,18 +7,24 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var logger = null;
 
 var ServiceMiddleware = (function () {
-  function ServiceMiddleware(_logger, _httpFramework, _middleware, _serviceManager) {
+  function ServiceMiddleware() {
     _classCallCheck(this, ServiceMiddleware);
-
-    logger = _logger;
-    this._serviceManager = _serviceManager;
-    this._middleware = _middleware;
-    this._httpFramework = _httpFramework;
   }
 
   _createClass(ServiceMiddleware, [{
+    key: "init",
+    value: function init(_logger, _httpFramework, _middleware, _serviceManager) {
+      logger = _logger;
+      this._serviceManager = _serviceManager;
+      this._middleware = _middleware;
+      this._httpFramework = _httpFramework;
+
+      // should be set
+      this.handles = [];
+    }
+  }, {
     key: "setup",
-    value: function setup(routeData, service, controller, route) {
+    value: function setup(handleKey, defaultConfig, service, controller, route) {
       logger.error("This should be overridden");
     }
   }]);
