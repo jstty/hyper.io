@@ -3,10 +3,17 @@
 module.exports = HelloCtrl;
 
 function HelloCtrl(){
+    this.data = { hello: "world" };
 }
 
 // localhost:8000/hello
-HelloCtrl.prototype.world = function($done)
+HelloCtrl.prototype.hello = function($done)
 {
-    $done( { hello: "world" } );
+    $done( this.data );
+};
+
+// localhost:8000/world
+HelloCtrl.prototype.world = function()
+{
+    return this.data;
 };

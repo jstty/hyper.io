@@ -21,8 +21,7 @@ module.exports = {
     "session-basic":              "app",
 
     "es6-generator-singlefile":   "app",
-    // TODO: fix the errors
-    //"es6-generator-multifile":    "app"
+    "es6-generator-multifile":    "app"
   },
   "config": {
     "helloworld-singlefile":      "app",

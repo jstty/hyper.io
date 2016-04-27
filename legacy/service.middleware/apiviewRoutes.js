@@ -319,22 +319,21 @@ var ApiViewRoutes = (function (_ServiceMiddleware) {
               }).bind(this));
 
               // TODO: replace this with DI lib
-              var generator = this._serviceManager._injectionDependency(module, service, controller, cFunc);
+              var result = this._serviceManager._injectionDependency(module, service, controller.instance, cFunc);
 
-              var promise = null;
               // if function is generator then wait on yield
               if (util.isES6Function(cFunc)) {
                 try {
-                  promise = co(generator);
-                } catch (ex) {
-                  promise = Promise.reject(ex);
+                  // result is generator, so co wrapper it and turn into promise
+                  result = co(result);
+                } catch (err) {
+                  result = Promise.reject(err);
                 }
-              } else if (when.isPromiseLike(generator)) {
-                promise = generator;
               }
 
-              if (when.isPromiseLike(promise)) {
-                promise.then(function (data) {
+              // if result is promise, fire done on the result data
+              if (when.isPromiseLike(result)) {
+                result.then(function (data) {
                   if (!responded) {
                     done(data);
                   }
@@ -344,6 +343,12 @@ var ApiViewRoutes = (function (_ServiceMiddleware) {
                   }
                 });
               }
+              // if result is not promise and not null or undefined
+              else if (result !== null && result !== undefined) {
+                  if (!responded) {
+                    done(result);
+                  }
+                }
 
               // ---------------------------------------
             }).bind(this));

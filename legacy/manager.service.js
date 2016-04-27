@@ -707,13 +707,17 @@ ServiceManager.prototype._injectionDependency = function (module, service, paren
         }
     } else {
         if (parent) {
-            var InjectedWrapper = function InjectedWrapper() {
-                return injector.invoke(parent.module, this);
-            };
-            //InjectedWrapper.prototype = _.merge(InjectedWrapper.prototype, parent.module.prototype);
-            InjectedWrapper.prototype = Object.create(parent.module.prototype);
+            if (parent.module.toString().indexOf('function') === 0) {
+                var InjectedWrapper = function InjectedWrapper() {
+                    return injector.invoke(parent.module, this);
+                };
+                //InjectedWrapper.prototype = _.merge(InjectedWrapper.prototype, parent.module.prototype);
+                InjectedWrapper.prototype = Object.create(parent.module.prototype);
 
-            return InjectedWrapper;
+                return InjectedWrapper;
+            } else {
+                return injector.invoke(parent.module, this);
+            }
         }
     }
     // ---------------------------------------

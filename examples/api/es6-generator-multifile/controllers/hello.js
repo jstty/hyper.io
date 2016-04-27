@@ -8,7 +8,7 @@ class HelloCtrl {
     // localhost:8000/hello
     world($done, $q)
     {
-        this.logger.log('/hello - defer request with timeout');
+        this.logger.info('/hello - defer request with timeout');
         var deferer = $q.defer();
 
         setTimeout(function(){
@@ -18,7 +18,7 @@ class HelloCtrl {
         //var data = yield deferer.promise;
         //$done( data );
         // OR
-        return data;
+        return deferer.promise;
     }
 }
 
