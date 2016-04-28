@@ -12,7 +12,7 @@ module.exports = {
 
     "resource-singlefile":        "app",
     "resource-multifile":         "app",
-    "resource-sqlite":            "app",
+    //"resource-sqlite":            "app",
 
     "externalservice-basic":      "app",
     "externalservice-websockets": "app",
