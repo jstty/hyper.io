@@ -26,7 +26,8 @@ module.exports = {
   "config": {
     "helloworld-singlefile":      "app",
     "helloworld-multifile":       "myserver",
-    "multiservice-singlefile":    "server"
+    "multiservice-singlefile":    "server",
+    "shared":                     "app"
   },
   "template": {
     "helloworld-singlefile":      "app",

@@ -170,6 +170,7 @@ function ServiceManager(hyperCore, appConfig, servicesManifest, middleware, serv
 
     var manifest = new ServiceManagerConfig(defaultAppName, servicesManifest); // normalizes the configs
     this._servicesManifest = manifest.get();
+    this._servicesManifest.shared = appConfig.shared;
 
     var servicesConfigs = {};
     _.forEach(this._servicesManifest.services, function (service, key) {
@@ -563,6 +564,8 @@ ServiceManager.prototype._setupController = function (service, route) {
             module: function module() {},
             instance: function instance() {}
         };
+        service.controller[controllerName].instance.config = service.config;
+
         return service.controller[controllerName];
     } else if (_.isString(route.controller)) {
         controllerName = route.controller;
@@ -675,11 +678,14 @@ ServiceManager.prototype._injectionDependency = function (module, service, paren
         '_': ['value', _],
         '$hyper': ['value', this._hyperCore],
         '$services': ['value', this._serviceRouter],
-        '$http': ['value', this._httpFramework]
+        '$http': ['value', this._httpFramework],
+        '$sharedConfig': ['value', this._servicesManifest.shared]
     }, module);
 
     if (parent && parent.hasOwnProperty('config')) {
         module.$config = ['value', parent.config];
+    } else if (service && service.hasOwnProperty('config')) {
+        module.$config = ['value', service.config];
     }
 
     // add all _resources to list for DI

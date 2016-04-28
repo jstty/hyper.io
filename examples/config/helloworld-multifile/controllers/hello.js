@@ -10,5 +10,5 @@ function HelloCtrl($logger, $config){
 HelloCtrl.prototype.world = function($done, $logger, $config)
 {
     $logger.log('Hello World Handler - config:', $config);
-    $done( { hello: "world" } );
+    $done( $config );
 };

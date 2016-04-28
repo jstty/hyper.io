@@ -16,7 +16,7 @@ module.exports = [
                     expect(res.body).to.be.a('object');
 
                     expect(res.body).to.have.keys("hello");
-                    expect(res.body.hello).to.equal("my server from config");
+                    expect(res.body.hello).to.equal("shared config");
                     if(done) done();
                 });
         } else {
