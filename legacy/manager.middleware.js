@@ -54,10 +54,7 @@ Middleware.prototype.use = function (MiddlewareGroup, MiddlewareName, option) {
             // default was added
             if (defaultMiddleware) {
                 return defaultMiddleware.Middleware;
-            } else {
-                // problem with Middleware
-                // error already reported upstream
-            }
+            } else {}
         }
     }
 
@@ -70,20 +67,20 @@ Middleware.prototype.use = function (MiddlewareGroup, MiddlewareName, option) {
     // Middleware.use('template', 'ejs');
     // Middleware.use('template', './lib/middleware/ejs.js');
     else if (_.isString(MiddlewareGroup) && _.isString(MiddlewareName)) {
-            // find Middleware file, load it
-            Middleware = this._loadMiddlewareFile(MiddlewareGroup, MiddlewareName);
-        }
-        // Middleware.use(require('./lib/middleware/ejs.js'));
-        // var ejs = require('ejs');
-        // Middleware.use(new ejs());
-        else if (_.isFunction(MiddlewareGroup) || _.isObject(MiddlewareGroup)) {
-                Middleware = this._setMiddleware(MiddlewareGroup);
-            } else {
-                logger.warn("Middleware (" + MiddlewareGroup + ", " + MiddlewareName + ") invalid");
-            }
+        // find Middleware file, load it
+        Middleware = this._loadMiddlewareFile(MiddlewareGroup, MiddlewareName);
+    }
+    // Middleware.use(require('./lib/middleware/ejs.js'));
+    // var ejs = require('ejs');
+    // Middleware.use(new ejs());
+    else if (_.isFunction(MiddlewareGroup) || _.isObject(MiddlewareGroup)) {
+        Middleware = this._setMiddleware(MiddlewareGroup);
+    } else {
+        logger.warn('Middleware (' + MiddlewareGroup + ', ' + MiddlewareName + ') invalid');
+    }
 
     if (!Middleware) {
-        logger.info("Problem loading Middleware (" + MiddlewareGroup + ", " + MiddlewareName + ")");
+        logger.info('Problem loading Middleware (' + MiddlewareGroup + ', ' + MiddlewareName + ')');
     }
 
     return Middleware;
@@ -116,7 +113,6 @@ Middleware.prototype._loadMiddlewareFile = function (MiddlewareGroup, file) {
     try {
         MiddlewareClass = require(file);
     } catch (err) {}
-    // this is ok
 
     // try loading file as path
     if (!MiddlewareClass && fs.existsSync(file)) {
@@ -131,7 +127,7 @@ Middleware.prototype._loadMiddlewareFile = function (MiddlewareGroup, file) {
         // if getInfo function does not exist auto add wrapper
         if (!MiddlewareClass.getInfo) {
             if (!MiddlewareGroup) {
-                logger.warn("Could not determine Middleware Type", file);
+                logger.warn('Could not determine Middleware Type', file);
                 return null;
             }
 
@@ -177,7 +173,7 @@ Middleware.prototype._setMiddleware = function (MiddlewareClass) {
     }
 
     if (!(mInfo.type && mInfo.name && _.isString(mInfo.name) && _.isString(mInfo.type))) {
-        logger.warn("Invalid Middleware Info", mInfo);
+        logger.warn('Invalid Middleware Info', mInfo);
     }
 
     // create group/type if not exist
@@ -197,7 +193,7 @@ Middleware.prototype._setMiddleware = function (MiddlewareClass) {
             try {
                 this.middleware[mInfo.type][mInfo.name].init();
             } catch (err) {
-                logger.error("Loading Middleware Error:", err);
+                logger.error('Loading Middleware Error:', err);
                 return null;
             }
         }
@@ -206,7 +202,7 @@ Middleware.prototype._setMiddleware = function (MiddlewareClass) {
             try {
                 this.middleware[mInfo.type][mInfo.name].$perStartInit();
             } catch (err) {
-                logger.error("Loading Middleware Error:", err);
+                logger.error('Loading Middleware Error:', err);
                 return null;
             }
         }
@@ -215,7 +211,7 @@ Middleware.prototype._setMiddleware = function (MiddlewareClass) {
         this._setDefault(mInfo.type, mInfo.name);
 
         logger.log('---------------------------------------------');
-        logger.log("Loaded Middleware (" + mInfo.type + ", " + mInfo.name + ")");
+        logger.log('Loaded Middleware (' + mInfo.type + ', ' + mInfo.name + ')');
     }
 
     return this.middleware[mInfo.type][mInfo.name];
@@ -248,3 +244,8 @@ Middleware.prototype._setDefault = function (MiddlewareGroup, MiddlewareName) {
 
     return null;
 };
+
+// problem with Middleware
+// error already reported upstream
+
+// this is ok

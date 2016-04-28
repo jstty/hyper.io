@@ -101,11 +101,9 @@ ServiceRouter.prototype.add = function (serviceOpt1, serviceOpt2) {
         };
 
         service.adapter = new ServiceAdapterHTTP(service.options);
-    } else if (service.type === 'custom') {
-        // this is ok
-    } else {
-            logger.error('could not find service adapter of type:', service.type);
-        }
+    } else if (service.type === 'custom') {} else {
+        logger.error('could not find service adapter of type:', service.type);
+    }
 
     // add service to service list
     this._services[service.name] = service;
@@ -121,3 +119,5 @@ ServiceRouter.prototype.find = function (name) {
         return service.adapter;
     }
 };
+
+// this is ok

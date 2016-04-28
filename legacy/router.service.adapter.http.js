@@ -72,9 +72,7 @@ ServiceHTTPAdapter.prototype._request = function (method, path, data, body) {
             // try to convert to JSON object
             try {
                 body = JSON.parse(body);
-            } catch (err) {
-                // this is ok
-            }
+            } catch (err) {}
 
             if (response.statusCode != 200) {
                 reject(body);
@@ -102,3 +100,5 @@ ServiceHTTPAdapter.prototype.put = function (path, body) {
 ServiceHTTPAdapter.prototype['delete'] = function (path, data) {
     return this._request('DELETE', path, data);
 };
+
+// this is ok

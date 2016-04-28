@@ -2,11 +2,11 @@
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
 var _ = require('lodash');
 var fs = require('fs');
@@ -24,8 +24,6 @@ var ServiceMiddleware = require('./service.middleware.js');
 var logger = null;
 
 var ApiViewRoutes = (function (_ServiceMiddleware) {
-  _inherits(ApiViewRoutes, _ServiceMiddleware);
-
   function ApiViewRoutes() {
     _classCallCheck(this, ApiViewRoutes);
 
@@ -33,20 +31,22 @@ var ApiViewRoutes = (function (_ServiceMiddleware) {
     this.handles = ['api', 'view'];
   }
 
+  _inherits(ApiViewRoutes, _ServiceMiddleware);
+
   _createClass(ApiViewRoutes, [{
     key: 'init',
     value: function init(_logger, _httpFramework, _middleware, _serviceManager) {
       _get(Object.getPrototypeOf(ApiViewRoutes.prototype), 'init', this).call(this, _logger, _httpFramework, _middleware, _serviceManager);
       logger = _logger;
     }
+  }, {
+    key: 'setup',
 
     /**
      * Setup ApiViewRoutes
      * @param service
      * @param defaultConfig
      */
-  }, {
-    key: 'setup',
     value: function setup(handleKey, defaultConfig, service, controller, route) {
       //logger.log('start DefaultRoutes handleKey:', handleKey);
 
@@ -57,6 +57,8 @@ var ApiViewRoutes = (function (_ServiceMiddleware) {
         logger.error('ApiViewRoutes Setup Error:', err);
       }
     }
+  }, {
+    key: '_setupDynamicRoute',
 
     /*
      * TODO: make this pipeline general
@@ -75,18 +77,16 @@ var ApiViewRoutes = (function (_ServiceMiddleware) {
      * @returns {*|Promise}
      * @private
      */
-  }, {
-    key: '_setupDynamicRoute',
     value: function _setupDynamicRoute(type, service, controller, route) {
-      var routeStr = route.api || route.view || "";
+      var routeStr = route.api || route.view || '';
 
       if (!controller) {
-        logger.error("Controller missing or invalid");
+        logger.error('Controller missing or invalid');
         return;
       }
 
       if (!routeStr) {
-        logger.warn("Controller", type, "value invalid");
+        logger.warn('Controller', type, 'value invalid');
         return;
       }
 
@@ -94,7 +94,7 @@ var ApiViewRoutes = (function (_ServiceMiddleware) {
       _.forEach(route.method, (function (value, m) {
         // TODO: move this per method
         var viewPromise = when.resolve();
-        if (type == "view") {
+        if (type == 'view') {
           viewPromise = this._loadView(service, route, routeStr);
         }
 
@@ -105,12 +105,12 @@ var ApiViewRoutes = (function (_ServiceMiddleware) {
           var cFunc,
               cInput,
               controllerObj = null;
-          var methodFunctionName = "";
+          var methodFunctionName = '';
 
           // either function or generator function
           if (_.isFunction(route.method[m]) || util.isES6Function(route.method[m])) {
             controllerObj = route.method[m];
-            methodFunctionName = route.method[m].name + " (function)";
+            methodFunctionName = route.method[m].name + ' (function)';
           } else if (_.isString(route.method[m])) {
             controllerObj = controller.instance[route.method[m]];
             methodFunctionName = route.method[m];
@@ -126,12 +126,12 @@ var ApiViewRoutes = (function (_ServiceMiddleware) {
             }
           } else {
             // if function does not exist in controller
-            logger.warn("Invalid Controller Function/Object", route.method[m]);
+            logger.warn('Invalid Controller Function/Object', route.method[m]);
             return;
           }
 
           if (!cFunc || !(_.isFunction(cFunc) || util.isES6Function(cFunc))) {
-            logger.warn("Controller missing method function", route.method[m]);
+            logger.warn('Controller missing method function', route.method[m]);
             return;
           }
 
@@ -139,10 +139,10 @@ var ApiViewRoutes = (function (_ServiceMiddleware) {
             return;
           }
 
-          if (type == "api") {
-            logger.log("API Route:", controller.name || "-", "[" + m + "]", "-", routeStr, "->", methodFunctionName);
-          } else if (type == "view") {
-            logger.log("View Route:", controller.name || "-", "[" + m + "]", "-", routeStr, "->", methodFunctionName);
+          if (type == 'api') {
+            logger.log('API Route:', controller.name || '-', '[' + m + ']', '-', routeStr, '->', methodFunctionName);
+          } else if (type == 'view') {
+            logger.log('View Route:', controller.name || '-', '[' + m + ']', '-', routeStr, '->', methodFunctionName);
           }
 
           var middlewareList = [];
@@ -182,7 +182,7 @@ var ApiViewRoutes = (function (_ServiceMiddleware) {
             var responded = false;
             function responseFunc(out, code, headers) {
               if (responded) {
-                logger.warn("Already responded to request");
+                logger.warn('Already responded to request');
                 return;
               }
 
@@ -197,7 +197,7 @@ var ApiViewRoutes = (function (_ServiceMiddleware) {
               //logger.log("responseFunc out:", out);
 
               // if view compile template
-              if (type == "view" && templateFunc) {
+              if (type == 'view' && templateFunc) {
                 out = templateFunc(out);
               }
 
@@ -216,17 +216,16 @@ var ApiViewRoutes = (function (_ServiceMiddleware) {
 
                 // assume JSON
                 if (!headers.hasOwnProperty('Content-type')) {
-                  headers['Content-Type'] = "application/json";
+                  headers['Content-Type'] = 'application/json';
                 }
                 // convert object to string
                 out = JSON.stringify(out);
               } else if (_.isString(out)) {
                 // assume HTML
                 if (!headers.hasOwnProperty('Content-type')) {
-                  headers['Content-Type'] = "text/html";
+                  headers['Content-Type'] = 'text/html';
                 }
               } else {}
-              // ???
 
               // merge default content-type with headers
               res.writeHead(code, headers);
@@ -345,10 +344,10 @@ var ApiViewRoutes = (function (_ServiceMiddleware) {
               }
               // if result is not promise and not null or undefined
               else if (result !== null && result !== undefined) {
-                  if (!responded) {
-                    done(result);
-                  }
+                if (!responded) {
+                  done(result);
                 }
+              }
 
               // ---------------------------------------
             }).bind(this));
@@ -360,6 +359,8 @@ var ApiViewRoutes = (function (_ServiceMiddleware) {
 
       return when.all(pList);
     }
+  }, {
+    key: '_validateInputs',
 
     /**
      * Validate Inputs
@@ -369,8 +370,6 @@ var ApiViewRoutes = (function (_ServiceMiddleware) {
      * @returns {Array}
      * @private
      */
-  }, {
-    key: '_validateInputs',
     value: function _validateInputs(cInput, req) {
       var errors = [];
 
@@ -384,20 +383,20 @@ var ApiViewRoutes = (function (_ServiceMiddleware) {
             // check required
             if (!req[i].hasOwnProperty(k) && cInput[i][k].required) {
               // missing
-              errors.push({ error: "Missing " + i + " " + k, type: "missing", id: k });
+              errors.push({ error: 'Missing ' + i + ' ' + k, type: 'missing', id: k });
             }
             // check type
             else if (req[i].hasOwnProperty(k) && cInput[i][k].type) {
 
-                var tFuncName = "is" + util.String.capitalize(cInput[i][k].type);
-                // check if lodash has type function
-                if (_[tFuncName]) {
-                  // check if input passes type function
-                  if (!_[tFuncName](req[i][k])) {
-                    errors.push({ error: "Invalid input " + k + " with value " + req[i][k] + ", expecting type " + i, type: "invalid", id: k });
-                  }
+              var tFuncName = 'is' + util.String.capitalize(cInput[i][k].type);
+              // check if lodash has type function
+              if (_[tFuncName]) {
+                // check if input passes type function
+                if (!_[tFuncName](req[i][k])) {
+                  errors.push({ error: 'Invalid input ' + k + ' with value ' + req[i][k] + ', expecting type ' + i, type: 'invalid', id: k });
                 }
               }
+            }
           }
         }
       }
@@ -410,6 +409,8 @@ var ApiViewRoutes = (function (_ServiceMiddleware) {
       }
       return errors;
     }
+  }, {
+    key: '_genPromiseHandle',
 
     /**
      * Generator/Promise Handler
@@ -419,8 +420,6 @@ var ApiViewRoutes = (function (_ServiceMiddleware) {
      * @returns {*}
      * @private
      */
-  }, {
-    key: '_genPromiseHandle',
     value: function _genPromiseHandle(generator, result) {
       // result => { done: [Boolean], value: [Object] }
       if (result.done) return when.resolve(result.value);
@@ -431,6 +430,8 @@ var ApiViewRoutes = (function (_ServiceMiddleware) {
         return this._genPromiseHandle(generator, generator['throw'](err));
       }).bind(this));
     }
+  }, {
+    key: '_loadView',
 
     /**
      * Load View
@@ -440,8 +441,6 @@ var ApiViewRoutes = (function (_ServiceMiddleware) {
      * @returns {*|Promise}
      * @private
      */
-  }, {
-    key: '_loadView',
     value: function _loadView(service, route, routeStr) {
       // add promise wrapper
       return when.promise((function (resolve, reject) {
@@ -449,7 +448,7 @@ var ApiViewRoutes = (function (_ServiceMiddleware) {
         var templateMiddleware, templateDefaultMW;
 
         if (!route.hasOwnProperty('template')) {
-          logger.warn("Template missing from route view", routeStr);
+          logger.warn('Template missing from route view', routeStr);
           return;
         }
 
@@ -481,6 +480,8 @@ var ApiViewRoutes = (function (_ServiceMiddleware) {
       }).bind(this));
       // end promise wrapper
     }
+  }, {
+    key: '_getTemplateFunc',
 
     /**
      * Get Template Function (used for 'view')
@@ -492,15 +493,13 @@ var ApiViewRoutes = (function (_ServiceMiddleware) {
      * @returns {*}
      * @private
      */
-  }, {
-    key: '_getTemplateFunc',
     value: function _getTemplateFunc(service, route, routeStr, templateMiddleware, templateDefaultMW) {
-      var templateData = "";
+      var templateData = '';
 
       // if not object
       if (!_.isObject(route.template)) {
         if (!_.isString(route.template)) {
-          logger.warn("Template is not 'object' or 'string' type, in route view", routeStr, " - template:", route.view.template);
+          logger.warn('Template is not \'object\' or \'string\' type, in route view', routeStr, ' - template:', route.view.template);
           return;
         }
 
@@ -517,9 +516,7 @@ var ApiViewRoutes = (function (_ServiceMiddleware) {
           }).bind(this));
         }
 
-        if (!templateType) {
-          // TODO: should this be a feature to try and load as file?
-        }
+        if (!templateType) {}
 
         route.template = {
           type: templateType,
@@ -560,7 +557,7 @@ var ApiViewRoutes = (function (_ServiceMiddleware) {
           // default "<service.directory>/views/<template>"
           templateFile = path.normalize(service.directory.views + path.sep + route.template.file);
           if (!fs.existsSync(templateFile)) {
-            logger.warn("Could not find Template", route.template.file, "at", templateFile);
+            logger.warn('Could not find Template', route.template.file, 'at', templateFile);
             return;
           }
         }
@@ -579,7 +576,7 @@ var ApiViewRoutes = (function (_ServiceMiddleware) {
         // compile template
         templateFunc = templateMiddleware.compile(templateData);
       } else {
-        logger.warn("Unknown template type:", route.template.type, ", in route view", routeStr);
+        logger.warn('Unknown template type:', route.template.type, ', in route view', routeStr);
         return templateFunc;
       }
 
@@ -591,3 +588,7 @@ var ApiViewRoutes = (function (_ServiceMiddleware) {
 })(ServiceMiddleware);
 
 module.exports = ApiViewRoutes;
+
+// ???
+
+// TODO: should this be a feature to try and load as file?
