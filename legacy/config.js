@@ -7,6 +7,6 @@ module.exports = {
             name: "HyperServiceManager"
         },
         displayDebuggerInfo: false,
-        httpFramework: "express"
+        httpFramework: 'express'
     }
 };

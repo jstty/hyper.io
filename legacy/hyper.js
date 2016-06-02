@@ -88,7 +88,7 @@ function Hyper(options) {
     this._isLoaded = false;
 
     // set logger
-    logger = util.logger('HyperCore');
+    logger = util.logger("HyperCore");
 
     // ------------------------------
     // normalize options
@@ -108,7 +108,7 @@ function Hyper(options) {
 
     // add catch all, just in case
     process.on('uncaughtException', function (err) {
-        logger.error('Uncaught Error -', err, ', stack:', err.stack);
+        logger.error("Uncaught Error -", err, ", stack:", err.stack);
     });
 }
 
@@ -191,7 +191,7 @@ Hyper.prototype._loadConfigs = function (servicesManifest) {
     this._config = this._configManager.loadSync(this._options.configs, !this._displayDebuggerInfo);
     // normalize configs
     this._config = this._normalizeOptions(this._config);
-    logger.groupEnd('');
+    logger.groupEnd("");
 
     // add options passed in from inits
     this._config.appName = this._options.appName;
@@ -318,7 +318,7 @@ Hyper.prototype._initHttpFramework = function () {
         // TODO: use DI to pass vars
         this._httpFramework = new HttpFramework_Express(this._config.httpFramework, this._stats);
     } else {
-        logger.error('Uncaught Error -', err, ', stack:', err.stack);
+        logger.error("Uncaught Error -", err, ", stack:", err.stack);
         return;
     }
 

@@ -2,11 +2,11 @@
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var _ = require('lodash');
 var fs = require('fs');
@@ -17,6 +17,8 @@ var ServiceMiddleware = require('./service.middleware.js');
 var logger = null;
 
 var DefaultRoutes = (function (_ServiceMiddleware) {
+  _inherits(DefaultRoutes, _ServiceMiddleware);
+
   function DefaultRoutes() {
     _classCallCheck(this, DefaultRoutes);
 
@@ -24,16 +26,12 @@ var DefaultRoutes = (function (_ServiceMiddleware) {
     this.handles = ['otherwise', 'default', 'static', 'redirect'];
   }
 
-  _inherits(DefaultRoutes, _ServiceMiddleware);
-
   _createClass(DefaultRoutes, [{
     key: 'init',
     value: function init(_logger, _httpFramework, _middleware, _serviceManager) {
       _get(Object.getPrototypeOf(DefaultRoutes.prototype), 'init', this).call(this, _logger, _httpFramework, _middleware, _serviceManager);
       logger = _logger;
     }
-  }, {
-    key: 'setup',
 
     /**
      * Setup DefaultRoutes
@@ -41,16 +39,18 @@ var DefaultRoutes = (function (_ServiceMiddleware) {
      * @param service
      * @param defaultConfig
      */
+  }, {
+    key: 'setup',
     value: function setup(handleKey, defaultConfig, service, controller, route) {
       //logger.log('start DefaultRoutes handleKey:', handleKey);
 
       if (handleKey === 'static') {
-        logger.group('Static Route');
+        logger.group("Static Route");
         //logger.log('defaultConfig:', JSON.stringify(defaultConfig, null, 2));
         this._addStaticRoute(service, defaultConfig);
         logger.groupEnd('');
       } else if (defaultConfig.hasOwnProperty('static')) {
-        logger.group('Static Route');
+        logger.group("Static Route");
         //logger.log('defaultConfig static:', JSON.stringify(defaultConfig.static, null, 2));
         this._addStaticRoute(service, defaultConfig['static']);
         logger.groupEnd('');
@@ -65,17 +65,15 @@ var DefaultRoutes = (function (_ServiceMiddleware) {
         }
         this._setupRedirectRoute(service, defaultConfig.redirect);
       } else if (defaultConfig.hasOwnProperty('root')) {
-        logger.log('Root:', defaultConfig.root);
-        this._addStaticRoute(service, defaultConfig.root, '/');
+        logger.log("Root:", defaultConfig.root);
+        this._addStaticRoute(service, defaultConfig.root, "/");
       } else {
         // all others -> DEFAULT
         defaultConfig.root = '/index.html';
-        logger.log('Default:', defaultConfig.root);
+        logger.log("Default:", defaultConfig.root);
         this._httpFramework.addStaticFileDefault(defaultConfig.root);
       }
     }
-  }, {
-    key: '_setupRedirectRoute',
 
     /**
      * Setup Redirect Route
@@ -83,22 +81,22 @@ var DefaultRoutes = (function (_ServiceMiddleware) {
      * @param route
      * @private
      */
+  }, {
+    key: '_setupRedirectRoute',
     value: function _setupRedirectRoute(service, redirect) {
-      logger.log('Redirect Route:', redirect.from, '->', redirect.to);
+      logger.log("Redirect Route:", redirect.from, "->", redirect.to);
 
       if (!redirect.hasOwnProperty('from')) {
-        logger.warn(service.name, 'Service Route - Redirect missing \'from\'');
+        logger.warn(service.name, "Service Route - Redirect missing 'from'");
         return;
       }
       if (!redirect.hasOwnProperty('to')) {
-        logger.warn(service.name, 'Service Route - Redirect missing \'to\'');
+        logger.warn(service.name, "Service Route - Redirect missing 'to'");
         return;
       }
 
       this._httpFramework.addRedirect(redirect.from, redirect.to);
     }
-  }, {
-    key: '_addStaticRoute',
 
     /**
      * Add Static Routes
@@ -108,6 +106,8 @@ var DefaultRoutes = (function (_ServiceMiddleware) {
      * @returns {boolean}
      * @private
      */
+  }, {
+    key: '_addStaticRoute',
     value: function _addStaticRoute(service, staticContent, route) {
       if (!_.isArray(staticContent) && _.isObject(staticContent)) {
         var staticRoute = staticContent;
@@ -119,7 +119,9 @@ var DefaultRoutes = (function (_ServiceMiddleware) {
           if (staticRoute.hasOwnProperty('root')) {
             service.directory.service = staticRoute.root;
           }
-          if (staticRoute.hasOwnProperty('cache')) {}
+          if (staticRoute.hasOwnProperty('cache')) {
+            // TODO
+          }
           if (staticRoute.hasOwnProperty('list')) {
             staticContent = staticRoute.list;
           }
@@ -147,13 +149,13 @@ var DefaultRoutes = (function (_ServiceMiddleware) {
 
             if (stats.isDirectory()) {
               //logger.log("Adding Static Dir Content -", staticContent);
-              logger.log('Static Dir Route:', staticContent, '->', route || '/');
+              logger.log("Static Dir Route:", staticContent, "->", route || '/');
 
               this._httpFramework.addStaticDir(staticContent, route);
               return true;
             } else {
               //logger.log("Adding Static File -", staticContent);
-              logger.log('Static File Route:', staticContent, '->', route || staticContent);
+              logger.log("Static File Route:", staticContent, "->", route || staticContent);
 
               // if route does not start with / then add one
               if (route && route.charAt(0) !== '/') {
@@ -170,14 +172,14 @@ var DefaultRoutes = (function (_ServiceMiddleware) {
           } else {
             // Static File/Dir does not exist
             // this is ok, go to next
-            logger.warn('Static File/Dir does not exist -', staticContent);
+            logger.warn("Static File/Dir does not exist -", staticContent);
             return false;
           }
         } catch (err) {
-          logger.warn('Add Static Route Error:', err);
+          logger.warn("Add Static Route Error:", err);
           //logger.info("Service:", JSON.stringify(service, null, 2) );
-          logger.info('route:', JSON.stringify(route, null, 2));
-          logger.info('staticContent:', JSON.stringify(staticContent, null, 2));
+          logger.info("route:", JSON.stringify(route, null, 2));
+          logger.info("staticContent:", JSON.stringify(staticContent, null, 2));
 
           return false;
         }
@@ -189,5 +191,3 @@ var DefaultRoutes = (function (_ServiceMiddleware) {
 })(ServiceMiddleware);
 
 module.exports = DefaultRoutes;
-
-// TODO

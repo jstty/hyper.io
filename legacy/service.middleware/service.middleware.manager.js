@@ -43,7 +43,9 @@ var ServiceMiddlewareManager = (function () {
           Middleware = require('./' + name + '.js');
         } else if (_.isObject(name)) {
           Middleware = name;
-        } else {}
+        } else {
+          //throw Error('Invalid Middleware Type:', name);
+        }
 
         var middleware = new Middleware(config);
         this._list[name] = middleware;
@@ -116,5 +118,3 @@ var ServiceMiddlewareManager = (function () {
 })();
 
 module.exports = ServiceMiddlewareManager;
-
-//throw Error('Invalid Middleware Type:', name);

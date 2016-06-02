@@ -64,10 +64,10 @@ var ServiceManagerConfig = (function () {
             }
             // if string or object
             else if (_.isString(config) || _.isObject(config)) {
-                this._normalizeService(config);
-            } else {
-                logger.error('Invalid config type:', config);
-            }
+                    this._normalizeService(config);
+                } else {
+                    logger.error('Invalid config type:', config);
+                }
 
             //logger.log("normalize service config:", JSON.stringify(this._config, null, 2));
         }
@@ -80,7 +80,7 @@ var ServiceManagerConfig = (function () {
                 options: {},
                 preRoutes: {},
                 routes: [],
-                directory: { service: 'lib', controllers: '', resolvers: '', views: '', 'static': '' }
+                directory: { service: "lib", controllers: "", resolvers: "", views: "", 'static': "" }
             };
 
             // -----------------------------------------------
@@ -117,7 +117,7 @@ var ServiceManagerConfig = (function () {
                 //logger.info("found directory:", service.directory[d]);
 
                 if (!service.directory[d]) {
-                    logger.info('Could not find ' + d + ' dir in App dir (' + process.cwd() + ')');
+                    logger.info("Could not find " + d + " dir in App dir (" + process.cwd() + ")");
                     //service.directory[d] = service.name;
                     // if not, set to current working dir
                     service.directory[d] = process.cwd();
@@ -139,9 +139,9 @@ var ServiceManagerConfig = (function () {
                     //logger.log("globs after filter:", globs);
 
                     if (globs.length === 0) {
-                        logger.info('Could not find a routes files and service defined (%s)', fileSearchPath);
+                        logger.info("Could not find a routes files and service defined (%s)", fileSearchPath);
                     } else if (globs.length > 1) {
-                        logger.warn('More than one route file found', globs);
+                        logger.warn("More than one route file found", globs);
                     }
 
                     if (globs.length === 1) {
@@ -149,7 +149,7 @@ var ServiceManagerConfig = (function () {
                         service.routes = require(file);
                     }
                 } catch (err) {
-                    logger.warn('Could not load routes files.', err);
+                    logger.warn("Could not load routes files.", err);
                     return;
                 }
             }
@@ -162,10 +162,10 @@ var ServiceManagerConfig = (function () {
             //logger.log("normalize service:", JSON.stringify(service, null, 2));
             this._config.services[key] = service;
         }
-    }, {
-        key: '_findDir',
 
         // directory default: "lib/<service key name in service list>"
+    }, {
+        key: '_findDir',
         value: function _findDir(type, configDirectory, serviceName, serviceDir) {
             // check if configDir is set, a string and not empty
             if (configDirectory && _.isString(configDirectory) && configDirectory.length > 0) {
@@ -177,11 +177,11 @@ var ServiceManagerConfig = (function () {
             }
 
             // find it
-            var file = '';
+            var file = "";
             var globs = null;
-            if (type === 'service') {
+            if (type === "service") {
                 // look for service/app file
-                file = path.sep + 'service.' + serviceName + '.js';
+                file = path.sep + "service." + serviceName + ".js";
                 globs = glob.sync('**' + file);
 
                 // remove all node_modules
@@ -190,13 +190,13 @@ var ServiceManagerConfig = (function () {
                 // check if file exists
                 if (globs.length > 0) {
                     if (globs.length > 1) {
-                        logger.warn('More than one service file found', globs);
+                        logger.warn("More than one service file found", globs);
                     }
                     // dirname removes files from results
                     return path.dirname(process.cwd() + path.sep + globs[0]);
                 }
 
-                file = path.sep + serviceName + '.js';
+                file = path.sep + serviceName + ".js";
                 globs = glob.sync('**' + file);
                 // remove all node_modules
                 globs = util.filterNodeModules(globs);
@@ -204,14 +204,14 @@ var ServiceManagerConfig = (function () {
                 // check if file exists
                 if (globs.length > 0) {
                     if (globs.length > 1) {
-                        logger.warn('More than one service file found', globs);
+                        logger.warn("More than one service file found", globs);
                     }
                     // dirname removes files from results
                     return path.dirname(process.cwd() + path.sep + globs[0]);
                 }
 
                 // default "<cwd>/<service.dir>/lib"
-                return process.cwd() + path.sep + 'lib';
+                return process.cwd() + path.sep + "lib";
             } else {
                 // start in service dir
                 globs = glob.sync(serviceDir + path.sep + '**' + path.sep + type);
@@ -221,7 +221,7 @@ var ServiceManagerConfig = (function () {
                 // check if file exists
                 if (globs.length > 0) {
                     if (globs.length > 1) {
-                        logger.warn('More than one service file found', globs);
+                        logger.warn("More than one service file found", globs);
                     }
                     return globs[0];
                 }

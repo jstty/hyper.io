@@ -23,8 +23,8 @@ function capitalize(string) {
 }
 
 function randomString(len) {
-    var out = '';
-    var alphaNum = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var out = "";
+    var alphaNum = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
     for (var i = 0; i < len; i++) {
         out += alphaNum.charAt(Math.floor(Math.random() * alphaNum.length));
@@ -41,28 +41,28 @@ function promiseContinue(val) {
 
 // build valid URI/URL
 function buildUri(options, path) {
-    var uri = '';
+    var uri = "";
 
     if (options.protocol) {
-        uri += options.protocol + '//';
+        uri += options.protocol + "//";
     } else {
-        uri += 'http://';
+        uri += "http://";
     }
 
     if (options.host) {
         uri += options.host;
     } else {
-        uri += 'localhost';
+        uri += "localhost";
     }
 
     if (options.port) {
-        uri += ':' + options.port;
+        uri += ":" + options.port;
     }
 
     if (path && _.isString(path)) {
         // make sure first char is a slash
         if (path.charAt(0) != '/') {
-            uri += '/';
+            uri += "/";
         }
         uri += path;
     }

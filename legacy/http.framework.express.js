@@ -136,7 +136,7 @@ HttpFramework_Express.prototype.load = function () {
 
 HttpFramework_Express.prototype.validateMethod = function (method) {
     if (!this._app[method] || !_.isFunction(this._app[method])) {
-        logger.warn('ServiceManager: Invalid method', method);
+        logger.warn("ServiceManager: Invalid method", method);
         return false;
     } else {
         return true;
@@ -167,7 +167,11 @@ HttpFramework_Express.prototype.addMethodFunction = function (method, middleware
             if (middlewareList[i] && middlewareList[i].middleware && _.isFunction(middlewareList[i].middleware.isType) && middlewareList[i].middleware.isType('express') && _.isFunction(middlewareList[i].middleware.setupRoute)) {
 
                 validMiddlewares.push(middlewareList[i]);
-            } else {}
+            } else {
+                // missing isType or
+                // is not express or
+                // setupRoute function
+            }
         }
     }
 
@@ -237,9 +241,5 @@ HttpFramework_Express.prototype.buildInputs = function ($rawRequest) {
     // POST - req.body
     // GET  - req.query
     // GET  - req.params
-    return _.pick($rawRequest, ['query', 'params', 'body']);
+    return _.pick($rawRequest, ["query", "params", "body"]);
 };
-
-// missing isType or
-// is not express or
-// setupRoute function
