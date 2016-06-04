@@ -11,6 +11,8 @@ var bodyParser = require('body-parser'); // aka. express.bodyParser
 var methodOverride = require('method-override'); // aka. express.methodOverride
 var morgan = require('morgan'); // aka. express.logger
 var session = require('express-session'); // aka. express.session
+var mime = require('mime');
+
 //
 var Util = require('./util.js');
 var logger = null;
@@ -157,7 +159,7 @@ HttpFramework_Express.prototype.server = function() {
 };
 */
 
-HttpFramework_Express.prototype.addMethodFunction = function (method, middlewareList, routeStr, func) {
+HttpFramework_Express.prototype.addMethodFunction = function (method, middlewareList, routeStr, handler) {
 
     var validMiddlewares = [];
     if (middlewareList) {
@@ -179,11 +181,11 @@ HttpFramework_Express.prototype.addMethodFunction = function (method, middleware
 
         // run setupRoute for each plugin
         _.forEach(validMiddlewares, (function (validMiddleware) {
-            validMiddleware.middleware.setupRoute(this._app, method, routeStr, func, validMiddleware.options);
+            validMiddleware.middleware.setupRoute(this._app, method, routeStr, handler, validMiddleware.options);
         }).bind(this));
     }
 
-    this._app[method](routeStr, func);
+    this._app[method](routeStr, handler);
 };
 
 HttpFramework_Express.prototype.addStaticDir = function (staticDir, staticRoute) {
@@ -242,4 +244,115 @@ HttpFramework_Express.prototype.buildInputs = function ($rawRequest) {
     // GET  - req.query
     // GET  - req.params
     return _.pick($rawRequest, ["query", "params", "body"]);
+};
+
+// type == "view"
+// route.outContentType
+// templateFunc
+HttpFramework_Express.prototype.addWrappedMethodFunction = function (method, middlewareList, routeStr, handler) {
+
+    this.addMethodFunction(method, middlewareList, routeStr, (function (req, res, next) {
+        var responded = false;
+
+        handler(this.buildInputs(req), req.session, req.cookies, req, res, next).then((function (output) {
+            // ---------------------------------------
+            // TODO: Custom error format, defined in config
+            if (responded) {
+                logger.warn("Already responded to request");
+                return;
+            }
+
+            responded = true;
+            if (!output.headers || !_.isObject(output.headers)) {
+                output.headers = {};
+            }
+
+            if (output.headers.filename) {
+                var mimetype = mime.lookup(output.headers.filename);
+                if (!output.headers.hasOwnProperty('Content-type')) {
+                    output.headers['Content-type'] = mimetype;
+                }
+                if (!output.headers.hasOwnProperty('Content-disposition')) {
+                    output.headers['Content-disposition'] = 'attachment; filename=' + output.headers.filename;
+                }
+            }
+
+            // is not buffer and is object
+            if (!Buffer.isBuffer(output.data) && _.isObject(output.data)) {
+
+                // assume JSON
+                if (!output.headers.hasOwnProperty('Content-type')) {
+                    output.headers['Content-Type'] = "application/json";
+                }
+                // convert object to string
+                output.data = JSON.stringify(output.data);
+            } else if (_.isString(output.data)) {
+                // assume HTML
+                if (!output.headers.hasOwnProperty('Content-type')) {
+                    output.headers['Content-Type'] = "text/html";
+                }
+            } else {}
+            // ???
+
+            // merge default content-type with headers
+            res.writeHead(output.code, output.headers);
+
+            if (Buffer.isBuffer(output.data)) {
+                res.end(output.data, 'binary');
+            } else {
+                res.end(output.data);
+            }
+
+            // TOOD: duplicate setHeader error with proper pipeline
+            //next();
+        }).bind(this));
+    }).bind(this));
+};
+
+/**
+ * Validate Inputs
+ * TODO: replace with lib
+ * @param cInput
+ * @param req
+ * @returns {Array}
+ * @private
+ */
+HttpFramework_Express.prototype.validateInputs = function (cInput, req) {
+    var errors = [];
+
+    for (var i in cInput) {
+        //logger.log("_validateInputs:" , i);
+
+        // check input type
+        if (req.hasOwnProperty(i)) {
+
+            for (var k in cInput[i]) {
+                // check required
+                if (!req[i].hasOwnProperty(k) && cInput[i][k].required) {
+                    // missing
+                    errors.push({ error: "Missing " + i + " " + k, type: "missing", id: k });
+                }
+                // check type
+                else if (req[i].hasOwnProperty(k) && cInput[i][k].type) {
+
+                        var tFuncName = "is" + util.String.capitalize(cInput[i][k].type);
+                        // check if lodash has type function
+                        if (_[tFuncName]) {
+                            // check if input passes type function
+                            if (!_[tFuncName](req[i][k])) {
+                                errors.push({ error: "Invalid input " + k + " with value " + req[i][k] + ", expecting type " + i, type: "invalid", id: k });
+                            }
+                        }
+                    }
+            }
+        }
+    }
+
+    if (errors.length === 0) {
+        errors = undefined;
+    }
+    if (errors.length === 1) {
+        errors = errors[0];
+    }
+    return errors;
 };

@@ -46,12 +46,17 @@ HelloCtrl.prototype.$postRoute = function($output) {
     return $output;
 }
 
+// localhost:8000/hello
+HelloCtrl.prototype.hello = function($done, $output)
+{
+    $output.data.hello = 'test hello';
+    return $output;
+};
+
 
 /*
-TODO make this same $routes example in ES6, decortators would be nice
-make hyper controller class?
- */
-
+//TODO make this same $routes example in ES6, decortators would be nice
+//make hyper controller class?
 HelloCtrl.prototype.$routes = {};
 
 // localhost:8000/hello
@@ -76,3 +81,4 @@ HelloCtrl.prototype.world = function()
 {
     return this.data;
 };
+*/

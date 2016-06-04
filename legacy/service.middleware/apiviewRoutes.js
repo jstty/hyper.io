@@ -13,6 +13,7 @@ var fs = require('fs');
 var path = require('path');
 var when = require('when');
 var whenKeys = require('when/keys');
+var whenPipeline = require('when/pipeline');
 var di = require('di');
 var co = require('co');
 var mime = require('mime');
@@ -173,186 +174,21 @@ var ApiViewRoutes = (function (_ServiceMiddleware) {
             }
           }
 
-          this._httpFramework.addMethodFunction(m, middlewareList, routeStr,
-          // TODO: Unify this across both express and hapi
-          (function (req, res, next) {
-            // ---------------------------------------
-            // TODO: Custom error format, defined in config
-            // General Response function
-            var responded = false;
-            function responseFunc(out, code, headers) {
-              if (responded) {
-                logger.warn("Already responded to request");
-                return;
-              }
+          var routeHandlers = {
+            preRoute: null,
+            route: cFunc,
+            postRoute: null
+          };
 
-              responded = true;
-              if (!headers || !_.isObject(headers)) {
-                headers = {};
-              }
+          if (_.isFunction(controller.instance['$preRoute'])) {
+            routeHandlers.preRoute = controller.instance['$preRoute']; //.bind(controller.instance);
+          }
 
-              if (!headers.hasOwnProperty('Content-type') && route.outContentType) {
-                headers['Content-Type'] = route.outContentType;
-              }
-              //logger.log("responseFunc out:", out);
+          if (_.isFunction(controller.instance['$postRoute'])) {
+            routeHandlers.postRoute = controller.instance['$postRoute']; //.bind(controller.instance);
+          }
 
-              // if view compile template
-              if (type == "view" && templateFunc) {
-                out = templateFunc(out);
-              }
-
-              if (headers.filename) {
-                var mimetype = mime.lookup(headers.filename);
-                if (!headers.hasOwnProperty('Content-type')) {
-                  headers['Content-type'] = mimetype;
-                }
-                if (!headers.hasOwnProperty('Content-disposition')) {
-                  headers['Content-disposition'] = 'attachment; filename=' + headers.filename;
-                }
-              }
-
-              // is not buffer and is object
-              if (!Buffer.isBuffer(out) && _.isObject(out)) {
-
-                // assume JSON
-                if (!headers.hasOwnProperty('Content-type')) {
-                  headers['Content-Type'] = "application/json";
-                }
-                // convert object to string
-                out = JSON.stringify(out);
-              } else if (_.isString(out)) {
-                // assume HTML
-                if (!headers.hasOwnProperty('Content-type')) {
-                  headers['Content-Type'] = "text/html";
-                }
-              } else {}
-              // ???
-
-              // merge default content-type with headers
-              res.writeHead(code, headers);
-
-              if (Buffer.isBuffer(out)) {
-                res.end(out, 'binary');
-              } else {
-                res.end(out);
-              }
-
-              // TOOD: duplicate setHeader error with proper pipeline
-              //next();
-            }
-
-            // TODO: dependency injection
-            var done = function done(out, code, headers) {
-              responseFunc(out, code || 200, headers);
-            };
-            // TODO: dependency injection
-            var error = function error(out, code, headers) {
-              responseFunc(out, code || 400, headers);
-            };
-            // TODO: dependency injection
-            var fatal = function fatal(out, code, headers) {
-              responseFunc(out, code || 500, headers);
-            };
-            // TODO: dependency injection
-            var custom = function custom(data) {
-              if (_.isObject(data)) {
-                if (data.hasOwnProperty('filename')) {
-                  if (!data.header) {
-                    data.headers = {};
-                  }
-                  data.headers.filename = data.filename;
-                  delete data.filename;
-                }
-
-                responseFunc(data.data, data.code || 200, data.headers);
-              } else {
-                logger.error('custom response input must be object');
-              }
-            };
-            // ---------------------------------------
-
-            // ---------------------------------------
-            // validate input, if inputs need validating
-            if (cInput) {
-              // bad inputs
-              var validateErrors = this._validateInputs(cInput, req);
-              if (validateErrors) {
-                error(validateErrors);
-                return;
-              }
-            }
-            // ---------------------------------------
-
-            // ---------------------------------------
-            // Run resolvers
-            // ---------------------------------------
-            var resolved = {};
-            // run the resolveFuncs
-            _.forEach(route.resolve, (function (func, key) {
-              // TODO: dependency injection
-              resolved[key] = func();
-            }).bind(this));
-            // promise map to save data to key
-            var resolverPromise = whenKeys.map(resolved, function (value, key) {
-              resolved[key] = value;
-            });
-
-            resolverPromise.then((function () {
-              var module = {
-                '$rawRequest': ['value', req],
-                '$rawResponse': ['value', res],
-                '$next': ['value', next],
-                '$done': ['value', done],
-                '$error': ['value', error],
-                '$fatal': ['value', fatal],
-                '$custom': ['value', custom],
-                '$session': ['value', req.session],
-                '$cookies': ['value', req.cookies],
-                '$input': ['factory', this._httpFramework.buildInputs],
-                '$service': ['value', service.instance],
-                '$logger': ['value', util.logger(service.name + ' - ' + controller.name)]
-              };
-
-              // add resolved to DI
-              _.forEach(resolved, (function (value, key) {
-                module[key] = ['value', value];
-              }).bind(this));
-
-              // TODO: replace this with DI lib
-              var result = this._serviceManager._injectionDependency(module, service, controller.instance, cFunc);
-
-              // if function is generator then wait on yield
-              if (util.isES6Function(cFunc)) {
-                try {
-                  // result is generator, so co wrapper it and turn into promise
-                  result = co(result);
-                } catch (err) {
-                  result = Promise.reject(err);
-                }
-              }
-
-              // if result is promise, fire done on the result data
-              if (when.isPromiseLike(result)) {
-                result.then(function (data) {
-                  if (!responded) {
-                    done(data);
-                  }
-                }, function (data) {
-                  if (!responded) {
-                    error(data);
-                  }
-                });
-              }
-              // if result is not promise and not null or undefined
-              else if (result !== null && result !== undefined) {
-                  if (!responded) {
-                    done(result);
-                  }
-                }
-
-              // ---------------------------------------
-            }).bind(this));
-          }).bind(this));
+          this._httpFramework.addWrappedMethodFunction(m, middlewareList, routeStr, this._handlerPipeline.bind(this, routeHandlers, type, service, controller, route, cInput, templateFunc));
         }).bind(this));
 
         pList.push(viewPromise);
@@ -361,75 +197,205 @@ var ApiViewRoutes = (function (_ServiceMiddleware) {
       return when.all(pList);
     }
 
-    /**
-     * Validate Inputs
-     * TODO: replace with lib, move to http.framework
-     * @param cInput
-     * @param req
-     * @returns {Array}
-     * @private
-     */
+    // TODO: to many input, need some work
   }, {
-    key: '_validateInputs',
-    value: function _validateInputs(cInput, req) {
-      var errors = [];
+    key: '_handlerPipeline',
+    value: function _handlerPipeline(routeHandlers, type, service, controller, route, cInput, templateFunc,
+    // passed in from http framework
+    input, session, cookies, rawRequest, rawResponse, next) {
+      var plist = [];
 
-      for (var i in cInput) {
-        //logger.log("_validateInputs:" , i);
+      var getHandler = function getHandler(handlerFunc, resolved, skipOnError) {
+        return this._handlerWrapper.bind(this, handlerFunc, resolved, skipOnError, service, controller);
+      };
 
-        // check input type
-        if (req.hasOwnProperty(i)) {
+      // ---------------------------------------
+      // TODO: fix this
+      // validate input, if inputs need validating
+      //if( cInput ) {
+      //  // bad inputs
+      //  var validateErrors = this._httpFramework.validateInputs(cInput, rawRequest);
+      //  if(validateErrors) {
+      //    error(validateErrors);
+      //  }
+      //}
+      // ---------------------------------------
 
-          for (var k in cInput[i]) {
-            // check required
-            if (!req[i].hasOwnProperty(k) && cInput[i][k].required) {
-              // missing
-              errors.push({ error: "Missing " + i + " " + k, type: "missing", id: k });
-            }
-            // check type
-            else if (req[i].hasOwnProperty(k) && cInput[i][k].type) {
+      // ---------------------------------------
+      // Run resolvers
+      // ---------------------------------------
+      var resolved = {};
+      // run the resolveFuncs
+      _.forEach(route.resolve, (function (func, key) {
+        // TODO: dependency injection
+        resolved[key] = func();
+      }).bind(this));
+      // promise map to save data to key
+      var resolverPromise = whenKeys.map(resolved, function (value, key) {
+        resolved[key] = value;
+      });
 
-                var tFuncName = "is" + util.String.capitalize(cInput[i][k].type);
-                // check if lodash has type function
-                if (_[tFuncName]) {
-                  // check if input passes type function
-                  if (!_[tFuncName](req[i][k])) {
-                    errors.push({ error: "Invalid input " + k + " with value " + req[i][k] + ", expecting type " + i, type: "invalid", id: k });
-                  }
-                }
-              }
+      return resolverPromise.then((function () {
+
+        resolved['$service'] = service.instance;
+        resolved['$rawRequest'] = rawRequest;
+        resolved['$rawResponse'] = rawResponse;
+        resolved['next'] = next;
+        resolved['$session'] = session;
+        resolved['$cookies'] = cookies;
+        resolved['$input'] = input;
+        resolved['$logger'] = util.logger(service.name + ' - ' + controller.name);
+
+        // pre
+        if (routeHandlers.preRoute) {
+          plist.push(getHandler.call(this, routeHandlers.preRoute, resolved, false));
+        }
+
+        // route
+        if (routeHandlers.route) {
+          plist.push(getHandler.call(this, routeHandlers.route, resolved, true));
+        }
+
+        // post
+        if (routeHandlers.postRoute) {
+          plist.push(getHandler.call(this, routeHandlers.postRoute, resolved, false));
+        }
+
+        return whenPipeline(plist, {}).then((function (output) {
+          // if view compile template
+          if (type == "view" && templateFunc) {
+            output.data = templateFunc(output.data);
           }
+
+          if (output.headers && !output.headers.hasOwnProperty('Content-type') && route.outContentType) {
+            output.headers['Content-Type'] = route.outContentType;
+          }
+
+          return output;
+        }).bind(this));
+      }).bind(this));
+    }
+
+    // TODO: to many input, need some work
+  }, {
+    key: '_handlerWrapper',
+    value: function _handlerWrapper(handlerFunc, resolved, skipOnError, service, controller, orgOutput) {
+      if (!orgOutput) {
+        orgOutput = { out: null, code: 200, headers: null };
+      }
+
+      // error, 40x and 50x codes
+      if (orgOutput.code && orgOutput.code > 400 && skipOnError) {
+        return when.resolve(orgOutput);
+      }
+
+      var deferer = when.defer();
+      var resolveOutput = function resolveOutput(newOutput) {
+        var out = _.merge(orgOutput, newOutput);
+        deferer.resolve(out);
+      };
+
+      // TODO: dependency injection
+      var done = function done(data, code, headers) {
+        resolveOutput({
+          data: data,
+          code: code || orgOutput.code || 200,
+          headers: headers
+        });
+      };
+      // TODO: dependency injection
+      var error = function error(data, code, headers) {
+        resolveOutput({
+          data: data,
+          code: code || 400,
+          headers: headers
+        });
+      };
+      // TODO: dependency injection
+      var fatal = function fatal(data, code, headers) {
+        resolveOutput({
+          data: data,
+          code: code || 500,
+          headers: headers
+        });
+      };
+
+      // TODO: dependency injection
+      var custom = function custom(data) {
+        if (_.isObject(data)) {
+          if (data.hasOwnProperty('filename')) {
+            if (!data.header) {
+              data.headers = {};
+            }
+            data.headers.filename = data.filename;
+            delete data.filename;
+          }
+
+          resolveOutput(data);
+        } else {
+          logger.error('custom response input must be object');
+        }
+      };
+      // ---------------------------------------
+
+      var module = {
+        '$done': ['value', done],
+        '$error': ['value', error],
+        '$fatal': ['value', fatal],
+        '$custom': ['value', custom],
+        '$output': ['value', orgOutput || {}]
+      };
+
+      // add resolved to DI
+      _.forEach(resolved, (function (value, key) {
+        module[key] = ['value', value];
+      }).bind(this));
+
+      // TODO: replace this with DI lib
+      try {
+        var result = this._serviceManager._injectionDependency(module, service, controller.instance, handlerFunc);
+      } catch (err) {
+        // TODO: fix this so errors are thrown, they seem to be swalled by DI
+        error({ error: err });
+      }
+
+      // if function is generator then wait on yield
+      if (util.isES6Function(handlerFunc)) {
+        try {
+          // result is generator, so co wrapper it and turn into promise
+          result = co(result);
+        } catch (err) {
+          error({ error: err });
         }
       }
 
-      if (errors.length === 0) {
-        errors = undefined;
+      // if result is promise, fire done on the result data
+      if (when.isPromiseLike(result)) {
+        result.then(function (output) {
+          // TODO: figure out better way to handle combined input/vs just data
+          // API breaking change?
+          if (output.data && output.code) {
+            done(output.data, output.code, output.headers);
+          } else {
+            done(output);
+          }
+        }, function (err) {
+          error({ error: err });
+        });
       }
-      if (errors.length === 1) {
-        errors = errors[0];
-      }
-      return errors;
-    }
+      // if result is not promise and not null or undefined
+      else if (result !== null && result !== undefined) {
+          // TODO: figure out better way to handle combined input/vs just data
+          // API breaking change?
+          var output = result;
+          if (output.data && output.code) {
+            done(output.data, output.code, output.headers);
+          } else {
+            done(output);
+          }
+        }
 
-    /**
-     * Generator/Promise Handler
-     * TODO: replace this with 'co' lib
-     * @param generator
-     * @param result
-     * @returns {*}
-     * @private
-     */
-  }, {
-    key: '_genPromiseHandle',
-    value: function _genPromiseHandle(generator, result) {
-      // result => { done: [Boolean], value: [Object] }
-      if (result.done) return when.resolve(result.value);
-
-      return when.resolve(result.value).then((function (res) {
-        return this._genPromiseHandle(generator, generator.next(res));
-      }).bind(this), (function (err) {
-        return this._genPromiseHandle(generator, generator['throw'](err));
-      }).bind(this));
+      return deferer.promise;
     }
 
     /**

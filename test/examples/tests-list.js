@@ -8,11 +8,13 @@ module.exports = {
     "multiservice-singlefile":    "app",
     "multiservice-multifile":     "app",
 
+    "prepost-route-multifile":    "app",
+
     "resolver-basic":             "app",
 
     "resource-singlefile":        "app",
     "resource-multifile":         "app",
-    //"resource-sqlite":            "app",
+    "resource-sqlite":            "app",
 
     "externalservice-basic":      "app",
     "externalservice-websockets": "app",
@@ -20,8 +22,10 @@ module.exports = {
     "input-basic":                "app",
     "session-basic":              "app",
 
+    "es6-helloworld-multifile":   "app",
     "es6-generator-singlefile":   "app",
-    "es6-generator-multifile":    "app"
+    "es6-generator-multifile":    "app",
+    "es6-prepost-route-multifile": "app"
   },
   "config": {
     "helloworld-singlefile":      "app",

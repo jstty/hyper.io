@@ -5,7 +5,7 @@ function promiseDelay($q, func) {
 
     setTimeout(function(){
         deferer.resolve( func() );
-    }, 100);
+    }, 50);
 
     return deferer.promise;
 }
@@ -25,7 +25,7 @@ class HelloCtrl {
     }
 
     // localhost:8000/world
-    world *($done, $q)
+    * world($done, $q)
     {
         this.logger.info('/world - yielded request with timeout');
 

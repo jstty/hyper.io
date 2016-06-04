@@ -6,7 +6,7 @@ class HelloCtrl {
     }
 
     // localhost:8000/hello
-    hello($done, $done)
+    hello($done)
     {
         $done({ hello: "world" });
     }
