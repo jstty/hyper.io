@@ -58,7 +58,13 @@
     "yanpm": "^1.0.x"
   },
   "devDependencies": {
-    "babel-cli": "^6.11.4",
+    "babel-cli": "^6.10.1",
+    "babel-plugin-transform-runtime": "^6.9.0",
+    "babel-polyfill": "^6.9.1",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-stage-3": "^6.11.0",
+    "babel-register": "^6.11.5",
+    "babel-runtime": "^6.9.2",
     "chai": "~3.5.0",
     "cheerio": "^0.20.0",
     "coveralls": "^2.11.12",
@@ -70,13 +76,20 @@
     "supertest": "~2.0.0"
   },
   "scripts": {
-    "compile:legacy": "./node_modules/.bin/babel lib --out-dir legacy",
-    "prepublish": "npm run-script compile:legacy",
-    "pretest": "npm run-script compile:legacy",
+    "compile": "./node_modules/.bin/babel lib --out-dir legacy",
+    "prepublish": "npm run-script compile",
+    "pretest": "npm run-script compile",
     "test": "istanbul --config=test/.istanbul.yml cover _mocha -- --check-leaks -t 5000 -b -R spec test/tests.js",
     "coveralls": "cat ./test/.coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
   },
   "engines": {
     "node": ">=0.10.0"
+  },
+  "babel": {
+    "presets": [
+      "es2015",
+      "stage-3"
+    ],
+    "plugins": ["transform-runtime"]
   }
 }

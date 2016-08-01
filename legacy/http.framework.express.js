@@ -1,5 +1,11 @@
 'use strict';
 
+var _stringify = require('babel-runtime/core-js/json/stringify');
+
+var _stringify2 = _interopRequireDefault(_stringify);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 var path = require('path');
 var _ = require('lodash');
 var when = require('when');
@@ -285,7 +291,7 @@ HttpFramework_Express.prototype.addWrappedMethodFunction = function (method, mid
                     output.headers['Content-Type'] = "application/json";
                 }
                 // convert object to string
-                output.data = JSON.stringify(output.data);
+                output.data = (0, _stringify2.default)(output.data);
             } else if (_.isString(output.data)) {
                 // assume HTML
                 if (!output.headers.hasOwnProperty('Content-type')) {

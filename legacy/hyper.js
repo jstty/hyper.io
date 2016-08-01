@@ -4,6 +4,28 @@
  *
  */
 
+var _getOwnPropertyNames = require('babel-runtime/core-js/object/get-own-property-names');
+
+var _getOwnPropertyNames2 = _interopRequireDefault(_getOwnPropertyNames);
+
+var _getPrototypeOf = require('babel-runtime/core-js/object/get-prototype-of');
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = require('babel-runtime/helpers/createClass');
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _create = require('babel-runtime/core-js/object/create');
+
+var _create2 = _interopRequireDefault(_create);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 var fs = require('fs');
 var path = require('path');
 var http = require('http');
@@ -336,7 +358,7 @@ Hyper.classes = {};
 Hyper.util = {};
 
 Hyper.util.extends = function (dest, src) {
-    dest.prototype = Object.create(src.prototype);
+    dest.prototype = (0, _create2.default)(src.prototype);
     dest.prototype.constructor = dest;
     return src.prototype;
 };
@@ -350,61 +372,75 @@ Hyper.decor.handler = function (config) {
     };
 };
 
-Hyper.classes.controller = class {
-    constructor() {
+Hyper.classes.controller = function () {
+    function _class() {
+        (0, _classCallCheck3.default)(this, _class);
+
         this.$route = {};
     }
 
-    $routeInit($logger) {
-        // create route object if not exist
-        if (!this.$route) {
-            this.$route = {};
-        }
-
-        var proto = Object.getPrototypeOf(this);
-        //       console.log('proto:', proto);
-
-        // find list of all handler
-        var pList = Object.getOwnPropertyNames(proto);
-        var list = pList.filter(function (p) {
-            return p !== 'constructor' && typeof this[p] === 'function';
-        }.bind(this));
-        //       console.log('pList:', pList, ', list:',  list);
-
-        // get route configs for all handlers
-        for (var i = 0; i < list.length; i++) {
-            this.__getHandlerRouteConfig($logger, list[i]);
-        }
-
-        console.log('$route:', this.$route);
-    }
-
-    __getHandlerRouteConfig($logger, handlerName) {
-        var funcStr = this[handlerName].toString();
-        // TODO: test all valid JSON string
-        var re = /\@Hyper\.route\(([:;{}<>|"',. !@#$%^&*\?\/\[\]\-\n\r\t\b\^0-9a-zA-Z]*)\)/g;
-
-        var reResult = re.exec(funcStr);
-        console.log('funcStr:', funcStr);
-        console.log('regex result:', reResult);
-        if (reResult && reResult.length >= 2) {
-            config = reResult[1];
-
-            // strip start line comments
-            config = config.replace(/^[ \t]*\/\//mg, '');
-
-            try {
-                config = JSON.parse(config);
-            } catch (err) {
-                console.error('$routeInit Error:', err);
+    (0, _createClass3.default)(_class, [{
+        key: '$routeInit',
+        value: function $routeInit($logger) {
+            // create route object if not exist
+            if (!this.$route) {
+                this.$route = {};
             }
 
-            this.$route[handlerName] = config;
-        }
-    }
+            var proto = (0, _getPrototypeOf2.default)(this);
+            //       console.log('proto:', proto);
 
-    $init() {}
-    $postInit() {}
-    $preRoute() {}
-    $postRoute() {}
-};
+            // find list of all handler
+            var pList = (0, _getOwnPropertyNames2.default)(proto);
+            var list = pList.filter(function (p) {
+                return p !== 'constructor' && typeof this[p] === 'function';
+            }.bind(this));
+            //       console.log('pList:', pList, ', list:',  list);
+
+            // get route configs for all handlers
+            for (var i = 0; i < list.length; i++) {
+                this.__getHandlerRouteConfig($logger, list[i]);
+            }
+
+            console.log('$route:', this.$route);
+        }
+    }, {
+        key: '__getHandlerRouteConfig',
+        value: function __getHandlerRouteConfig($logger, handlerName) {
+            var funcStr = this[handlerName].toString();
+            // TODO: test all valid JSON string
+            var re = /\@Hyper\.route\(([:;{}<>|"',. !@#$%^&*\?\/\[\]\-\n\r\t\b\^0-9a-zA-Z]*)\)/g;
+
+            var reResult = re.exec(funcStr);
+            console.log('funcStr:', funcStr);
+            console.log('regex result:', reResult);
+            if (reResult && reResult.length >= 2) {
+                config = reResult[1];
+
+                // strip start line comments
+                config = config.replace(/^[ \t]*\/\//mg, '');
+
+                try {
+                    config = JSON.parse(config);
+                } catch (err) {
+                    console.error('$routeInit Error:', err);
+                }
+
+                this.$route[handlerName] = config;
+            }
+        }
+    }, {
+        key: '$init',
+        value: function $init() {}
+    }, {
+        key: '$postInit',
+        value: function $postInit() {}
+    }, {
+        key: '$preRoute',
+        value: function $preRoute() {}
+    }, {
+        key: '$postRoute',
+        value: function $postRoute() {}
+    }]);
+    return _class;
+}();

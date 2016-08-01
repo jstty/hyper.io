@@ -5,6 +5,24 @@
  *
  */
 
+var _create = require('babel-runtime/core-js/object/create');
+
+var _create2 = _interopRequireDefault(_create);
+
+var _stringify = require('babel-runtime/core-js/json/stringify');
+
+var _stringify2 = _interopRequireDefault(_stringify);
+
+var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = require('babel-runtime/helpers/createClass');
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 var fs = require('fs');
 var http = require('http');
 var path = require('path');
@@ -28,90 +46,129 @@ module.exports = ServiceManager;
 /** ---------------------------------------------------
  * Public Functions
  * --------------------------------------------------- */
-class Service {
-    /**
-     * initialize service
-     */
-    init() {}
-    // TODO
 
-
-    /**
-     * load service routes into http framework
-     */
-    load() {}
-    // TODO
-
-
-    /**
-     * adds route to http framework
-     * @param routeConfig
-     */
-    addRoute(routeConfig) {}
-    // TODO
-
-
-    /**
-     * adds resource to service
-     * @param resourceConfig
-     */
-    addResource(resourceConfig) {
-        // TODO
+var Service = function () {
+    function Service() {
+        (0, _classCallCheck3.default)(this, Service);
     }
-}
 
-class _ServiceManager {
-    /**
-     * initialize services
-     * load config
-     * normalize service configs
-     * check files exist
-     * any prep before loading the service into the http framework
-     */
-    init() {}
-    // TODO
+    (0, _createClass3.default)(Service, [{
+        key: 'init',
 
-    // load service plugins
-    //   - dynamic (api)
-    //   - template (view)
-    //   - static
-    //   - redirect
-    //   - otherwise
-    //   - auth
-    //   - ...
-
-
-    /**
-     * load services routes into http framework
-     * mostly a config to -> addService helper
-     */
-    load() {}
-    // TODO
-
-
-    /**
-     * adds a service to the manager
-     * adds all routes defined in the config to http framework
-     * @param serviceConfig
-     * @returns Service Object
-     */
-    add(serviceConfig) {}
-    // TODO
-
-
-    /**
-     * get Service Object from serviceId
-     * @param serviceId
-     * @returns Service Object
-     */
-    get(serviceId) {
+        /**
+         * initialize service
+         */
+        value: function init() {}
         // TODO
+
+
+        /**
+         * load service routes into http framework
+         */
+
+    }, {
+        key: 'load',
+        value: function load() {}
+        // TODO
+
+
+        /**
+         * adds route to http framework
+         * @param routeConfig
+         */
+
+    }, {
+        key: 'addRoute',
+        value: function addRoute(routeConfig) {}
+        // TODO
+
+
+        /**
+         * adds resource to service
+         * @param resourceConfig
+         */
+
+    }, {
+        key: 'addResource',
+        value: function addResource(resourceConfig) {
+            // TODO
+        }
+    }]);
+    return Service;
+}();
+
+var _ServiceManager = function () {
+    function _ServiceManager() {
+        (0, _classCallCheck3.default)(this, _ServiceManager);
     }
-}
+
+    (0, _createClass3.default)(_ServiceManager, [{
+        key: 'init',
+
+        /**
+         * initialize services
+         * load config
+         * normalize service configs
+         * check files exist
+         * any prep before loading the service into the http framework
+         */
+        value: function init() {}
+        // TODO
+
+        // load service plugins
+        //   - dynamic (api)
+        //   - template (view)
+        //   - static
+        //   - redirect
+        //   - otherwise
+        //   - auth
+        //   - ...
+
+
+        /**
+         * load services routes into http framework
+         * mostly a config to -> addService helper
+         */
+
+    }, {
+        key: 'load',
+        value: function load() {}
+        // TODO
+
+
+        /**
+         * adds a service to the manager
+         * adds all routes defined in the config to http framework
+         * @param serviceConfig
+         * @returns Service Object
+         */
+
+    }, {
+        key: 'add',
+        value: function add(serviceConfig) {}
+        // TODO
+
+
+        /**
+         * get Service Object from serviceId
+         * @param serviceId
+         * @returns Service Object
+         */
+
+    }, {
+        key: 'get',
+        value: function get(serviceId) {
+            // TODO
+        }
+    }]);
+    return _ServiceManager;
+}();
 
 /* ---------------------------------------------------
  * Constructor
  * --------------------------------------------------- */
+
+
 function ServiceManager(hyperCore, appConfig, servicesManifest, middleware, serviceMiddlewareManager, httpFramework, defaultAppName) {
 
     var serviceManagerConfig = appConfig.serviceManager;
@@ -273,7 +330,7 @@ ServiceManager.prototype._loadServices = function () {
         }
 
         if (this._displayDebuggerInfo) {
-            logger.info('services["%s"]: %s', key, JSON.stringify(service, null, 2));
+            logger.info('services["%s"]: %s', key, (0, _stringify2.default)(service, null, 2));
         }
     }.bind(this));
 };
@@ -483,7 +540,7 @@ ServiceManager.prototype._setupRoutes = function (service) {
         // return controller created or from cache
         var controller = this._setupController(service, route);
         if (this._displayDebuggerInfo) {
-            logger.info("Controller:", JSON.stringify(controller, null, 2));
+            logger.info("Controller:", (0, _stringify2.default)(controller, null, 2));
         }
 
         // Setup Resolver, if they exist
@@ -523,8 +580,8 @@ ServiceManager.prototype._setupController = function (service, route) {
         service.controller[controllerName] = {
             name: controllerName,
             config: service.config,
-            module: function () {},
-            instance: function () {}
+            module: function module() {},
+            instance: function instance() {}
         };
         service.controller[controllerName].instance.config = service.config;
 
@@ -676,11 +733,11 @@ ServiceManager.prototype._injectionDependency = function (module, service, paren
     } else {
         if (parent) {
             if (parent.module.toString().indexOf('function') === 0) {
-                var InjectedWrapper = function () {
+                var InjectedWrapper = function InjectedWrapper() {
                     return injector.invoke(parent.module, this);
                 };
                 //InjectedWrapper.prototype = _.merge(InjectedWrapper.prototype, parent.module.prototype);
-                InjectedWrapper.prototype = Object.create(parent.module.prototype);
+                InjectedWrapper.prototype = (0, _create2.default)(parent.module.prototype);
 
                 return InjectedWrapper;
             } else {
