@@ -5,10 +5,6 @@
  *
  */
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
 var fs = require('fs');
 var http = require('http');
 var path = require('path');
@@ -32,124 +28,90 @@ module.exports = ServiceManager;
 /** ---------------------------------------------------
  * Public Functions
  * --------------------------------------------------- */
+class Service {
+    /**
+     * initialize service
+     */
+    init() {}
+    // TODO
 
-var Service = (function () {
-    function Service() {
-        _classCallCheck(this, Service);
+
+    /**
+     * load service routes into http framework
+     */
+    load() {}
+    // TODO
+
+
+    /**
+     * adds route to http framework
+     * @param routeConfig
+     */
+    addRoute(routeConfig) {}
+    // TODO
+
+
+    /**
+     * adds resource to service
+     * @param resourceConfig
+     */
+    addResource(resourceConfig) {
+        // TODO
     }
+}
 
-    _createClass(Service, [{
-        key: 'init',
+class _ServiceManager {
+    /**
+     * initialize services
+     * load config
+     * normalize service configs
+     * check files exist
+     * any prep before loading the service into the http framework
+     */
+    init() {}
+    // TODO
 
-        /**
-         * initialize service
-         */
-        value: function init() {}
+    // load service plugins
+    //   - dynamic (api)
+    //   - template (view)
+    //   - static
+    //   - redirect
+    //   - otherwise
+    //   - auth
+    //   - ...
+
+
+    /**
+     * load services routes into http framework
+     * mostly a config to -> addService helper
+     */
+    load() {}
+    // TODO
+
+
+    /**
+     * adds a service to the manager
+     * adds all routes defined in the config to http framework
+     * @param serviceConfig
+     * @returns Service Object
+     */
+    add(serviceConfig) {}
+    // TODO
+
+
+    /**
+     * get Service Object from serviceId
+     * @param serviceId
+     * @returns Service Object
+     */
+    get(serviceId) {
         // TODO
-
-        /**
-         * load service routes into http framework
-         */
-
-    }, {
-        key: 'load',
-        value: function load() {}
-        // TODO
-
-        /**
-         * adds route to http framework
-         * @param routeConfig
-         */
-
-    }, {
-        key: 'addRoute',
-        value: function addRoute(routeConfig) {}
-        // TODO
-
-        /**
-         * adds resource to service
-         * @param resourceConfig
-         */
-
-    }, {
-        key: 'addResource',
-        value: function addResource(resourceConfig) {
-            // TODO
-        }
-    }]);
-
-    return Service;
-})();
-
-var _ServiceManager = (function () {
-    function _ServiceManager() {
-        _classCallCheck(this, _ServiceManager);
     }
+}
 
-    /* ---------------------------------------------------
-     * Constructor
-     * --------------------------------------------------- */
-
-    _createClass(_ServiceManager, [{
-        key: 'init',
-
-        /**
-         * initialize services
-         * load config
-         * normalize service configs
-         * check files exist
-         * any prep before loading the service into the http framework
-         */
-        value: function init() {}
-        // TODO
-
-        // load service plugins
-        //   - dynamic (api)
-        //   - template (view)
-        //   - static
-        //   - redirect
-        //   - otherwise
-        //   - auth
-        //   - ...
-
-        /**
-         * load services routes into http framework
-         * mostly a config to -> addService helper
-         */
-
-    }, {
-        key: 'load',
-        value: function load() {}
-        // TODO
-
-        /**
-         * adds a service to the manager
-         * adds all routes defined in the config to http framework
-         * @param serviceConfig
-         * @returns Service Object
-         */
-
-    }, {
-        key: 'add',
-        value: function add(serviceConfig) {}
-        // TODO
-
-        /**
-         * get Service Object from serviceId
-         * @param serviceId
-         * @returns Service Object
-         */
-
-    }, {
-        key: 'get',
-        value: function get(serviceId) {
-            // TODO
-        }
-    }]);
-
-    return _ServiceManager;
-})();
-
+/* ---------------------------------------------------
+ * Constructor
+ * --------------------------------------------------- */
 function ServiceManager(hyperCore, appConfig, servicesManifest, middleware, serviceMiddlewareManager, httpFramework, defaultAppName) {
 
     var serviceManagerConfig = appConfig.serviceManager;
@@ -215,7 +177,7 @@ ServiceManager.prototype._loadServices = function () {
     serviceList.reverse();
     serviceList.push({});
 
-    return when.reduceRight(serviceList, (function (notUsed, serviceManifest, index) {
+    return when.reduceRight(serviceList, function (notUsed, serviceManifest, index) {
         var service = this._services[serviceManifest.name] = {};
 
         service.name = serviceManifest.name;
@@ -225,7 +187,7 @@ ServiceManager.prototype._loadServices = function () {
         service.preRoutes = serviceManifest.preRoutes;
         service.controller = {};
         service.resolver = {};
-        service.directory = serviceManifest.directory || { service: "", controllers: "", resolvers: "", views: "", 'static': "" };
+        service.directory = serviceManifest.directory || { service: "", controllers: "", resolvers: "", views: "", static: "" };
         service.resources = {};
 
         service._promiseQueue = [];
@@ -298,11 +260,11 @@ ServiceManager.prototype._loadServices = function () {
                 //logger.info("Wait for Setup...");
 
                 // TODO: need timeout in case resource promise never resolves
-                return when.all(service._promiseQueue).then((function () {
+                return when.all(service._promiseQueue).then(function (results) {
                     delete service._promiseQueue;
-                    //logger.info("Route Setup Complete");
+                    logger.info("Route Setup Complete:", results);
                     logger.groupEnd(" ");
-                }).bind(this));
+                }.bind(this));
             } else {
                 logger.groupEnd(" ");
 
@@ -313,7 +275,7 @@ ServiceManager.prototype._loadServices = function () {
         if (this._displayDebuggerInfo) {
             logger.info('services["%s"]: %s', key, JSON.stringify(service, null, 2));
         }
-    }).bind(this));
+    }.bind(this));
 };
 
 // run all post start init on services
@@ -323,7 +285,7 @@ ServiceManager.prototype.postStartInit = function () {
     serviceList.reverse();
     serviceList.push({});
 
-    return when.reduceRight(serviceList, (function (notUsed, service) {
+    return when.reduceRight(serviceList, function (notUsed, service) {
         logger.group("Running Service " + service.name + " Post Start Init...");
 
         service._promiseQueue = [];
@@ -342,7 +304,7 @@ ServiceManager.prototype.postStartInit = function () {
             }
         }
 
-        _.forEach(service.resources, (function (resource) {
+        _.forEach(service.resources, function (resource) {
             if (_.isFunction(resource.instance.$postStartInit)) {
                 try {
                     var result = this._injectionDependency(module, service, resource.instance, resource.instance.$postStartInit);
@@ -356,25 +318,25 @@ ServiceManager.prototype.postStartInit = function () {
                     return when.reject(err);
                 }
             }
-        }).bind(this));
+        }.bind(this));
 
         // wait for Q'd resources to resolve before letting service resolve
         if (service._promiseQueue.length) {
             logger.info("Wait Post Start Init...");
 
             // TODO: need timeout in case resource promise never resolves
-            return when.all(service._promiseQueue).then((function () {
+            return when.all(service._promiseQueue).then(function () {
                 delete service._promiseQueue;
 
                 logger.info("Loaded");
                 logger.groupEnd(" ");
-            }).bind(this));
+            }.bind(this));
         } else {
             logger.groupEnd(" ");
 
             return 1;
         }
-    }).bind(this));
+    }.bind(this));
 };
 
 ServiceManager.prototype.addResource = function (name, resourceModule, type, service) {
@@ -414,6 +376,10 @@ ServiceManager.prototype.addResource = function (name, resourceModule, type, ser
 
                     // is promise
                     if (_.isObject(result) && _.isFunction(result.then)) {
+                        result.then(function (result) {
+                            logger.log('Resource "' + name + '" $init:', result);
+                            return result;
+                        }.bind(this));
                         service._promiseQueue.push(result);
                     }
                 } catch (err) {
@@ -516,7 +482,7 @@ ServiceManager.prototype._loadFile = function (type, key, directory) {
  * --------------------------------------------------- */
 
 ServiceManager.prototype._setupRoutes = function (service) {
-    return when.reduce(service.routes, (function (notUsed, route) {
+    return when.reduce(service.routes, function (notUsed, route) {
 
         // return controller created or from cache
         var controller = this._setupController(service, route);
@@ -544,7 +510,7 @@ ServiceManager.prototype._setupRoutes = function (service) {
 
         // if 'p' null then return resolved promise
         return p || when.resolve();
-    }).bind(this), 0);
+    }.bind(this), 0);
 };
 
 ServiceManager.prototype._setupController = function (service, route) {
@@ -561,8 +527,8 @@ ServiceManager.prototype._setupController = function (service, route) {
         service.controller[controllerName] = {
             name: controllerName,
             config: service.config,
-            module: function module() {},
-            instance: function instance() {}
+            module: function () {},
+            instance: function () {}
         };
         service.controller[controllerName].instance.config = service.config;
 
@@ -651,8 +617,8 @@ ServiceManager.prototype._setupController = function (service, route) {
             service.controller[controllerName].instance = new InjectedModule();
             //service.controller[controllerName].instance = new controller();
         } else {
-                service.controller[controllerName].instance = controller;
-            }
+            service.controller[controllerName].instance = controller;
+        }
     }
 
     return service.controller[controllerName];
@@ -714,7 +680,7 @@ ServiceManager.prototype._injectionDependency = function (module, service, paren
     } else {
         if (parent) {
             if (parent.module.toString().indexOf('function') === 0) {
-                var InjectedWrapper = function InjectedWrapper() {
+                var InjectedWrapper = function () {
                     return injector.invoke(parent.module, this);
                 };
                 //InjectedWrapper.prototype = _.merge(InjectedWrapper.prototype, parent.module.prototype);
@@ -741,7 +707,7 @@ ServiceManager.prototype._setupResolver = function (service, route) {
         return;
     }
 
-    _.forEach(route.resolve, (function (resolver, resolverBindName) {
+    _.forEach(route.resolve, function (resolver, resolverBindName) {
         var resolverName = 'defaultResolver';
         var resolverFile = null;
         var ResolverClass = null;
@@ -792,7 +758,7 @@ ServiceManager.prototype._setupResolver = function (service, route) {
         } else {
             logger.warn("Service \"" + service.name + "\" resolver function (" + service.resolver[resolverName][resolverBindName] + ") invalid");
         }
-    }).bind(this));
+    }.bind(this));
 
     return resolve;
 };

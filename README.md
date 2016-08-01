@@ -55,28 +55,17 @@ Note: **Bold items** are on the roadmap, not in the current release.
 
 ### Releases
 ## **Current Release**
-* 0.4.0 - Release
-    * Update Dependencies
-    * Add Service Router
-        * Add HTTP Adapter
-    * Add $services DI
-        * .find(&lt;service name&gt;)
-        * .get(&lt;route&gt;, [&lt;query/hash data [URL format](https://nodejs.org/docs/latest/api/url.html#url_url)&gt;])
-    * Add tests for all examples
-    * Add auto-exec $init function waiting on return promise
-    * Examples
-        * External Services
-        * Sessions
-        * Input
+* 0.5.0 - Release
+    * Replace Middleware with yanpm plugin manager
+    * Refactor Service Manager - breaking it into smaller modules
+    * Custom binary responses
+    * Examples:
+        * Auth middleware - Basic
 
 ## Next Release
-* 0.5.0 - Refactor and polish (50% completed)
-    * [x] Replace Middleware with yanpm plugin manager
-    * [x] Refactor Service Manager - breaking it into smaller modules
-    * [x] Custom binary responses
+* 0.6.0 - Polish
     * Examples:
-        * [/] Auth middleware
-            * [x] Basic
+        * [ ] Auth middleware
             * [ ] JWT
             * [ ] Passport
     * [ ] Error checks (bullet proof)
@@ -85,7 +74,7 @@ Note: **Bold items** are on the roadmap, not in the current release.
 
 ## Road Map
 ---
-* 0.6.0 - Release
+* 1.0.0 - Release
     * [ ] Add $di DI attribute to inject dependencies into a function
     * [ ] Move Express out of the framework to its own plugin (hyper.io-express)
     * [ ] General route pipeline
@@ -94,10 +83,10 @@ Note: **Bold items** are on the roadmap, not in the current release.
             * https://github.com/ctavan/express-validator
             * https://github.com/petreboy14/express-joi
 
-* 0.7.0 - Release
+* 1.2.0 - Release
     * add Koa support
     * Plugin manager support private NPM repos
-    * Add Websocket service router adapter
+    * Move Service router adapter to plugins and use external repos
     * Unit Tests
     * Route Throttling
         * Express
@@ -107,14 +96,14 @@ Note: **Bold items** are on the roadmap, not in the current release.
             * Forever - https://github.com/foreverjs/forever
             * PM2 - https://github.com/Unitech/pm2
     
-* 0.8.0 - Release
+* 1.4.0 - Release
     * API Doc generation
         * Express
             * https://github.com/fliptoo/swagger-express
     * CLI
         * Add API Doc generation
 
-* 0.9.0 - Release
+* 1.6.0 - Release
     * CLI
         * Create Route for a Controller
         * Create Basic Server with Service
@@ -122,7 +111,7 @@ Note: **Bold items** are on the roadmap, not in the current release.
     * Support Clustering
 
 ---
-* 1.0.0 - Release
+* 2.0.0 - Release
     * Load tests
     * Benchmarking Tools
     * Polish and bug fixes
@@ -133,7 +122,7 @@ Note: **Bold items** are on the roadmap, not in the current release.
     * Push to Service Store
 
 ## Example
-See [Examples](https://github.com/jstty/hyper.io/tree/master/examples) directory
+See [Examples](./examples) directory
 
 ## API
 
@@ -182,6 +171,20 @@ See [Examples](https://github.com/jstty/hyper.io/tree/master/examples) directory
         * Resolvers
         * Resources
         * Custom paths
+
+* 0.4.0 - Release
+    * Update Dependencies
+    * Add Service Router
+        * Add HTTP Adapter
+    * Add $services DI
+        * .find(&lt;service name&gt;)
+        * .get(&lt;route&gt;, [&lt;query/hash data [URL format](https://nodejs.org/docs/latest/api/url.html#url_url)&gt;])
+    * Add tests for all examples
+    * Add auto-exec $init function waiting on return promise
+    * Examples
+        * External Services
+        * Sessions
+        * Input
 
 ## License
 

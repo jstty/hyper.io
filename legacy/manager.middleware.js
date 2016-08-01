@@ -4,6 +4,7 @@
  * Manager for middleware
  *
  */
+
 var fs = require('fs');
 //
 var _ = require('lodash');
@@ -117,6 +118,7 @@ Middleware.prototype._loadMiddlewareFile = function (MiddlewareGroup, file) {
         MiddlewareClass = require(file);
     } catch (err) {}
     // this is ok
+
 
     // try loading file as path
     if (!MiddlewareClass && fs.existsSync(file)) {

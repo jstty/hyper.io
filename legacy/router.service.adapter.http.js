@@ -56,7 +56,7 @@ ServiceHTTPAdapter.prototype._buildURI = function (path, data) {
 
 ServiceHTTPAdapter.prototype._request = function (method, path, data, body) {
     // add promise wrapper
-    return when.promise((function (resolve, reject) {
+    return when.promise(function (resolve, reject) {
         // ------------------------------------------------
         request({
             method: method,
@@ -83,7 +83,7 @@ ServiceHTTPAdapter.prototype._request = function (method, path, data, body) {
             }
         });
         // ------------------------------------------------
-    }).bind(this));
+    }.bind(this));
     // end promise wrapper
 };
 
@@ -99,6 +99,6 @@ ServiceHTTPAdapter.prototype.post = function (path, body) {
 ServiceHTTPAdapter.prototype.put = function (path, body) {
     return this._request('PUT', path, null, body);
 };
-ServiceHTTPAdapter.prototype['delete'] = function (path, data) {
+ServiceHTTPAdapter.prototype.delete = function (path, data) {
     return this._request('DELETE', path, data);
 };

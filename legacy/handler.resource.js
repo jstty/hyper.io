@@ -4,6 +4,7 @@
  * Handler for Resources, used in Service/Controllers
  *
  */
+
 module.exports = ResourceHandler;
 
 /* ---------------------------------------------------

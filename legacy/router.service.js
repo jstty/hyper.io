@@ -104,8 +104,8 @@ ServiceRouter.prototype.add = function (serviceOpt1, serviceOpt2) {
     } else if (service.type === 'custom') {
         // this is ok
     } else {
-            logger.error('could not find service adapter of type:', service.type);
-        }
+        logger.error('could not find service adapter of type:', service.type);
+    }
 
     // add service to service list
     this._services[service.name] = service;

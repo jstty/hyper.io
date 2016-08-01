@@ -64,7 +64,7 @@ HttpFramework_Express.prototype.load = function () {
     logger.group('Express HttpFramework Loading...');
 
     // add promise wrapper
-    return when.promise((function (resolve, reject) {
+    return when.promise(function (resolve, reject) {
         // ------------------------------------------------
 
         try {
@@ -132,7 +132,7 @@ HttpFramework_Express.prototype.load = function () {
         }
 
         // ------------------------------------------------
-    }).bind(this));
+    }.bind(this));
     // end promise wrapper
 };
 
@@ -180,9 +180,9 @@ HttpFramework_Express.prototype.addMethodFunction = function (method, middleware
     if (validMiddlewares && _.isArray(validMiddlewares) && validMiddlewares.length) {
 
         // run setupRoute for each plugin
-        _.forEach(validMiddlewares, (function (validMiddleware) {
+        _.forEach(validMiddlewares, function (validMiddleware) {
             validMiddleware.middleware.setupRoute(this._app, method, routeStr, handler, validMiddleware.options);
-        }).bind(this));
+        }.bind(this));
     }
 
     this._app[method](routeStr, handler);
@@ -190,28 +190,28 @@ HttpFramework_Express.prototype.addMethodFunction = function (method, middleware
 
 HttpFramework_Express.prototype.addStaticDir = function (staticDir, staticRoute) {
     if (staticRoute) {
-        return this._app.use(staticRoute, express['static'](staticDir));
+        return this._app.use(staticRoute, express.static(staticDir));
     } else {
-        return this._app.use(express['static'](staticDir));
+        return this._app.use(express.static(staticDir));
     }
 };
 
 HttpFramework_Express.prototype.addStaticFile = function (staticRoute, staticFile) {
-    this._app.get(staticRoute, (function (req, res) {
+    this._app.get(staticRoute, function (req, res) {
         res.sendFile(path.resolve(staticFile));
-    }).bind(this));
+    }.bind(this));
 };
 
 HttpFramework_Express.prototype.addStaticFileDefault = function (staticFile) {
-    this._app.use((function (req, res) {
+    this._app.use(function (req, res) {
         res.sendFile(path.resolve(staticFile));
-    }).bind(this));
+    }.bind(this));
 };
 
 HttpFramework_Express.prototype.addRedirect = function (from, to) {
-    return this._app.use(from, (function (req, res) {
+    return this._app.use(from, function (req, res) {
         res.redirect(to);
-    }).bind(this));
+    }.bind(this));
 };
 
 // custom logging function to add 'x-forwarded-for' and defaults for missing values
@@ -251,10 +251,10 @@ HttpFramework_Express.prototype.buildInputs = function ($rawRequest) {
 // templateFunc
 HttpFramework_Express.prototype.addWrappedMethodFunction = function (method, middlewareList, routeStr, handler) {
 
-    this.addMethodFunction(method, middlewareList, routeStr, (function (req, res, next) {
+    this.addMethodFunction(method, middlewareList, routeStr, function (req, res, next) {
         var responded = false;
 
-        handler(this.buildInputs(req), req.session, req.cookies, req, res, next).then((function (output) {
+        handler(this.buildInputs(req), req.session, req.cookies, req, res, next).then(function (output) {
             // ---------------------------------------
             // TODO: Custom error format, defined in config
             if (responded) {
@@ -294,6 +294,12 @@ HttpFramework_Express.prototype.addWrappedMethodFunction = function (method, mid
             } else {}
             // ???
 
+
+            // if not code passed in, default 200
+            if (!output.code) {
+                output.code = 200;
+            }
+
             // merge default content-type with headers
             res.writeHead(output.code, output.headers);
 
@@ -305,8 +311,8 @@ HttpFramework_Express.prototype.addWrappedMethodFunction = function (method, mid
 
             // TOOD: duplicate setHeader error with proper pipeline
             //next();
-        }).bind(this));
-    }).bind(this));
+        }.bind(this));
+    }.bind(this));
 };
 
 /**

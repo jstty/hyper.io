@@ -3,6 +3,7 @@
 /*
  *
  */
+
 var fs = require('fs');
 var path = require('path');
 var http = require('http');
@@ -216,7 +217,7 @@ Hyper.prototype._loadConfigs = function (servicesManifest) {
 // return promise
 Hyper.prototype.load = function (servicesManifest) {
     // add promise wrapper
-    return when.promise((function (resolve) {
+    return when.promise(function (resolve) {
         // ------------------------------------------------
         this._isLoaded = true;
 
@@ -230,41 +231,41 @@ Hyper.prototype.load = function (servicesManifest) {
         //logger.info("process:", JSON.stringify(process.versions, null, 2));
 
         // done loading plugins, now load http framework
-        this._serviceManager.loadHttpFramework().then((function () {
+        this._serviceManager.loadHttpFramework().then(function () {
             resolve(this);
-        }).bind(this));
+        }.bind(this));
         // ------------------------------------------------
-    }).bind(this));
+    }.bind(this));
     // end promise wrapper
 };
 
 Hyper.prototype.httpServerListen = function () {
     // add promise wrapper
-    return when.promise((function (resolve, reject) {
+    return when.promise(function (resolve, reject) {
         // ------------------------------------------------
 
-        this._httpServer.listen(this._httpFramework.port(), (function () {
+        this._httpServer.listen(this._httpFramework.port(), function () {
             logger.log('Listening on port %d', this._httpFramework.port());
             resolve();
-        }).bind(this));
+        }.bind(this));
 
         // ------------------------------------------------
-    }).bind(this));
+    }.bind(this));
     // end promise wrapper
 };
 
 // load all services and then start
 Hyper.prototype._start = function () {
-    return this._serviceManager.loadServices().then((function () {
+    return this._serviceManager.loadServices().then(function () {
         return this.httpServerListen();
-    }).bind(this)).then((function () {
+    }.bind(this)).then(function () {
         return this._serviceManager.postStartInit();
-    }).bind(this)).then((function () {
+    }.bind(this)).then(function () {
         logger.log('---------------------------------------------');
         logger.log('Ready to accept connections on port', this._httpFramework.port());
         logger.log('---------------------------------------------');
         return this;
-    }).bind(this));
+    }.bind(this));
 };
 
 Hyper.prototype.start = function (servicesManifest) {
@@ -272,23 +273,23 @@ Hyper.prototype.start = function (servicesManifest) {
         logger.log('---------------------------------------------');
         return this._start();
     } else {
-        return this.load(servicesManifest).then((function () {
+        return this.load(servicesManifest).then(function () {
             logger.log('---------------------------------------------');
             return this._start();
-        }).bind(this));
+        }.bind(this));
     }
 };
 
 Hyper.prototype.stop = function () {
     // add promise wrapper
-    return when.promise((function (resolve, reject) {
+    return when.promise(function (resolve, reject) {
         // ------------------------------------------------
 
         this._httpServer.close();
         resolve();
 
         // ------------------------------------------------
-    }).bind(this));
+    }.bind(this));
     // end promise wrapper
 };
 
@@ -328,4 +329,82 @@ Hyper.prototype._initHttpFramework = function () {
 Hyper.prototype._initServiceManager = function () {
     // service manager
     this._serviceManager = new ServiceManager(this, this._config, this._servicesManifest, this._pluginManager, this._serviceMiddlewareManager, this._httpFramework, this._defaultAppName);
+};
+
+Hyper.decor = {};
+Hyper.classes = {};
+Hyper.util = {};
+
+Hyper.util.extends = function (dest, src) {
+    dest.prototype = Object.create(src.prototype);
+    dest.prototype.constructor = dest;
+    return src.prototype;
+};
+
+Hyper.decor.handler = function (config) {
+    return function (target, key, descriptor) {
+        if (!target.$route) {
+            target.$route = {};
+        }
+        target.$route[key] = config;
+    };
+};
+
+Hyper.classes.controller = class {
+    constructor() {
+        this.$route = {};
+    }
+
+    $routeInit($logger) {
+        // create route object if not exist
+        if (!this.$route) {
+            this.$route = {};
+        }
+
+        var proto = Object.getPrototypeOf(this);
+        //       console.log('proto:', proto);
+
+        // find list of all handler
+        var pList = Object.getOwnPropertyNames(proto);
+        var list = pList.filter(function (p) {
+            return p !== 'constructor' && typeof this[p] === 'function';
+        }.bind(this));
+        //       console.log('pList:', pList, ', list:',  list);
+
+        // get route configs for all handlers
+        for (var i = 0; i < list.length; i++) {
+            this.__getHandlerRouteConfig($logger, list[i]);
+        }
+
+        console.log('$route:', this.$route);
+    }
+
+    __getHandlerRouteConfig($logger, handlerName) {
+        var funcStr = this[handlerName].toString();
+        // TODO: test all valid JSON string
+        var re = /\@Hyper\.route\(([:;{}<>|"',. !@#$%^&*\?\/\[\]\-\n\r\t\b\^0-9a-zA-Z]*)\)/g;
+
+        var reResult = re.exec(funcStr);
+        console.log('funcStr:', funcStr);
+        console.log('regex result:', reResult);
+        if (reResult && reResult.length >= 2) {
+            config = reResult[1];
+
+            // strip start line comments
+            config = config.replace(/^[ \t]*\/\//mg, '');
+
+            try {
+                config = JSON.parse(config);
+            } catch (err) {
+                console.error('$routeInit Error:', err);
+            }
+
+            this.$route[handlerName] = config;
+        }
+    }
+
+    $init() {}
+    $postInit() {}
+    $preRoute() {}
+    $postRoute() {}
 };
