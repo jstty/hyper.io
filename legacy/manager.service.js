@@ -260,9 +260,9 @@ ServiceManager.prototype._loadServices = function () {
                 //logger.info("Wait for Setup...");
 
                 // TODO: need timeout in case resource promise never resolves
-                return when.all(service._promiseQueue).then(function (results) {
+                return when.all(service._promiseQueue).then(function () {
                     delete service._promiseQueue;
-                    logger.info("Route Setup Complete:", results);
+                    //logger.info("Route Setup Complete");
                     logger.groupEnd(" ");
                 }.bind(this));
             } else {
@@ -376,10 +376,6 @@ ServiceManager.prototype.addResource = function (name, resourceModule, type, ser
 
                     // is promise
                     if (_.isObject(result) && _.isFunction(result.then)) {
-                        result.then(function (result) {
-                            logger.log('Resource "' + name + '" $init:', result);
-                            return result;
-                        }.bind(this));
                         service._promiseQueue.push(result);
                     }
                 } catch (err) {

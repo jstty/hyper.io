@@ -408,7 +408,7 @@ class ApiViewRoutes extends ServiceMiddleware {
           factory: function (ejs) {
             return new ejs();
           }
-        }]).load(function () {
+        }]).install().then(function () {
           templateMiddleware = this._middleware.getAll('template');
           templateDefaultMW = this._middleware.getDefault('template');
 
