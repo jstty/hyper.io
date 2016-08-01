@@ -12,7 +12,7 @@ var expect  = common.expect;
 
 var rootDir = __dirname;
 //console.log("root dir:", rootDir, "\n");
-var timeoutSec = 2000;
+var timeoutSec = 200;
 
 var list = require('./tests-list.js');
 
@@ -20,7 +20,7 @@ var list = require('./tests-list.js');
 process.setMaxListeners(0);
 
 // iterate over all test groups
-_.forEach(list, function(testList, item){
+_.forEach(list, function(testList, item) {
     // create group for each test
     describe(item, function() {
         this.timeout(timeoutSec * 1000);
@@ -60,7 +60,7 @@ _.forEach(list, function(testList, item){
                         server.config = config = {
                             appName: appName,
                             env: "dev",
-                            silent: true,
+                            silent: false,
                             port: port
                         };
 
