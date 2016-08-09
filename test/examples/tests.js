@@ -12,7 +12,7 @@ var expect  = common.expect;
 
 var rootDir = __dirname;
 //console.log("root dir:", rootDir, "\n");
-var timeoutSec = 200;
+var timeoutSec = 15 * 60; // 15 mins
 
 var list = require('./tests-list.js');
 
