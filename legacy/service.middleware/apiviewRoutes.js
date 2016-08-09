@@ -453,14 +453,14 @@ var ApiViewRoutes = function (_ServiceMiddleware) {
         templateDefaultMW = this._middleware.getDefault('template');
         if (!(0, _keys2.default)(templateMiddleware).length || !templateDefaultMW) {
           // load default templates
-          this._middleware.add([{
+          this._middleware.install([{
             group: 'template',
             name: 'ejs',
             package: 'hyper.io-ejs@0.0.x',
             factory: function factory(ejs) {
               return new ejs();
             }
-          }]).install().then(function () {
+          }]).then(function () {
             templateMiddleware = this._middleware.getAll('template');
             templateDefaultMW = this._middleware.getDefault('template');
 
