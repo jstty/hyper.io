@@ -60,7 +60,7 @@ _.forEach(list, function(testList, item) {
                         server.config = config = {
                             appName: appName,
                             env: "dev",
-                            silent: false,
+                            silent: true,
                             port: port
                         };
 

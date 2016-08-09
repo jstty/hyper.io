@@ -1,6 +1,7 @@
 #!/bin/bash
 
-ALL_VERSIONS="0.10 0.12 4.4 5.12 6.3"
+# TODO: pull these versions from .travis.yml
+ALL_VERSIONS="0.12 4.4 5.12 6.3"
 TEST='mocha --check-leaks -t 5000 -b -R spec test/tests.js'
 
 # run function

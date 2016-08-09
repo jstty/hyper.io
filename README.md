@@ -1,14 +1,15 @@
-# hyper.io [![Build Status](https://secure.travis-ci.org/jstty/hyper.io.png?branch=master)](http://travis-ci.org/jstty/hyper.io)
+<!-- # hyper.io - go plaid -->
+<center>![logo](./logo.png)</center>
+
+[![Build Status](https://secure.travis-ci.org/jstty/hyper.io.png?branch=master)](http://travis-ci.org/jstty/hyper.io)
 [![bitHound Score](https://www.bithound.io/github/jstty/hyper.io/badges/score.svg?branch=master)](https://www.bithound.io/github/jstty/hyper.io)
 [![Coverage Status](https://coveralls.io/repos/jstty/hyper.io/badge.svg?branch=master&service=github)](https://coveralls.io/github/jstty/hyper.io?branch=master)
 ![License](https://img.shields.io/npm/l/hyper.io.svg)
-
 [![Dependency Status](https://david-dm.org/jstty/hyper.io.png?theme=shields.io&branch=master)](https://david-dm.org/jstty/hyper.io)
-[![devDependency Status](https://david-dm.org/jstty/hyper.io/dev-status.png?theme=shields.io&branch=master)](https://david-dm.org/jstty/hyper.io#info=devDependencies) 
+[![devDependency Status](https://david-dm.org/jstty/hyper.io/dev-status.png?theme=shields.io&branch=master)](https://david-dm.org/jstty/hyper.io#info=devDependencies)
+ 
 [![NPM](https://nodei.co/npm/hyper.io.png)](https://nodei.co/npm/hyper.io/)
-----
 
-**This project is in early alpha stage, wait until 0.5.0 for production use.**
 
 ## Features
 * Auto Service Discovery
