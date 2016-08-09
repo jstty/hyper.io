@@ -33,10 +33,10 @@ module.exports = {
     "multiservice-singlefile":    "server",
     "shared":                     "app"
   },
-  // "template": {
-  //   "helloworld-singlefile":      "app",
-  //   "helloworld-multifile":       "app"
-  // },
+  "template": {
+    "helloworld-singlefile":      "app",
+    "helloworld-multifile":       "app"
+  },
   "static": {
     "helloworld-basic":           "app",
     "helloworld-fromto":          "app",
