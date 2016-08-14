@@ -1,6 +1,6 @@
 {
   "name": "hyper.io",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "description": "MicroServices so fast they've gone plaid!",
   "homepage": "https://github.com/jstty/hyper.io#readme",
   "keywords": [
@@ -59,13 +59,13 @@
     "yanpm": "^1.0.x"
   },
   "devDependencies": {
-    "babel-cli": "^6.10.1",
-    "babel-plugin-transform-runtime": "^6.9.0",
-    "babel-polyfill": "^6.9.1",
-    "babel-preset-es2015": "^6.9.0",
+    "babel-cli": "^6.11.4",
+    "babel-plugin-transform-runtime": "^6.12.0",
+    "babel-polyfill": "^6.13.0",
+    "babel-preset-es2015": "^6.13.2",
     "babel-preset-stage-3": "^6.11.0",
-    "babel-register": "^6.11.5",
-    "babel-runtime": "^6.9.2",
+    "babel-register": "^6.11.6",
+    "babel-runtime": "^6.11.6",
     "chai": "~3.5.0",
     "cheerio": "^0.20.0",
     "coveralls": "^2.11.12",
@@ -80,7 +80,7 @@
     "compile": "./node_modules/.bin/babel lib --out-dir legacy",
     "prepublish": "npm run-script compile",
     "pretest": "npm run-script compile",
-    "test": "istanbul --config=test/.istanbul.yml cover _mocha -- --check-leaks -t 5000 -b -R spec test/tests.js",
+    "test": "NODE_ENV=production && istanbul --config=test/.istanbul.yml cover _mocha -- --prof --check-leaks -t 5000 -b -R spec test/tests.js",
     "coveralls": "cat ./test/.coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
   },
   "engines": {

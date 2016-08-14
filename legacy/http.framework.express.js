@@ -93,7 +93,7 @@ HttpFramework_Express.prototype.load = function () {
             }
             if (this._options.urlencoded) {
                 logger.info('Enabling URL Encoding');
-                this._app.use(bodyParser.urlencoded({ extended: true }));
+                this._app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
             }
             if (this._options.parser.cookies) {
                 logger.info('Enabling Cookie Parser');
@@ -101,7 +101,7 @@ HttpFramework_Express.prototype.load = function () {
             }
             if (this._options.parser.json) {
                 logger.info('Enabling JSON support');
-                this._app.use(bodyParser.json());
+                this._app.use(bodyParser.json({ limit: '100mb' }));
             }
 
             if (this._options.session) {
