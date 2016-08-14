@@ -31,7 +31,6 @@ var path = require('path');
 var http = require('http');
 
 var _ = require('lodash');
-var glob = require('glob');
 var transfuser = require('transfuser');
 var when = require('when');
 
@@ -221,7 +220,8 @@ Hyper.prototype._loadConfigs = function (servicesManifest) {
     this._config.hyper = _.merge(this._config.hyper, this._options.hyper);
     this._config.serviceManager = _.merge(this._config.serviceManager, this._options.serviceManager);
     this._config.httpFramework = _.merge(this._config.httpFramework, this._options.httpFramework);
-    //logger.log('config:', JSON.stringify(this._config, null, 2));
+    // TODO: add to verbose
+    // logger.info('config:', JSON.stringify(this._config, null, 2));
 
     //
     if (this._config.hyper.hasOwnProperty('displayDebuggerInfo')) {
@@ -353,9 +353,14 @@ Hyper.prototype._initServiceManager = function () {
     this._serviceManager = new ServiceManager(this, this._config, this._servicesManifest, this._pluginManager, this._serviceMiddlewareManager, this._httpFramework, this._defaultAppName);
 };
 
+Hyper.export = {};
 Hyper.decor = {};
 Hyper.classes = {};
 Hyper.util = {};
+
+Hyper.export.service = function (serviceName) {
+    return ServiceManager.export(serviceName);
+};
 
 Hyper.util.extends = function (dest, src) {
     dest.prototype = (0, _create2.default)(src.prototype);
@@ -372,6 +377,7 @@ Hyper.decor.handler = function (config) {
     };
 };
 
+// TODO: finish this
 Hyper.classes.controller = function () {
     function _class() {
         (0, _classCallCheck3.default)(this, _class);

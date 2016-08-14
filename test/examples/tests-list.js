@@ -41,5 +41,8 @@ module.exports = {
     "helloworld-basic":           "app",
     "helloworld-fromto":          "app",
     "helloworld-otherwise":       "app"
+  },
+  "export": {
+    "helloworld-multifile":       "app"
   }
 };

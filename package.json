@@ -1,6 +1,6 @@
 {
   "name": "hyper.io",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "MicroServices so fast they've gone plaid!",
   "homepage": "https://github.com/jstty/hyper.io#readme",
   "keywords": [
@@ -38,6 +38,7 @@
   "license": "MIT",
   "dependencies": {
     "body-parser": "~1.15.2",
+    "callsite": "^1.0.0",
     "co": "^4.6.0",
     "compression": "~1.6.2",
     "cookie-parser": "~1.4.3",
@@ -90,6 +91,8 @@
       "es2015",
       "stage-3"
     ],
-    "plugins": ["transform-runtime"]
+    "plugins": [
+      "transform-runtime"
+    ]
   }
 }

@@ -31,6 +31,7 @@ var _ = require('lodash');
 var when = require('when');
 var di = require('di');
 var glob = require('glob');
+var stack = require('callsite');
 
 var util = require('./util.js');
 var defaultAppService = require('./default.service.app.js');
@@ -183,7 +184,7 @@ function ServiceManager(hyperCore, appConfig, servicesManifest, middleware, serv
         protocol: this._httpFramework.protocol()
     });
 
-    // TODO: statsD
+    // TODO: add statsD to middleware as plugin
     //this.stats     = new util.Stats(this.options, "ServiceManager");
     logger = util.logger('Services');
 
@@ -240,11 +241,12 @@ ServiceManager.prototype._loadServices = function () {
         service.name = serviceManifest.name;
         service.config = serviceManifest.config || {};
         service.options = serviceManifest.options || {};
+        service.module = serviceManifest.module || {};
         service.routes = serviceManifest.routes || {};
-        service.preRoutes = serviceManifest.preRoutes;
-        service.controller = {};
-        service.resolver = {};
+        service.preRoutes = serviceManifest.preRoutes || {};
+        service.controller = serviceManifest.controller || {};
         service.directory = serviceManifest.directory || { service: "", controllers: "", resolvers: "", views: "", static: "" };
+        service.resolver = {};
         service.resources = {};
 
         service._promiseQueue = [];
@@ -260,8 +262,6 @@ ServiceManager.prototype._loadServices = function () {
                 // use default
                 service.module = defaultAppService;
             }
-        } else {
-            service.module = serviceManifest.module;
         }
 
         // create instance of module
@@ -550,16 +550,9 @@ ServiceManager.prototype._setupRoutes = function (service) {
         var p = null;
         if (this._serviceMiddlewareManager.hasHandler(route)) {
             p = this._serviceMiddlewareManager.setup(service, controller, route);
+        } else {
+            logger.warn("Service \"" + service.name + "\" has invalid route", route);
         }
-        //else if( route.hasOwnProperty('api')) {
-        //    p = this.setupDynamicRoute("api", service, controller, route);
-        //}
-        //else if( route.hasOwnProperty('view')) {
-        //    p = this.setupDynamicRoute("view", service, controller, route);
-        //}
-        else {
-                logger.warn("Service \"" + service.name + "\" has invalid route", route);
-            }
 
         // if 'p' null then return resolved promise
         return p || when.resolve();
@@ -593,58 +586,63 @@ ServiceManager.prototype._setupController = function (service, route) {
     }
 
     if (service.controller[controllerName]) {
-        // controller already loaded
-        return service.controller[controllerName];
+        if (service.controller[controllerName].instance) {
+            // controller already loaded
+            return service.controller[controllerName];
+        }
     } else {
         // create one, required data should be filled in the section below
         service.controller[controllerName] = {};
     }
 
     logger.info("Loading Controller:", controllerName);
-    if (_.isString(route.controller)) {
-        // try to load controller as file
-        var file = route.controller;
-        controller = null;
-        if (fs.existsSync(file)) {
-            try {
-                controller = require(file);
-            } catch (err) {
-                logger.error("Loading Service \"" + service.name + "\" controller (" + route.controller + ") Error:", err);
-            }
-        }
-
-        if (!controller) {
-            // controller default: "<service.directory>/controllers/<controller>.js"
-            file = path.normalize(service.directory.controllers + path.sep + route.controller + ".js");
-            //logger.log("setupController file:", file);
+    // if no controller loaded already
+    if (_.keys(service.controller[controllerName]).length === 0) {
+        if (_.isString(route.controller)) {
+            // try to load controller as file
+            var file = route.controller;
+            controller = null;
             if (fs.existsSync(file)) {
-                // need to add the current cwd because require is relative to this file
                 try {
                     controller = require(file);
                 } catch (err) {
                     logger.error("Loading Service \"" + service.name + "\" controller (" + route.controller + ") Error:", err);
                 }
             }
-        }
 
-        if (!controller) {
+            if (!controller) {
+                // controller default: "<service.directory>/controllers/<controller>.js"
+                file = path.normalize(service.directory.controllers + path.sep + route.controller + ".js");
+                //logger.log("setupController file:", file);
+                if (fs.existsSync(file)) {
+                    // need to add the current cwd because require is relative to this file
+                    try {
+                        controller = require(file);
+                    } catch (err) {
+                        logger.error("Loading Service \"" + service.name + "\" controller (" + route.controller + ") Error:", err);
+                    }
+                }
+            }
+
+            if (!controller) {
+                // error
+                logger.warn("Service \"" + service.name + "\" controller (" + route.controller + ") invalid");
+                return;
+            } else {
+                service.controller[controllerName].module = controller;
+                logger.info("Loaded Controller:", controllerName);
+            }
+        } else if (_.isObject(route.controller)) {
+            if (route.controller.hasOwnProperty('module') && route.controller.hasOwnProperty('instance')) {
+                service.controller[controllerName] = route.controller;
+            } else {
+                service.controller[controllerName].module = route.controller;
+            }
+        } else {
             // error
             logger.warn("Service \"" + service.name + "\" controller (" + route.controller + ") invalid");
             return;
-        } else {
-            service.controller[controllerName].module = controller;
-            logger.info("Loaded Controller:", controllerName);
         }
-    } else if (_.isObject(route.controller)) {
-        if (route.controller.hasOwnProperty('module') && route.controller.hasOwnProperty('instance')) {
-            service.controller[controllerName] = route.controller;
-        } else {
-            service.controller[controllerName].module = route.controller;
-        }
-    } else {
-        // error
-        logger.warn("Service \"" + service.name + "\" controller (" + route.controller + ") invalid");
-        return;
     }
 
     // if controller does not have a config then pass service along
@@ -657,7 +655,7 @@ ServiceManager.prototype._setupController = function (service, route) {
         service.controller[controllerName].name = controllerName;
     }
 
-    if (!service.controller[controllerName].instance) {
+    if (service.controller[controllerName].instance === null || service.controller[controllerName].instance === undefined) {
         if (_.isFunction(service.controller[controllerName].module)) {
             var module = {
                 '$service': ['value', service.instance],
@@ -840,4 +838,43 @@ ServiceManager.prototype._loadServiceFile = function (key, directory) {
     }
 
     return null;
+};
+
+// TODO: move this to shared funcs with core service manager
+ServiceManager.export = function (serviceName) {
+    // get calling dir info
+    var caller = stack()[2]; // get dir 2 levels up, original calling location
+    var file = caller.getFileName();
+
+    // remove calling filename
+    var parts = file.split(path.sep);
+    parts.pop();
+    var filePath = parts.join(path.sep);
+
+    // console.log('dirname:', __dirname, ', cwd:', process.cwd());
+    // console.log('filePath:', filePath, ', parts:', parts);
+
+    // service struction
+    var service = {
+        name: serviceName,
+        config: {},
+        module: require(filePath + path.sep + serviceName + '.js'),
+        routes: require(filePath + path.sep + serviceName + '.routes.js'),
+        controller: {}
+    };
+
+    // get all controllers in dir
+    var files = glob.sync(filePath + path.sep + 'controllers' + path.sep + '*.js');
+    // console.log('files:', files);
+    _.forEach(files, function (file) {
+        var parts = file.split(path.sep);
+        var name = parts.pop();
+        service.controller[name] = {
+            name: name,
+            module: require(file)
+        };
+    });
+    // console.log('service:', service);
+
+    return service;
 };

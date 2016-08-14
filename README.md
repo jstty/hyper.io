@@ -54,6 +54,44 @@
 
 Note: **Bold items** are on the roadmap, not in the current release.
 
+## Example
+See [Examples](./examples) directory
+
+
+## API
+### Config Loading/Merge Order
+1. Built in [config](./lib/config.js)
+2. Current working directory (most likely, dir server was run in)
+    * config.json
+    * config.js
+    * <app/project name>.config.json
+    * <app/project name>.config.js
+3. User home directory
+    * config.custom.json
+    * config.custom.js
+    * <app/project name>.config.custom.json
+    * <app/project name>.config.custom.json
+
+
+### Functions Dependency Injection
+* $hyper: instance of the current hyper server
+* $q: promise library used in hyper (default: when)
+* _: util library used in hyper (default: lodash)
+* $logger: logger library used in hyper (default: stumpy)
+* $rawRequest: raw route request from httpFramework
+* $rawResponse: raw route response from httpFramework
+* $next: route next function
+* $done: route done function
+* $error: route error function
+* $fatal: route fatal function
+* $session: req.session
+* $cookies: req.cookies
+* $input
+    * $input.body: POST data
+    * $input.query: GET query data
+    * $input.params: GET query data
+
+
 ### Releases
 ## **Current Release**
 * 0.5.0 - Release
@@ -72,6 +110,7 @@ Note: **Bold items** are on the roadmap, not in the current release.
     * [ ] Error checks (bullet proof)
     * [ ] Polish and bug fixes
     * [ ] API documentation
+
 
 ## Road Map
 ---
@@ -121,29 +160,6 @@ Note: **Bold items** are on the roadmap, not in the current release.
             * Server production setup
         * Update API
     * Push to Service Store
-
-## Example
-See [Examples](./examples) directory
-
-## API
-
-### Functions Dependency Injection
-* $hyper: instance of the current hyper server
-* $q: promise library used in hyper (default: when)
-* _: util library used in hyper (default: lodash)
-* $logger: logger library used in hyper (default: stumpy)
-* $rawRequest: raw route request from httpFramework
-* $rawResponse: raw route response from httpFramework
-* $next: route next function
-* $done: route done function
-* $error: route error function
-* $fatal: route fatal function
-* $session: req.session
-* $cookies: req.cookies
-* $input
-    * $input.body: POST data
-    * $input.query: GET query data
-    * $input.params: GET query data
 
 
 ### Prev Release(s)

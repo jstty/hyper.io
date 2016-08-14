@@ -74,7 +74,8 @@ var ServiceManagerConfig = function () {
                     logger.error('Invalid config type:', config);
                 }
 
-            //logger.log("normalize service config:", JSON.stringify(this._config, null, 2));
+            // TODO: add to verbose
+            // logger.info("normalize service config:", JSON.stringify(this._config, null, 2));
         }
     }, {
         key: '_normalizeService',
