@@ -18,7 +18,7 @@ resourceHello.prototype.$init = function($q, $logger) {
         };
 
         $logger.log('service1.resourceHello Init Done.');
-        deferer.resolve();
+        deferer.resolve("service1");
     }.bind(this), 2 * 1000);
 
     return deferer.promise;

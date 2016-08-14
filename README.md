@@ -1,17 +1,15 @@
-# hyper.io
-## MicroServices so fast they've gone plaid!
+<!-- # hyper.io - go plaid -->
+<center>![logo](./logo.png)</center>
 
-[![Build Status](https://secure.travis-ci.org/jstty/hyper.io.png)](http://travis-ci.org/jstty/hyper.io)
-[![bitHound Score](https://www.bithound.io/github/jstty/hyper.io/badges/score.svg)](https://www.bithound.io/github/jstty/hyper.io)
+[![Build Status](https://secure.travis-ci.org/jstty/hyper.io.png?branch=master)](http://travis-ci.org/jstty/hyper.io)
+[![bitHound Score](https://www.bithound.io/github/jstty/hyper.io/badges/score.svg?branch=master)](https://www.bithound.io/github/jstty/hyper.io)
 [![Coverage Status](https://coveralls.io/repos/jstty/hyper.io/badge.svg?branch=master&service=github)](https://coveralls.io/github/jstty/hyper.io?branch=master)
 ![License](https://img.shields.io/npm/l/hyper.io.svg)
-
-[![Dependency Status](https://david-dm.org/jstty/hyper.io.png?theme=shields.io)](https://david-dm.org/jstty/hyper.io)
-[![devDependency Status](https://david-dm.org/jstty/hyper.io/dev-status.png?theme=shields.io)](https://david-dm.org/jstty/hyper.io#info=devDependencies) 
+[![Dependency Status](https://david-dm.org/jstty/hyper.io.png?theme=shields.io&branch=master)](https://david-dm.org/jstty/hyper.io)
+[![devDependency Status](https://david-dm.org/jstty/hyper.io/dev-status.png?theme=shields.io&branch=master)](https://david-dm.org/jstty/hyper.io#info=devDependencies)
+ 
 [![NPM](https://nodei.co/npm/hyper.io.png)](https://nodei.co/npm/hyper.io/)
-----
 
-**This project is in early alpha stage, wait until 0.5.0 for production use.**
 
 ## Features
 * Auto Service Discovery
@@ -54,90 +52,26 @@
    * **Load tests**
    * **Benchmarking Tools**
 
-Note: **Bolded items** are on the roadmap, not in the current release.
-
-### Releases
-## **Current Release**
-* 0.4.0 - Release
-    * Update Dependencies
-    * Add Service Router
-        * Add HTTP Adapter
-    * Add $services DI
-        * .find(&lt;service name&gt;)
-        * .get(&lt;route&gt;, [&lt;query/hash data [URL format](https://nodejs.org/docs/latest/api/url.html#url_url)&gt;])
-    * Add tests for all examples
-    * Add auto-exec $init function waiting on return promise
-    * Examples
-        * External Services
-        * Sessions
-        * Input
-
-## Next Release
-* 0.5.0 - Refactor and polish
-    * [ ] Refactor Service Manager - breaking it into smaller modules
-    * [ ] Refactor Service Manager to support add service and General route pipeline
-    * [ ] General route pipeline
-    * [ ] Replace Middleware with yanpm plugin manager
-    * [ ] Move Express out of the framework to its own plugin (hyper.io-express)
-    * [ ] Plugin manager support private NPM repos
-    * Examples:
-        * [ ] Auth middleware
-            * [ ] Basic
-            * [ ] JWT
-            * [ ] Passport
-    * [ ] Error checks (bullet proof)
-    * [ ] Polish and bug fixes
-    * [ ] API documentation
-
-## Road Map
----
-* 0.6.0 - Release
-    * Add $di DI attribute to inject dependencies into a function
-    * Add Websocket service router adapter
-    * Unit Tests
-    * Input validation
-        * Express
-            * https://github.com/ctavan/express-validator
-            * https://github.com/petreboy14/express-joi
-
-* 0.7.0 - Release
-    * Route Throttling
-        * Express
-            * https://github.com/ivolo/express-rate
-    * Add CLI
-        * Keep Alive
-            * Forever - https://github.com/foreverjs/forever
-            * PM2 - https://github.com/Unitech/pm2
-    
-* 0.8.0 - Release
-    * API Doc generation
-        * Express
-            * https://github.com/fliptoo/swagger-express
-    * CLI
-        * Add API Doc generation
-
-* 0.9.0 - Release
-    * CLI
-        * Create Route for a Controller
-        * Create Basic Server with Service
-        * Build/Package/Deploy
-    * Support Clustering
-
----
-* 1.0.0 - Release
-    * Load tests
-    * Benchmarking Tools
-    * Polish and bug fixes
-    * More Documentation
-        * How To 
-            * Server production setup
-        * Update API
-    * Push to Service Store
+Note: **Bold items** are on the roadmap, not in the current release.
 
 ## Example
-See [Examples](https://github.com/jstty/hyper.io/tree/master/examples) directory
+See [Examples](./examples) directory
+
 
 ## API
+### Config Loading/Merge Order
+1. Built in [config](./lib/config.js)
+2. Current working directory (most likely, dir server was run in)
+    * config.json
+    * config.js
+    * <app/project name>.config.json
+    * <app/project name>.config.js
+3. User home directory
+    * config.custom.json
+    * config.custom.js
+    * <app/project name>.config.custom.json
+    * <app/project name>.config.custom.json
+
 
 ### Functions Dependency Injection
 * $hyper: instance of the current hyper server
@@ -156,6 +90,76 @@ See [Examples](https://github.com/jstty/hyper.io/tree/master/examples) directory
     * $input.body: POST data
     * $input.query: GET query data
     * $input.params: GET query data
+
+
+### Releases
+## **Current Release**
+* 0.5.0 - Release
+    * Replace Middleware with yanpm plugin manager
+    * Refactor Service Manager - breaking it into smaller modules
+    * Custom binary responses
+    * Examples:
+        * Auth middleware - Basic
+
+## Next Release
+* 0.6.0 - Polish
+    * Examples:
+        * [ ] Auth middleware
+            * [ ] JWT
+            * [ ] Passport
+    * [ ] Error checks (bullet proof)
+    * [ ] Polish and bug fixes
+    * [ ] API documentation
+
+
+## Road Map
+---
+* 1.0.0 - Release
+    * [ ] Add $di DI attribute to inject dependencies into a function
+    * [ ] Move Express out of the framework to its own plugin (hyper.io-express)
+    * [ ] General route pipeline
+    * [ ] Input validation
+        * Express
+            * https://github.com/ctavan/express-validator
+            * https://github.com/petreboy14/express-joi
+
+* 1.2.0 - Release
+    * add Koa support
+    * Plugin manager support private NPM repos
+    * Move Service router adapter to plugins and use external repos
+    * Unit Tests
+    * Route Throttling
+        * Express
+            * https://github.com/ivolo/express-rate
+    * Add CLI
+        * Keep Alive
+            * Forever - https://github.com/foreverjs/forever
+            * PM2 - https://github.com/Unitech/pm2
+    
+* 1.4.0 - Release
+    * API Doc generation
+        * Express
+            * https://github.com/fliptoo/swagger-express
+    * CLI
+        * Add API Doc generation
+
+* 1.6.0 - Release
+    * CLI
+        * Create Route for a Controller
+        * Create Basic Server with Service
+        * Build/Package/Deploy
+    * Support Clustering
+
+---
+* 2.0.0 - Release
+    * Load tests
+    * Benchmarking Tools
+    * Polish and bug fixes
+    * More Documentation
+        * How To 
+            * Server production setup
+        * Update API
+    * Push to Service Store
 
 
 ### Prev Release(s)
@@ -184,6 +188,20 @@ See [Examples](https://github.com/jstty/hyper.io/tree/master/examples) directory
         * Resolvers
         * Resources
         * Custom paths
+
+* 0.4.0 - Release
+    * Update Dependencies
+    * Add Service Router
+        * Add HTTP Adapter
+    * Add $services DI
+        * .find(&lt;service name&gt;)
+        * .get(&lt;route&gt;, [&lt;query/hash data [URL format](https://nodejs.org/docs/latest/api/url.html#url_url)&gt;])
+    * Add tests for all examples
+    * Add auto-exec $init function waiting on return promise
+    * Examples
+        * External Services
+        * Sessions
+        * Input
 
 ## License
 

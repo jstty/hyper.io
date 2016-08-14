@@ -1,0 +1,10 @@
+{
+    "env": "dev",
+    "port": "8001",
+    "app": {
+        "hello": "config"
+    },
+    "shared": {
+        "hello": "shared config"
+    }
+}
