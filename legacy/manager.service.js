@@ -857,9 +857,9 @@ ServiceManager.export = function (serviceName) {
     // service struction
     var service = {
         name: serviceName,
-        config: {},
-        module: require(filePath + path.sep + serviceName + '.js'),
-        routes: require(filePath + path.sep + serviceName + '.routes.js'),
+        config: util.require([filePath + path.sep + serviceName + '.config.json', filePath + path.sep + serviceName + '.config.js']),
+        module: util.require(filePath + path.sep + serviceName + '.js'),
+        routes: util.require([filePath + path.sep + serviceName + '.routes.json', filePath + path.sep + serviceName + '.routes.js']),
         controller: {}
     };
 
@@ -869,9 +869,10 @@ ServiceManager.export = function (serviceName) {
     _.forEach(files, function (file) {
         var parts = file.split(path.sep);
         var name = parts.pop();
+        name = name.split('.')[0]; // remove '.js' from name
         service.controller[name] = {
             name: name,
-            module: require(file)
+            module: util.require(file)
         };
     });
     // console.log('service:', service);

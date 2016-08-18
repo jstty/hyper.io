@@ -3,7 +3,7 @@ var Hyper = require('../../../../index.js');
 
 // var service = {
 //     name: "myservice",
-//     config: {},
+//     config: { hello: "world"},
 //     module: require('./myservice.js'),
 //     routes: require('./myservice.routes.js'),
 //     controller: {

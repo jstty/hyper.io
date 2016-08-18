@@ -1,6 +1,6 @@
 {
   "name": "hyper.io",
-  "version": "0.5.4",
+  "version": "0.5.5",
   "description": "MicroServices so fast they've gone plaid!",
   "homepage": "https://github.com/jstty/hyper.io#readme",
   "keywords": [
@@ -54,7 +54,7 @@
     "morgan": "~1.7.0",
     "request": "^2.74.0",
     "stumpy": "~0.6.x",
-    "transfuser": "0.2.x",
+    "transfuser": "~0.2.x",
     "when": "~3.7.7",
     "yanpm": "^1.0.x"
   },

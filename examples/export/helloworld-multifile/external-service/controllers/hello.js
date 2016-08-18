@@ -7,9 +7,9 @@ function HelloCtrl(){
 }
 
 // localhost:8000/hello
-HelloCtrl.prototype.hello = function($done)
+HelloCtrl.prototype.hello = function($done, $config)
 {
-    $done( this.data );
+    $done( $config );
 };
 
 // localhost:8000/world

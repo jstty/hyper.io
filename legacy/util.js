@@ -13,6 +13,7 @@ var path = require('path');
 var when = require('when');
 var _ = require('lodash');
 var stumpy = require('stumpy');
+var transfuser = require('transfuser');
 
 // singleton logger
 var _logger = null;
@@ -125,6 +126,12 @@ function isES6Function(func) {
     return func && func.constructor && func.constructor.name === 'GeneratorFunction';
 }
 
+function requireFile(filename) {
+    var config = new transfuser({ silent: true });
+    var data = config.loadSync(filename);
+    return data;
+}
+
 module.exports = {
     promiseContinue: promiseContinue,
     buildURI: buildUri,
@@ -137,5 +144,6 @@ module.exports = {
     filterNodeModules: filterNodeModules,
     version: version,
     isES6: isES6,
-    isES6Function: isES6Function
+    isES6Function: isES6Function,
+    require: requireFile
 };
