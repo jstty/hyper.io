@@ -42,5 +42,25 @@ module.exports = [
         } else {
             if(done) done();
         }
+    },
+    function (server, done) {
+        expect(server).to.not.be.null;
+
+        if (server) {
+            request(server)
+                .get('/test')
+                .expect('Content-Type', /json/)
+                .expect(200)
+                .end(function (err, res) {
+                    expect(err).to.be.null;
+                    expect(res.body).to.be.a('object');
+
+                    expect(res.body).to.have.keys("test");
+                    expect(res.body.test).to.equal(123);
+                    if(done) done();
+                });
+        } else {
+            if(done) done();
+        }
     }
 ];

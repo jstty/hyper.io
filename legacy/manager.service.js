@@ -245,7 +245,13 @@ ServiceManager.prototype._loadServices = function () {
         service.routes = serviceManifest.routes || {};
         service.preRoutes = serviceManifest.preRoutes || {};
         service.controller = serviceManifest.controller || {};
-        service.directory = serviceManifest.directory || { service: "", controllers: "", resolvers: "", views: "", static: "" };
+        service.directory = serviceManifest.directory || {
+            service: "",
+            controllers: "",
+            resolvers: "",
+            views: "",
+            static: ""
+        };
         service.resolver = {};
         service.resources = {};
 
@@ -312,6 +318,12 @@ ServiceManager.prototype._loadServices = function () {
                 logger.groupEnd(" ");
             }
 
+            if (serviceManifest.resources) {
+                _.forEach(serviceManifest.resources, function (resourceModule, name) {
+                    this.addResource(name, resourceModule, 'factory', service);
+                }.bind(this));
+            }
+
             // wait for Q'd resources to resolve before letting service resolve
             if (service._promiseQueue.length) {
                 //logger.info("Wait for Setup...");
@@ -347,7 +359,7 @@ ServiceManager.prototype.postStartInit = function () {
 
         service._promiseQueue = [];
 
-        if (_.isFunction(service.instance.$postStartInit)) {
+        if (service.instance && _.isFunction(service.instance.$postStartInit)) {
             try {
                 var result = this._injectionDependency(module, service, service.instance, service.instance.$postStartInit);
 
@@ -362,7 +374,7 @@ ServiceManager.prototype.postStartInit = function () {
         }
 
         _.forEach(service.resources, function (resource) {
-            if (_.isFunction(resource.instance.$postStartInit)) {
+            if (resource.instance && _.isFunction(resource.instance.$postStartInit)) {
                 try {
                     var result = this._injectionDependency(module, service, resource.instance, resource.instance.$postStartInit);
 
@@ -854,12 +866,13 @@ ServiceManager.export = function (serviceName) {
     // console.log('dirname:', __dirname, ', cwd:', process.cwd());
     // console.log('filePath:', filePath, ', parts:', parts);
 
-    // service struction
+    // service structure
     var service = {
         name: serviceName,
         config: util.require([filePath + path.sep + serviceName + '.config.json', filePath + path.sep + serviceName + '.config.js']),
         module: util.require(filePath + path.sep + serviceName + '.js'),
         routes: util.require([filePath + path.sep + serviceName + '.routes.json', filePath + path.sep + serviceName + '.routes.js']),
+        resources: util.require([filePath + path.sep + serviceName + '.resources.json', filePath + path.sep + serviceName + '.resources.js']),
         controller: {}
     };
 
