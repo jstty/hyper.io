@@ -50,7 +50,7 @@ var ServiceMiddlewareManager = function () {
         } else if (_.isObject(name)) {
           Middleware = name;
         } else {
-          //throw Error('Invalid Middleware Type:', name);
+          // throw Error('Invalid Middleware Type:', name);
         }
 
         var middleware = new Middleware(config);
@@ -80,7 +80,7 @@ var ServiceMiddlewareManager = function () {
           hasHandler = true;
           return false; // exit early
         }
-      }.bind(this));
+      });
 
       return hasHandler;
     }
@@ -91,10 +91,8 @@ var ServiceMiddlewareManager = function () {
         var pList = [];
 
         _.forEach(this._allHandles, function (handles, key) {
-
           if (route.hasOwnProperty(key)) {
             _.forEach(handles, function (middleware) {
-
               var p = null;
               if (middleware.setup) {
                 p = middleware.setup(key, route[key], service, controller, route);
@@ -104,9 +102,9 @@ var ServiceMiddlewareManager = function () {
               if (p) {
                 pList.push(p);
               }
-            }.bind(this));
+            });
           }
-        }.bind(this));
+        });
 
         if (!pList.length) {
           // shortcut, instant resolve, no need for 'all'

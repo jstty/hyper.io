@@ -1,4 +1,4 @@
 
-describe("Examples", function() {
-    require('./examples/tests.js');
+describe('Examples', function () {
+  require('./examples/tests.js');
 });

@@ -1,12 +1,12 @@
 'use strict';
 
 module.exports = {
-    env: "dev",
-    hyper: {
-        logger: { // logz options
-            name: 'HyperServiceManager'
-        },
-        displayDebuggerInfo: false,
-        httpFramework: 'express'
-    }
+  env: 'dev',
+  hyper: {
+    logger: { // logz options
+      name: 'HyperServiceManager'
+    },
+    displayDebuggerInfo: false,
+    httpFramework: 'express' // TODO: make this an object
+  }
 };

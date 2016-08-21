@@ -67,16 +67,16 @@ var DefaultRoutes = function (_ServiceMiddleware) {
   }, {
     key: 'setup',
     value: function setup(handleKey, defaultConfig, service, controller, route) {
-      //logger.log('start DefaultRoutes handleKey:', handleKey);
+      // logger.log('start DefaultRoutes handleKey:', handleKey);
 
       if (handleKey === 'static') {
-        logger.group("Static Route");
-        //logger.log('defaultConfig:', JSON.stringify(defaultConfig, null, 2));
+        logger.group('Static Route');
+        // logger.log('defaultConfig:', JSON.stringify(defaultConfig, null, 2));
         this._addStaticRoute(service, defaultConfig);
         logger.groupEnd('');
       } else if (defaultConfig.hasOwnProperty('static')) {
-        logger.group("Static Route");
-        //logger.log('defaultConfig static:', JSON.stringify(defaultConfig.static, null, 2));
+        logger.group('Static Route');
+        // logger.log('defaultConfig static:', JSON.stringify(defaultConfig.static, null, 2));
         this._addStaticRoute(service, defaultConfig.static);
         logger.groupEnd('');
       } else if (handleKey === 'redirect') {
@@ -90,12 +90,12 @@ var DefaultRoutes = function (_ServiceMiddleware) {
         }
         this._setupRedirectRoute(service, defaultConfig.redirect);
       } else if (defaultConfig.hasOwnProperty('root')) {
-        logger.log("Root:", defaultConfig.root);
-        this._addStaticRoute(service, defaultConfig.root, "/");
+        logger.log('Root:', defaultConfig.root);
+        this._addStaticRoute(service, defaultConfig.root, '/');
       } else {
         // all others -> DEFAULT
         defaultConfig.root = '/index.html';
-        logger.log("Default:", defaultConfig.root);
+        logger.log('Default:', defaultConfig.root);
         this._httpFramework.addStaticFileDefault(defaultConfig.root);
       }
     }
@@ -110,7 +110,7 @@ var DefaultRoutes = function (_ServiceMiddleware) {
   }, {
     key: '_setupRedirectRoute',
     value: function _setupRedirectRoute(service, redirect) {
-      logger.log("Redirect Route:", redirect.from, "->", redirect.to);
+      logger.log('Redirect Route:', redirect.from, '->', redirect.to);
 
       if (!redirect.hasOwnProperty('from')) {
         logger.warn(service.name, "Service Route - Redirect missing 'from'");
@@ -170,19 +170,18 @@ var DefaultRoutes = function (_ServiceMiddleware) {
 
           // check if file/dir exists
           if (fs.existsSync(staticContent)) {
-
             // get stats to see if file or dir
             var stats = fs.lstatSync(staticContent);
 
             if (stats.isDirectory()) {
-              //logger.log("Adding Static Dir Content -", staticContent);
-              logger.log("Static Dir Route:", staticContent, "->", route || '/');
+              // logger.log("Adding Static Dir Content -", staticContent);
+              logger.log('Static Dir Route:', staticContent, '->', route || '/');
 
               this._httpFramework.addStaticDir(staticContent, route);
               return true;
             } else {
-              //logger.log("Adding Static File -", staticContent);
-              logger.log("Static File Route:", staticContent, "->", route || staticContent);
+              // logger.log("Adding Static File -", staticContent);
+              logger.log('Static File Route:', staticContent, '->', route || staticContent);
 
               // if route does not start with / then add one
               if (route && route.charAt(0) !== '/') {
@@ -199,14 +198,14 @@ var DefaultRoutes = function (_ServiceMiddleware) {
           } else {
             // Static File/Dir does not exist
             // this is ok, go to next
-            logger.warn("Static File/Dir does not exist -", staticContent);
+            logger.warn('Static File/Dir does not exist -', staticContent);
             return false;
           }
         } catch (err) {
-          logger.warn("Add Static Route Error:", err);
-          //logger.info("Service:", JSON.stringify(service, null, 2) );
-          logger.info("route:", (0, _stringify2.default)(route, null, 2));
-          logger.info("staticContent:", (0, _stringify2.default)(staticContent, null, 2));
+          logger.warn('Add Static Route Error:', err);
+          // logger.info("Service:", JSON.stringify(service, null, 2) );
+          logger.info('route:', (0, _stringify2.default)(route, null, 2));
+          logger.info('staticContent:', (0, _stringify2.default)(staticContent, null, 2));
 
           return false;
         }

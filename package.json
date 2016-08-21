@@ -1,6 +1,6 @@
 {
   "name": "hyper.io",
-  "version": "0.5.6",
+  "version": "0.6.0",
   "description": "MicroServices so fast they've gone plaid!",
   "homepage": "https://github.com/jstty/hyper.io#readme",
   "keywords": [
@@ -69,6 +69,10 @@
     "chai": "~3.5.0",
     "cheerio": "^0.20.0",
     "coveralls": "^2.11.12",
+    "eslint": "^3.3.1",
+    "eslint-config-standard": "^6.0.0-beta.3",
+    "eslint-plugin-promise": "^2.0.1",
+    "eslint-plugin-standard": "^2.0.0",
     "freeport": "^1.0.5",
     "is-es6": "^1.0.0",
     "istanbul": "^0.4.4",
@@ -77,14 +81,17 @@
     "supertest": "~2.0.0"
   },
   "scripts": {
+    "lint": "npm run clearn && ./node_modules/.bin/eslint lib examples test",
+    "lint-fix": "npm run clearn && ./node_modules/.bin/eslint lib examples test --fix",
     "compile": "./node_modules/.bin/babel lib --out-dir legacy",
+    "clean": "find examples -name 'node_modules' -print0 | xargs -0 rm -rf",
     "prepublish": "npm run-script compile",
     "pretest": "npm run-script compile",
     "test": "NODE_ENV=production && istanbul --config=test/.istanbul.yml cover _mocha -- --prof --check-leaks -t 5000 -b -R spec test/tests.js",
     "coveralls": "cat ./test/.coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
   },
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">=0.12.0"
   },
   "babel": {
     "presets": [

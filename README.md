@@ -94,57 +94,47 @@ See [Examples](./examples) directory
 
 ### Releases
 ## **Current Release**
-* 0.5.0 - Release
-    * Replace Middleware with yanpm plugin manager
-    * Refactor Service Manager - breaking it into smaller modules
-    * Custom binary responses
-    * Examples:
-        * Auth middleware - Basic
+* 0.6.0 - Release
+    * Service Export
+    * Added Resource Manager
+    * Lint Cleanup/Fixes
 
 ## Next Release
-* 0.6.0 - Polish
-    * Examples:
-        * [ ] Auth middleware
-            * [ ] JWT
-            * [ ] Passport
-    * [ ] Error checks (bullet proof)
-    * [ ] Polish and bug fixes
-    * [ ] API documentation
+* 0.6.x - More Polish
+    * [ ] Error checks
 
+* 1.0.0 - ES Next!
+    * [ ] ES6 Classes, decorators
+    * [ ] General route pipeline
+    * [ ] Move Express out of the framework to its own plugin (hyper.io-express)
+    * [ ] API documentation
+    * [ ] Cleanup/Remove old features not heavily used
 
 ## Road Map
 ---
-* 1.0.0 - Release
-    * [ ] Add $di DI attribute to inject dependencies into a function
-    * [ ] Move Express out of the framework to its own plugin (hyper.io-express)
-    * [ ] General route pipeline
-    * [ ] Input validation
+* 1.x.0 - Release
+    * add Koa support
+    * Move Service router adapter to plugins and use external repos
+    * Examples:
+        * Auth middleware
+            * JWT
+            * Passport
+    * Input validation
         * Express
             * https://github.com/ctavan/express-validator
             * https://github.com/petreboy14/express-joi
-
-* 1.2.0 - Release
-    * add Koa support
-    * Plugin manager support private NPM repos
-    * Move Service router adapter to plugins and use external repos
     * Unit Tests
     * Route Throttling
         * Express
             * https://github.com/ivolo/express-rate
-    * Add CLI
-        * Keep Alive
-            * Forever - https://github.com/foreverjs/forever
-            * PM2 - https://github.com/Unitech/pm2
-    
-* 1.4.0 - Release
     * API Doc generation
         * Express
             * https://github.com/fliptoo/swagger-express
     * CLI
+        * Keep Alive
+            * Forever - https://github.com/foreverjs/forever
+            * PM2 - https://github.com/Unitech/pm2
         * Add API Doc generation
-
-* 1.6.0 - Release
-    * CLI
         * Create Route for a Controller
         * Create Basic Server with Service
         * Build/Package/Deploy
@@ -202,6 +192,13 @@ See [Examples](./examples) directory
         * External Services
         * Sessions
         * Input
+
+* 0.5.0 - Release
+    * Replace Middleware with yanpm plugin manager
+    * Refactor Service Manager - breaking it into smaller modules
+    * Custom binary responses
+    * Examples:
+        * Auth middleware - Basic
 
 ## License
 

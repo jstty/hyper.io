@@ -1,4 +1,9 @@
 
-module.exports = {
-    'util': require('./util')
-};
+module.exports = [
+  {
+    group:  'util',
+    name:   'main',
+    type:   'factory',
+    module: require('./util/main.js')
+  }
+];

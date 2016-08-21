@@ -2,16 +2,19 @@
 
 module.exports = HelloCtrl;
 
-function HelloCtrl($logger){
-    $logger.log('Service 1 - Hello Ctrl Init');
+function HelloCtrl ($logger) {
+  $logger.log('Service 1 - Hello Ctrl Init');
 }
 
 // localhost:8000/service1/hello
-HelloCtrl.prototype.hello = function($done, $services)
-{
-    $services.find('service2')
-        .get('/service2/world', { query: { hello: 'world1'} })
-        .then(function(data){
-            $done( data );
-        });
+HelloCtrl.prototype.hello = function ($done, $services) {
+  $services.find('service2')
+    .get('/service2/world', {
+      query: {
+        hello: 'world1'
+      }
+    })
+    .then(function (data) {
+      $done(data);
+    });
 };
