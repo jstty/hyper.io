@@ -30,8 +30,29 @@ var ResourceManager = function () {
     key: 'load',
     value: function load(resources) {
       var pList = [];
+      var resList = [];
 
-      _.forEach(resources, function (resource) {
+      if (_.isArray(resources)) {
+        resList = resources;
+      } else if (_.isObject(resources)) {
+        // convert objects to array
+        _.forEach(resources, function (group, groupName) {
+          _.forEach(group, function (res, resName) {
+            var resource = {
+              group: groupName,
+              name: resName,
+              type: res.type || 'factory',
+              module: res.module
+            };
+            resList.push(resource);
+          });
+        });
+      } else {
+        return when.reject('Invalid resouce type');
+      }
+
+      // resource array now added
+      _.forEach(resList, function (resource) {
         var p = this.add(resource);
         pList.push(p);
       }.bind(this));
