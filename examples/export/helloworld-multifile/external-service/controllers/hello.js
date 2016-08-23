@@ -17,6 +17,7 @@ HelloCtrl.prototype.world = function () {
 };
 
 // localhost:8000/test
-HelloCtrl.prototype.test = function (main) {
-  return main.test();
+HelloCtrl.prototype.test = function (main1, main2) {
+  // return main2.test2();
+  return main1.test1();
 };

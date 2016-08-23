@@ -57,8 +57,8 @@ module.exports = [
           expect(err).to.be.null;
           expect(res.body).to.be.a('object');
 
-          expect(res.body).to.have.keys('test');
-          expect(res.body.test).to.equal(123);
+          expect(res.body).to.have.keys('test1');
+          expect(res.body.test1).to.equal(123);
           if (done) done();
         });
     }

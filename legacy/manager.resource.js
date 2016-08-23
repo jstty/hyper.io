@@ -38,6 +38,18 @@ var ResourceManager = function () {
         // convert objects to array
         _.forEach(resources, function (group, groupName) {
           _.forEach(group, function (res, resName) {
+            if (_.isString(res)) {
+              // TODO: load all modules in the dir
+              this._L.error('Invalid resouce type');
+            }
+            // is module not object containing module properties
+            else if (_.isObject(res) && !res.hasOwnProperty('module')) {
+                var module = res;
+                res = {
+                  module: module
+                };
+              }
+
             var resource = {
               group: groupName,
               name: resName,
@@ -48,7 +60,7 @@ var ResourceManager = function () {
           });
         });
       } else {
-        return when.reject('Invalid resouce type');
+        this._L.error('Invalid resouce type');
       }
 
       // resource array now added
@@ -82,20 +94,46 @@ var ResourceManager = function () {
       return when.all(pList);
     }
   }, {
+    key: 'newModule',
+    value: function newModule(group, resName) {
+      var resInstance = null;
+      var resource = this._find(group, resName);
+      if (resource && resource.module) {
+        var Module = resource.module;
+        resInstance = new Module();
+        resource.instance = resInstance;
+      }
+      return resInstance;
+    }
+  }, {
+    key: '$init',
+    value: function $init(group, resName) {
+      return this._diExec(group, resName, '$init');
+    }
+  }, {
+    key: '$postStartInit',
+    value: function $postStartInit(group, resName) {
+      return this._diExec(group, resName, '$postStartInit');
+    }
+  }, {
     key: 'getAllModules',
-    value: function getAllModules() {
+    value: function getAllModules(group) {
       var list = {};
       _.forEach(this._resources, function (resource, name) {
-        list[name] = resource.module;
+        if (!group || group && group === resource.group) {
+          list[name] = resource.module;
+        }
       });
       return list;
     }
   }, {
     key: 'getAllInstances',
-    value: function getAllInstances() {
+    value: function getAllInstances(group) {
       var list = {};
       _.forEach(this._resources, function (resource, name) {
-        list[name] = resource.instance;
+        if (!group || group && group === resource.group) {
+          list[name] = resource.instance;
+        }
       });
       return list;
     }
@@ -105,20 +143,23 @@ var ResourceManager = function () {
       var type = arguments.length <= 2 || arguments[2] === undefined ? 'factory' : arguments[2];
       var group = arguments.length <= 3 || arguments[3] === undefined ? 'default' : arguments[3];
 
+      if (!type) {
+        type = 'factory';
+      }
+      if (!group) {
+        group = 'default';
+      }
+
       if (_.isObject(name)) {
         var resObj = name;
         resourceModule = resObj.module;
-        type = resObj.type;
-        group = resObj.group;
         name = resObj.name;
+        type = resObj.type || type;
+        group = resObj.group || group;
       }
 
       var resourceInstance = resourceModule;
       var promise = null;
-
-      if (!type) {
-        type = 'factory';
-      }
 
       if (!_.isString(name)) {
         this._L.error("argument1 ('name') needs to be a string");
@@ -143,23 +184,6 @@ var ResourceManager = function () {
             module: resourceModule
           });
           resourceInstance = new InjectedModule();
-
-          // run $init function
-          if (_.isFunction(resourceInstance.$init)) {
-            try {
-              var result = this._serviceManager.injectionDependency(_module, this._service, resourceInstance, resourceInstance.$init);
-
-              // is promise
-              if (_.isObject(result) && _.isFunction(result.then)) {
-                promise = result.then(function () {
-                  return resourceInstance;
-                });
-              }
-            } catch (err) {
-              this._L.error('Loading Middleware Error:', err);
-              return when.resolve(null);
-            }
-          }
         } else {
           this._L.error("argument2 ('resource') needs to be a function/module");
         }
@@ -167,11 +191,18 @@ var ResourceManager = function () {
 
       if (_.isObject(resourceModule)) {
         this._resources[name] = {
+          group: group,
+          type: type,
           module: resourceModule,
           instance: resourceInstance
         };
       } else {
         this._L.info("Could not find or load resource '%s'", name);
+      }
+
+      // if resourceInstance then run $init function
+      if (resourceInstance !== resourceModule) {
+        promise = this.$init(group, name);
       }
 
       if (!promise) {
@@ -184,6 +215,46 @@ var ResourceManager = function () {
       }
 
       return promise;
+    }
+  }, {
+    key: '_diExec',
+    value: function _diExec(group, resName, funcName) {
+      var promise = when.resolve();
+      var resource = this._find(group, resName);
+
+      if (resource && resource.instance && _.isFunction(resource.instance[funcName])) {
+        try {
+          var result = this._serviceManager.injectionDependency(module, this._service, resource.instance, resource.instance[funcName]);
+
+          // is promise
+          if (_.isObject(result) && _.isFunction(result.then)) {
+            promise = result.then(function () {
+              return resource.instance;
+            });
+          }
+        } catch (err) {
+          this._L.error('Loading Middleware Error:', err);
+          promise = when.reject(err);
+        }
+      }
+
+      if (!promise) {
+        promise = when.resolce();
+      }
+
+      return promise;
+    }
+  }, {
+    key: '_find',
+    value: function _find(group, resName) {
+      var res = null;
+      _.forEach(this._resources, function (resource, name) {
+        if (group && group === resource.group && resName === name) {
+          res = resource;
+          return false;
+        }
+      });
+      return res;
     }
   }, {
     key: '_loadResourceFile',
