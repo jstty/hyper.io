@@ -239,7 +239,7 @@ var ResourceManager = function () {
       }
 
       if (!promise) {
-        promise = when.resolce();
+        promise = when.resolve();
       }
 
       return promise;

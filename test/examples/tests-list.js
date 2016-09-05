@@ -33,6 +33,9 @@ module.exports = {
     'multiservice-singlefile': 'server',
     'shared':                  'app'
   },
+  'custom-response': {
+    'helloworld-singlefile': 'app'
+  },
   'template': {
     'helloworld-singlefile': 'app',
     'helloworld-multifile':  'app'
