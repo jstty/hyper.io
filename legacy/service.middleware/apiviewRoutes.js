@@ -403,7 +403,7 @@ var ApiViewRoutes = function (_ServiceMiddleware) {
         result.then(function (output) {
           // TODO: figure out better way to handle combined input/vs just data
           // API breaking change?
-          if (output.data && output.code) {
+          if (output && output.data && output.code) {
             done(output.data, output.code, output.headers);
           } else {
             done(output);
@@ -417,7 +417,7 @@ var ApiViewRoutes = function (_ServiceMiddleware) {
           // TODO: figure out better way to handle combined input/vs just data
           // API breaking change?
           var output = result;
-          if (output.data && output.code) {
+          if (output && output.data && output.code) {
             done(output.data, output.code, output.headers);
           } else {
             done(output);

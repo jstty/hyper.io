@@ -28,7 +28,7 @@ class HelloCtrl {
     }
   }
 
-  // not called if error thown
+  // always called
   $postRoute ($output) {
     if ($output.code > 399) {
       var errorMsg = $output.data;
@@ -45,6 +45,7 @@ class HelloCtrl {
     return $output;
   }
 
+  // not called if preRoute throws error
   // localhost:8000/hello
   hello ($done, $output) {
     $output.data.hello = 'test hello';

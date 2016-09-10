@@ -137,11 +137,17 @@ var ResourceManager = function () {
       });
       return list;
     }
+
+    /*
+    * @return resource instance
+    */
+
   }, {
     key: 'add',
     value: function add(name, resourceModule) {
       var type = arguments.length <= 2 || arguments[2] === undefined ? 'factory' : arguments[2];
       var group = arguments.length <= 3 || arguments[3] === undefined ? 'default' : arguments[3];
+      var returnPromise = arguments.length <= 4 || arguments[4] === undefined ? false : arguments[4];
 
       if (!type) {
         type = 'factory';
@@ -200,21 +206,41 @@ var ResourceManager = function () {
         this._L.info("Could not find or load resource '%s'", name);
       }
 
-      // if resourceInstance then run $init function
-      if (resourceInstance !== resourceModule) {
-        promise = this.$init(group, name);
-      }
-
-      if (!promise) {
-        promise = when.resolve(resourceInstance);
-      }
-
       // to support the adding resouce on service constructor
       if (this._serviceManager.isLoading()) {
+        // if resourceInstance then run $init function
+        if (resourceInstance !== resourceModule) {
+          promise = this.$init(group, name);
+        }
+
+        if (!promise) {
+          promise = when.resolve(resourceInstance);
+        }
+
         this._serviceManager.addToLoadingQ(this._service, promise);
       }
 
-      return promise;
+      if (returnPromise) {
+        if (!promise) {
+          promise = when.resolve(resourceInstance);
+        }
+        return promise;
+      } else {
+        return resourceInstance;
+      }
+    }
+
+    /*
+    * @return promise
+    */
+
+  }, {
+    key: 'addWithInit',
+    value: function addWithInit(name, resourceModule) {
+      var type = arguments.length <= 2 || arguments[2] === undefined ? 'factory' : arguments[2];
+      var group = arguments.length <= 3 || arguments[3] === undefined ? 'default' : arguments[3];
+
+      return this.add(name, resourceModule, type, group, true);
     }
   }, {
     key: '_diExec',
