@@ -20,7 +20,7 @@ hyper1.load({
       routes: [{
         api:    '/service1/hello',
         method: {
-          get: function hello ($done, $services) {
+          get: function hello ($done, $services, $logger) {
             $services.find('service2')
               .get('/service2/world', {
                 query: {
@@ -28,6 +28,7 @@ hyper1.load({
                 }
               })
               .then(function (data) {
+                $logger.log('service1 hello data:', data);
                 $done(data);
               });
           }
@@ -39,14 +40,12 @@ hyper1.load({
         api:    '/service2/hello',
         method: {
           get: function hello ($done, $services) {
-            $services.find('service3')
+            // return promise, resolve to API JSON responce
+            return $services.find('service3')
               .get('/service3/world', {
                 query: {
                   hello: 'world2'
                 }
-              })
-              .then(function (data) {
-                $done(data);
               });
           }
         }
@@ -59,9 +58,10 @@ hyper1.load({
               hello2: $input.query.hello,
               ts:     new Date()
             };
-            $logger.log('world2 data:', data);
+            $logger.log('service2 world data:', data);
 
-            $done(data);
+            // return data, as API JSON responce
+            return data;
           }
         }
       }]
@@ -98,11 +98,10 @@ app1.then(function () {
             api:    '/service3/world',
             method: {
               get: function hello ($done, $input) {
-                var data = {
+                return {
                   hello3: $input.query.hello,
                   ts:     new Date()
                 };
-                $done(data);
               }
             }
           }]

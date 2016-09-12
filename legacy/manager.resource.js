@@ -139,6 +139,25 @@ var ResourceManager = function () {
     }
 
     /*
+    * get resource instance by name
+    * @return resource instance
+    */
+
+  }, {
+    key: 'get',
+    value: function get(resName) {
+      var resInst;
+      _.forEach(this._resources, function (resource, name) {
+        if (name === resName) {
+          resInst = resource.instance;
+          // shortcut exit
+          return false;
+        }
+      });
+      return resInst;
+    }
+
+    /*
     * @return resource instance
     */
 

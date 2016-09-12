@@ -408,21 +408,21 @@ var ApiViewRoutes = function (_ServiceMiddleware) {
           } else {
             done(output);
           }
-        }, function (err) {
+        }).catch(function (err) {
           error({ error: err });
         });
       }
       // if result is not promise and not null or undefined
-      else if (result !== null && result !== undefined) {
+      else if (_.isObject(result) && result.data && result.code) {
           // TODO: figure out better way to handle combined input/vs just data
           // API breaking change?
-          var output = result;
-          if (output && output.data && output.code) {
-            done(output.data, output.code, output.headers);
-          } else {
-            done(output);
-          }
+          done(result.data, result.code, result.headers);
         }
+        // else if result is something
+        else if (result !== null && result !== undefined) {
+            done(result);
+          }
+      // TODO: is a timer needed here in case handler never resloves the route
 
       return deferer.promise;
     }

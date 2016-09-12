@@ -10,7 +10,7 @@ function HelloCtrl () {
 // (eg, generators, promises, throw errors...)
 HelloCtrl.prototype.$preRoute = function ($input, $error, $q) {
   if (!$input.query || !$input.query.q) {
-        // TODO: support throwing errors
+    // TODO: support throwing errors
     $error('missing search input', 404);
         /*
         throw new Error({
@@ -20,7 +20,7 @@ HelloCtrl.prototype.$preRoute = function ($input, $error, $q) {
         */
   }
   else {
-        // can return promise, like handler
+    // can return promise, like handler
     return $q.resolve({
       pre:  $input.query.q,
       data: this.data
@@ -38,7 +38,7 @@ HelloCtrl.prototype.$postRoute = function ($output) {
     };
   }
   else {
-        // can return data, like handler
+    // can return data, like handler
     $output.data.post = 'test2';
   }
 
