@@ -314,14 +314,7 @@ var ApiViewRoutes = function (_ServiceMiddleware) {
 
       var deferer = when.defer();
       var resolveOutput = function resolveOutput(newOutput) {
-        // needed to add this customer to work around the issue of lodash converting buffers to arrays
-        // https://github.com/lodash/lodash/issues/1453
-        var out = _.merge(orgOutput, newOutput, function (a, b) {
-          if (b instanceof Buffer) {
-            return b;
-          }
-        });
-        deferer.resolve(out);
+        deferer.resolve(newOutput);
       };
 
       // TODO: dependency injection
