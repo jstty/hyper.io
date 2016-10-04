@@ -164,9 +164,9 @@ var ResourceManager = function () {
   }, {
     key: 'add',
     value: function add(name, resourceModule) {
-      var type = arguments.length <= 2 || arguments[2] === undefined ? 'factory' : arguments[2];
-      var group = arguments.length <= 3 || arguments[3] === undefined ? 'default' : arguments[3];
-      var returnPromise = arguments.length <= 4 || arguments[4] === undefined ? false : arguments[4];
+      var type = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'factory';
+      var group = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'default';
+      var returnPromise = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
 
       if (!type) {
         type = 'factory';
@@ -256,8 +256,8 @@ var ResourceManager = function () {
   }, {
     key: 'addWithInit',
     value: function addWithInit(name, resourceModule) {
-      var type = arguments.length <= 2 || arguments[2] === undefined ? 'factory' : arguments[2];
-      var group = arguments.length <= 3 || arguments[3] === undefined ? 'default' : arguments[3];
+      var type = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'factory';
+      var group = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'default';
 
       return this.add(name, resourceModule, type, group, true);
     }

@@ -50,7 +50,7 @@ var ApiViewRoutes = function (_ServiceMiddleware) {
   function ApiViewRoutes() {
     (0, _classCallCheck3.default)(this, ApiViewRoutes);
 
-    var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(ApiViewRoutes).call(this));
+    var _this = (0, _possibleConstructorReturn3.default)(this, (ApiViewRoutes.__proto__ || (0, _getPrototypeOf2.default)(ApiViewRoutes)).call(this));
 
     _this.handles = ['api', 'view'];
     return _this;
@@ -59,7 +59,7 @@ var ApiViewRoutes = function (_ServiceMiddleware) {
   (0, _createClass3.default)(ApiViewRoutes, [{
     key: 'init',
     value: function init(_logger, _httpFramework, _middleware, _serviceManager) {
-      (0, _get3.default)((0, _getPrototypeOf2.default)(ApiViewRoutes.prototype), 'init', this).call(this, _logger, _httpFramework, _middleware, _serviceManager);
+      (0, _get3.default)(ApiViewRoutes.prototype.__proto__ || (0, _getPrototypeOf2.default)(ApiViewRoutes.prototype), 'init', this).call(this, _logger, _httpFramework, _middleware, _serviceManager);
       logger = _logger;
     }
 

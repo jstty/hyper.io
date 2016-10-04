@@ -44,7 +44,7 @@ var DefaultRoutes = function (_ServiceMiddleware) {
   function DefaultRoutes() {
     (0, _classCallCheck3.default)(this, DefaultRoutes);
 
-    var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(DefaultRoutes).call(this));
+    var _this = (0, _possibleConstructorReturn3.default)(this, (DefaultRoutes.__proto__ || (0, _getPrototypeOf2.default)(DefaultRoutes)).call(this));
 
     _this.handles = ['otherwise', 'default', 'static', 'redirect'];
     return _this;
@@ -53,7 +53,7 @@ var DefaultRoutes = function (_ServiceMiddleware) {
   (0, _createClass3.default)(DefaultRoutes, [{
     key: 'init',
     value: function init(_logger, _httpFramework, _middleware, _serviceManager) {
-      (0, _get3.default)((0, _getPrototypeOf2.default)(DefaultRoutes.prototype), 'init', this).call(this, _logger, _httpFramework, _middleware, _serviceManager);
+      (0, _get3.default)(DefaultRoutes.prototype.__proto__ || (0, _getPrototypeOf2.default)(DefaultRoutes.prototype), 'init', this).call(this, _logger, _httpFramework, _middleware, _serviceManager);
       logger = _logger;
     }
 
