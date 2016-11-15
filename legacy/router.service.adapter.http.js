@@ -51,7 +51,7 @@ ServiceHTTPAdapter.prototype._buildURI = function (path, data) {
   return url.format(uri);
 };
 
-ServiceHTTPAdapter.prototype._request = function (method, path, data, body) {
+ServiceHTTPAdapter.prototype._request = function (method, path, data, body, headers) {
   // add promise wrapper
   return when.promise(function (resolve, reject) {
     // ------------------------------------------------
@@ -59,7 +59,8 @@ ServiceHTTPAdapter.prototype._request = function (method, path, data, body) {
       method: method,
       uri: this._buildURI(path, data),
       body: body,
-      json: _.isObject(body)
+      json: _.isObject(body),
+      headers: headers || {}
     }, function (error, response, body) {
       if (error) {
         reject(error);
@@ -87,15 +88,15 @@ ServiceHTTPAdapter.prototype._request = function (method, path, data, body) {
 /* ---------------------------------------------------
  * Public Functions
  * --------------------------------------------------- */
-ServiceHTTPAdapter.prototype.get = function (path, data) {
-  return this._request('GET', path, data);
+ServiceHTTPAdapter.prototype.get = function (path, data, headers) {
+  return this._request('GET', path, data, null, headers);
 };
-ServiceHTTPAdapter.prototype.post = function (path, body) {
-  return this._request('POST', path, null, body);
+ServiceHTTPAdapter.prototype.post = function (path, body, headers) {
+  return this._request('POST', path, null, body, headers);
 };
-ServiceHTTPAdapter.prototype.put = function (path, body) {
-  return this._request('PUT', path, null, body);
+ServiceHTTPAdapter.prototype.put = function (path, body, headers) {
+  return this._request('PUT', path, null, body, headers);
 };
-ServiceHTTPAdapter.prototype.delete = function (path, data) {
-  return this._request('DELETE', path, data);
+ServiceHTTPAdapter.prototype.delete = function (path, data, headers) {
+  return this._request('DELETE', path, data, null, headers);
 };
