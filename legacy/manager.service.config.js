@@ -21,7 +21,7 @@ var logger = null;
 
 var ServiceManagerConfig = function () {
   // var appName = this._config.appName || this._defaultAppName;
-  function ServiceManagerConfig(appName, config) {
+  function ServiceManagerConfig(appName, $logger, config) {
     (0, _classCallCheck3.default)(this, ServiceManagerConfig);
 
     this._appName = appName;
@@ -30,8 +30,7 @@ var ServiceManagerConfig = function () {
       this._config = {};
     }
 
-    logger = util.logger('ServicesConfig');
-
+    logger = util.logger({ name: 'ServicesConfig' }, $logger);
     this._normalize();
   }
 

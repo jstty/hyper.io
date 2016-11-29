@@ -17,16 +17,16 @@ module.exports = ServiceRouter;
 /* ---------------------------------------------------
  * Constructor
  * --------------------------------------------------- */
-function ServiceRouter(options) {
+function ServiceRouter(options, $logger) {
   this._services = {};
-  // TODO: statsD
-  // this.stats     = new util.Stats(this.options, "ServiceManager");
-  logger = util.logger('ServiceRouter');
-
   this._options = _.merge({
     port: '8000',
     protocal: 'http:'
   }, options);
+
+  // TODO: statsD
+  // this.stats     = new util.Stats(this.options, "ServiceManager");
+  logger = util.logger({ name: 'ServiceRouter' }, logger);
 }
 
 /* ---------------------------------------------------

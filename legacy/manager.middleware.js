@@ -17,8 +17,8 @@ module.exports = Middleware;
 /* ---------------------------------------------------
  * Constructor
  * --------------------------------------------------- */
-function Middleware() {
-  logger = util.logger('Middleware');
+function Middleware(options) {
+  logger = util.logger({ name: 'Middleware', env: options.env });
 
   this.middleware = {};
 
@@ -213,7 +213,6 @@ Middleware.prototype._setMiddleware = function (MiddlewareClass) {
     // set it as default
     this._setDefault(mInfo.type, mInfo.name);
 
-    logger.log('---------------------------------------------');
     logger.log('Loaded Middleware (' + mInfo.type + ', ' + mInfo.name + ')');
   }
 

@@ -78,7 +78,7 @@ var ApiViewRoutes = function (_ServiceMiddleware) {
         // if return nothing then, return resolved promise
         return this._setupDynamicRoute(handleKey, service, controller, route) || when.resolve();
       } catch (err) {
-        logger.error('ApiViewRoutes Setup Error:', err);
+        service.logger.error('ApiViewRoutes Setup Error:', err);
       }
     }
 
@@ -106,12 +106,12 @@ var ApiViewRoutes = function (_ServiceMiddleware) {
       var routeStr = route.api || route.view || '';
 
       if (!controller) {
-        logger.error('Controller missing or invalid');
+        service.logger.error('Controller missing or invalid');
         return;
       }
 
       if (!routeStr) {
-        logger.warn('Controller', type, 'value invalid');
+        service.logger.warn('Controller', type, 'value invalid');
         return;
       }
 
@@ -150,12 +150,12 @@ var ApiViewRoutes = function (_ServiceMiddleware) {
             }
           } else {
             // if function does not exist in controller
-            logger.warn('Invalid Controller Function/Object', route.method[m]);
+            service.logger.warn('Invalid Controller Function/Object', route.method[m]);
             return;
           }
 
           if (!cFunc || !(_.isFunction(cFunc) || util.isES6Function(cFunc))) {
-            logger.warn('Controller missing method function', route.method[m]);
+            service.logger.warn('Controller missing method function', route.method[m]);
             return;
           }
 
@@ -164,7 +164,7 @@ var ApiViewRoutes = function (_ServiceMiddleware) {
           }
 
           if (type === 'api') {
-            logger.log('API Route:', controller.name || '-', '[' + m + ']', '-', routeStr, '->', methodFunctionName);
+            service.logger.log('API Route:', controller.name || '-', '[' + m + ']', '-', routeStr, '->', methodFunctionName);
           } else if (type === 'view') {
             logger.log('View Route:', controller.name || '-', '[' + m + ']', '-', routeStr, '->', methodFunctionName);
           }
@@ -266,7 +266,7 @@ var ApiViewRoutes = function (_ServiceMiddleware) {
         resolved['$session'] = session;
         resolved['$cookies'] = cookies;
         resolved['$input'] = input;
-        resolved['$logger'] = util.logger(service.name + ' - ' + controller.name);
+        resolved['$logger'] = service.logger;
 
         // pre
         if (routeHandlers.preRoute) {
@@ -355,7 +355,7 @@ var ApiViewRoutes = function (_ServiceMiddleware) {
 
           resolveOutput(data);
         } else {
-          logger.error('custom response input must be object');
+          service.logger.error('custom response input must be object');
         }
       };
       // ---------------------------------------
@@ -438,7 +438,7 @@ var ApiViewRoutes = function (_ServiceMiddleware) {
         var templateMiddleware, templateDefaultMW;
 
         if (!route.hasOwnProperty('template')) {
-          logger.warn('Template missing from route view', routeStr);
+          service.logger.warn('Template missing from route view', routeStr);
           return;
         }
 
@@ -490,7 +490,7 @@ var ApiViewRoutes = function (_ServiceMiddleware) {
       // if not object
       if (!_.isObject(route.template)) {
         if (!_.isString(route.template)) {
-          logger.warn("Template is not 'object' or 'string' type, in route view", routeStr, ' - template:', route.view.template);
+          service.logger.warn("Template is not 'object' or 'string' type, in route view", routeStr, ' - template:', route.view.template);
           return;
         }
 
@@ -548,7 +548,7 @@ var ApiViewRoutes = function (_ServiceMiddleware) {
           // default "<service.directory>/views/<template>"
           templateFile = path.normalize(service.directory.views + path.sep + route.template.file);
           if (!fs.existsSync(templateFile)) {
-            logger.warn('Could not find Template', route.template.file, 'at', templateFile);
+            service.logger.warn('Could not find Template', route.template.file, 'at', templateFile);
             return;
           }
         }
@@ -567,7 +567,7 @@ var ApiViewRoutes = function (_ServiceMiddleware) {
         // compile template
         templateFunc = templateMiddleware.compile(templateData);
       } else {
-        logger.warn('Unknown template type:', route.template.type, ', in route view', routeStr);
+        service.logger.warn('Unknown template type:', route.template.type, ', in route view', routeStr);
         return templateFunc;
       }
 

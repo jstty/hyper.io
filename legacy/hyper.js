@@ -40,9 +40,8 @@ var PluginManager = require('yanpm');
 var ServiceManager = require('./manager.service.js');
 var ServiceMiddlewareManager = require('./service.middleware/service.middleware.manager.js');
 var util = require('./util.js');
+var hyperConfigs = require('./config.js');
 
-//
-var logger = null;
 // for singleton behavior, single instance of hyper globally
 var _hyper = null;
 
@@ -80,13 +79,10 @@ function Hyper(options) {
   this._displayDebuggerInfo = options.displayDebuggerInfo || false;
 
   // default
-  var configs = ['$/config.json', // framework dir (default)
-  '$/config.js' // framework dir (default)
+  var configs = ['$/config.js' // framework dir (default)
   ];
-
   // get server filename
   this._defaultAppName = options.appName || path.basename(require.main.filename, '.js');
-
   configs.push('config.json'); // current dir
   configs.push('config.js'); // current dir
   configs.push(this._defaultAppName + '.config.json'); // current dir
@@ -108,18 +104,19 @@ function Hyper(options) {
   this._servicesManifest = {};
   this._isLoaded = false;
 
-  // set logger
-  logger = util.logger('HyperCore');
-
   // ------------------------------
   // normalize options
+  this._options = _.merge(_.cloneDeep(hyperConfigs), this._options);
   this._options = this._normalizeOptions(this._options);
-  // logger.info('options:', JSON.stringify(this._options, null, 2));
+  // this._logger.info('options:', JSON.stringify(this._options, null, 2));
   // ------------------------------
+
+  // set logger
+  this._logger = util.logger(this._options.hyper.logger);
 
   // middleware manager
   this._pluginManager = new PluginManager({
-    logger: logger
+    logger: this._logger
   });
 
   this._serviceMiddlewareManager = new ServiceMiddlewareManager();
@@ -129,37 +126,20 @@ function Hyper(options) {
 
   // add catch all, just in case
   process.on('uncaughtException', function (err) {
-    logger.error('Uncaught Error -', err, ', stack:', err.stack);
+    this._logger.error('Uncaught Error -', err, ', stack:', err.stack);
   });
 }
 
 Hyper.prototype.env = function (env) {
   if (env) {
-    this._options.serviceManager.env = env;
-    this._options.httpFramework.env = env;
+    this._config.serviceManager.env = env;
+    this._config.httpFramework.env = env;
   }
 
-  return this._options.serviceManager.env;
+  return this._config.serviceManager.env;
 };
 
 Hyper.prototype._normalizeOptions = function (options) {
-  options = _.merge({
-    serviceManager: {
-      env: 'dev',
-      silent: false,
-      displayDebuggerInfo: false
-    },
-    httpFramework: {
-      env: 'dev',
-      port: 8000,
-      silent: false,
-      displayDebuggerInfo: false
-    },
-    hyper: {
-      displayDebuggerInfo: false
-    }
-  }, options);
-
   if (options.env) {
     options.serviceManager.env = options.env;
     options.httpFramework.env = options.env;
@@ -184,14 +164,16 @@ Hyper.prototype._normalizeOptions = function (options) {
     options.serviceManager.silent = true;
     delete options.silent;
 
-    logger.setEnv('prod');
+    options.serviceManager.env = 'prod';
+    options.httpFramework.env = options.serviceManager.env;
+    options.hyper.logger.env = options.serviceManager.env;
   }
 
   return options;
 };
 
 Hyper.prototype.logger = function () {
-  return util.logger();
+  return this._logger;
 };
 
 Hyper.prototype.resource = function () {
@@ -203,17 +185,16 @@ Hyper.prototype.resource = function () {
 Hyper.prototype._loadConfigs = function (servicesManifest) {
   // config manager
   // logger not loaded, yet so we can only user console
-  logger.log('---------------------------------------------');
-  logger.group('Loading Configuration...');
+  this._logger.group('Loading Configuration...');
   this._configManager = new Transfuser({
     basePath: __dirname,
-    logger: logger
+    logger: this._logger
   });
   // blocking, but this is ok because the server needs the configs to proceed
   this._config = this._configManager.loadSync(this._options.configs, !this._displayDebuggerInfo);
   // normalize configs
   this._config = this._normalizeOptions(this._config);
-  logger.groupEnd('');
+  this._logger.groupEnd('');
 
   // add options passed in from inits
   this._config.appName = this._options.appName;
@@ -221,7 +202,7 @@ Hyper.prototype._loadConfigs = function (servicesManifest) {
   this._config.serviceManager = _.merge(this._config.serviceManager, this._options.serviceManager);
   this._config.httpFramework = _.merge(this._config.httpFramework, this._options.httpFramework);
   // TODO: add to verbose
-  // logger.info('config:', JSON.stringify(this._config, null, 2));
+  // this._logger.info('config:', JSON.stringify(this._config, null, 2));
 
   //
   if (this._config.hyper.hasOwnProperty('displayDebuggerInfo')) {
@@ -229,7 +210,7 @@ Hyper.prototype._loadConfigs = function (servicesManifest) {
   }
 
   // update logger options, using config
-  logger.setOptions(this._config.hyper.logger);
+  this._logger.setOptions(this._config.hyper.logger);
 
   // service config
   this._servicesManifest = servicesManifest;
@@ -250,7 +231,7 @@ Hyper.prototype.load = function (servicesManifest) {
     // init service manager and router
     this._initServiceManager();
 
-    // logger.info("process:", JSON.stringify(process.versions, null, 2));
+    // this._logger.info("process:", JSON.stringify(process.versions, null, 2));
 
     // done loading plugins, now load http framework
     this._serviceManager.loadHttpFramework().then(function () {
@@ -267,7 +248,7 @@ Hyper.prototype.httpServerListen = function () {
     // ------------------------------------------------
 
     this._httpServer.listen(this._httpFramework.port(), function () {
-      logger.log('Listening on port %d', this._httpFramework.port());
+      this._logger.log('Listening on port %d', this._httpFramework.port());
       resolve();
     }.bind(this));
 
@@ -283,20 +264,18 @@ Hyper.prototype._start = function () {
   }.bind(this)).then(function () {
     return this._serviceManager.postStartInit();
   }.bind(this)).then(function () {
-    logger.log('---------------------------------------------');
-    logger.log('Ready to accept connections on port', this._httpFramework.port());
-    logger.log('---------------------------------------------');
+    this._logger.log('---------------------------------------------');
+    this._logger.log('Ready to accept connections on port', this._httpFramework.port());
+    this._logger.log('---------------------------------------------');
     return this;
   }.bind(this));
 };
 
 Hyper.prototype.start = function (servicesManifest) {
   if (this._isLoaded) {
-    logger.log('---------------------------------------------');
     return this._start();
   } else {
     return this.load(servicesManifest).then(function () {
-      logger.log('---------------------------------------------');
       return this._start();
     }.bind(this));
   }
@@ -339,9 +318,9 @@ Hyper.prototype._initHttpFramework = function () {
   // load HTTP framework
   if (this._config.hyper.httpFramework === 'express') {
     // TODO: use DI to pass vars
-    this._httpFramework = new HttpFrameworkExpress(this._config.httpFramework, this._stats);
+    this._httpFramework = new HttpFrameworkExpress(this._config.httpFramework, this._logger, this._stats);
   } else {
-    logger.error('Unknown HTTP Framework');
+    this._logger.error('Unknown HTTP Framework');
     return;
   }
 

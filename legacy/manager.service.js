@@ -125,13 +125,13 @@ function ServiceManager(hyperCore, appConfig, servicesManifest, middleware, serv
   this._serviceRouter = new ServiceRouter({
     port: this._httpFramework.port(),
     protocol: this._httpFramework.protocol()
-  });
+  }, this._hyperCore.logger());
 
   // TODO: add statsD to middleware as plugin
   // this.stats     = new util.Stats(this.options, "ServiceManager");
-  logger = util.logger('Services');
+  logger = util.logger({ name: '~Services' }, this._hyperCore.logger());
 
-  var manifest = new ServiceManagerConfig(defaultAppName, servicesManifest); // normalizes the configs
+  var manifest = new ServiceManagerConfig(defaultAppName, this._hyperCore.logger(), servicesManifest); // normalizes the configs
   this._servicesManifest = manifest.get();
   this._servicesManifest.shared = appConfig.shared;
 
@@ -159,6 +159,10 @@ function ServiceManager(hyperCore, appConfig, servicesManifest, middleware, serv
 /* ---------------------------------------------------
  * Public Functions
  * --------------------------------------------------- */
+ServiceManager.prototype.env = function (env) {
+  return this._hyperCore.env(env);
+};
+
 ServiceManager.prototype.getServiceRouter = function () {
   return this._serviceRouter;
 };
@@ -186,8 +190,7 @@ ServiceManager.prototype.addToLoadingQ = function (service, promise) {
 };
 
 ServiceManager.prototype._loadServices = function () {
-  logger.log('---------------------------------------------');
-  logger.group('Loading Services...');
+  logger.group('Loading All Services...');
 
   var serviceList = _.values(this._servicesManifest.services);
   serviceList.reverse();
@@ -213,7 +216,8 @@ ServiceManager.prototype._loadServices = function () {
     };
     service._promiseQueue = [];
 
-    service.resources = new ResourceManager(this, service, logger);
+    service.logger = util.logger({ name: service.name }, logger);
+    service.resources = new ResourceManager(this, service, service.logger);
 
     // add service to service router
     this._serviceRouter.add(service.name);
@@ -230,11 +234,11 @@ ServiceManager.prototype._loadServices = function () {
 
     // create instance of module
     if (service.module) {
-      logger.group('Loading Service ' + service.name + '...');
+      service.logger.group('Loading Service...');
 
       var module = {
         '$resource': ['value', service.resources],
-        '$logger': ['value', util.logger(service.name)]
+        '$logger': ['value', service.logger]
       };
 
       if (service && service.hasOwnProperty('options')) {
@@ -245,7 +249,7 @@ ServiceManager.prototype._loadServices = function () {
       service.instance = new InjectedModule();
 
       if (_.isFunction(service.instance.$init)) {
-        logger.info('Initializing...');
+        service.logger.info('Initializing...');
         try {
           var result = this.injectionDependency(module, service, service.instance, service.instance.$init);
 
@@ -254,26 +258,26 @@ ServiceManager.prototype._loadServices = function () {
             service._promiseQueue.push(result);
           }
         } catch (err) {
-          logger.error('Initializing Service Error:', err);
+          service.logger.error('Initializing Service Error:', err);
           return when.reject(err);
         }
       }
 
       // create instance of module
       if (service.module && service.preRoutes && _.isFunction(service.preRoutes)) {
-        logger.group('Loading PreRoutes...');
+        service.logger.group('Loading PreRoutes...');
         // DI invoke preRoutes
         this.injectionDependency({}, service, service, service.preRoutes);
-        logger.groupEnd(' ');
+        service.logger.groupEnd(' ');
       }
 
       var p;
       if (service.module) {
-        logger.group('Loading Setup Routes...');
+        service.logger.group('Loading Setup Routes...');
         // setup service routes
         p = this._setupRoutes(service);
         service._promiseQueue.push(p);
-        logger.groupEnd(' ');
+        service.logger.groupEnd(' ');
       }
 
       if (serviceManifest.resources) {
@@ -283,24 +287,27 @@ ServiceManager.prototype._loadServices = function () {
 
       // wait for Q'd resources to resolve before letting service resolve
       if (service._promiseQueue.length) {
-        // logger.info("Wait for Setup...");
+        // service.logger.info("Wait for Setup...");
 
         // TODO: need timeout in case resource promise never resolves
         return when.all(service._promiseQueue).then(function () {
           delete service._promiseQueue;
-          // logger.info("Route Setup Complete");
-          logger.groupEnd(' ');
+          // service.logger.info("Route Setup Complete");
+          service.logger.groupEnd(' ');
         });
       } else {
-        logger.groupEnd(' ');
+        service.logger.groupEnd(' ');
         return 1;
       }
     }
 
     if (this._displayDebuggerInfo) {
-      logger.info('services["%s"]: %s', serviceManifest.name, (0, _stringify2.default)(service, null, 2));
+      service.logger.info('services["%s"]: %s', serviceManifest.name, (0, _stringify2.default)(service, null, 2));
     }
-  }.bind(this));
+  }.bind(this)).then(function (result) {
+    logger.groupEnd('Done Loading All Services');
+    return result;
+  });
 };
 
 ServiceManager.prototype.addResource = function () {
@@ -312,13 +319,15 @@ ServiceManager.prototype.addResource = function () {
 
 // run all post start init on services
 ServiceManager.prototype.postStartInit = function () {
+  logger.group('Running All Post Start Inits...');
+
   var serviceList = _.values(this._services);
   serviceList.reverse();
   serviceList.push({});
 
   return when.reduceRight(serviceList, function (notUsed, service) {
     var result = null;
-    logger.group('Running Service ' + service.name + ' Post Start Init...');
+    service.logger.group('Running Post Start Init...');
 
     service._promiseQueue = [];
 
@@ -331,7 +340,7 @@ ServiceManager.prototype.postStartInit = function () {
           service._promiseQueue.push(result);
         }
       } catch (err) {
-        logger.error('Post Start Init Service Error:', err);
+        service.logger.error('Post Start Init Service Error:', err);
         return when.reject(err);
       }
     }
@@ -342,21 +351,24 @@ ServiceManager.prototype.postStartInit = function () {
 
     // wait for Q'd resources to resolve before letting service resolve
     if (service._promiseQueue.length) {
-      logger.info('Wait Post Start Init...');
+      service.logger.info('Wait Post Start Init...');
 
       // TODO: need timeout in case resource promise never resolves
       return when.all(service._promiseQueue).then(function () {
         delete service._promiseQueue;
 
-        logger.info('Loaded');
-        logger.groupEnd(' ');
+        service.logger.info('Loaded');
+        service.logger.groupEnd(' ');
       });
     } else {
-      logger.groupEnd(' ');
+      service.logger.groupEnd(' ');
 
       return 1;
     }
-  }.bind(this));
+  }.bind(this)).then(function (result) {
+    logger.groupEnd('Done Running All Post Start Inits');
+    return result;
+  });
 };
 
 ServiceManager.prototype._loadFile = function (type, key, directory) {
@@ -458,7 +470,7 @@ ServiceManager.prototype._setupController = function (service, route) {
     service.controller[controllerName] = {};
   }
 
-  logger.info('Loading Controller:', controllerName);
+  service.logger.group('Loading Controller: ' + controllerName + ' ...');
   // if no controller loaded already
   if (_.keys(service.controller[controllerName]).length === 0) {
     if (_.isString(route.controller)) {
@@ -469,7 +481,7 @@ ServiceManager.prototype._setupController = function (service, route) {
         try {
           controller = require(file);
         } catch (err) {
-          logger.error('Loading Service "' + service.name + '" controller (' + route.controller + ') Error:', err);
+          service.logger.error('Loading Controller (' + route.controller + ') Error:', err);
         }
       }
 
@@ -482,18 +494,18 @@ ServiceManager.prototype._setupController = function (service, route) {
           try {
             controller = require(file);
           } catch (err) {
-            logger.error('Loading Service "' + service.name + '" controller (' + route.controller + ') Error:', err);
+            service.logger.error('Loading Controller (' + route.controller + ') Error:', err);
           }
         }
       }
 
       if (!controller) {
         // error
-        logger.warn('Service "' + service.name + '" controller (' + route.controller + ') invalid');
+        service.logger.warn('Controller (' + route.controller + ') invalid');
         return;
       } else {
         service.controller[controllerName].module = controller;
-        logger.info('Loaded Controller:', controllerName);
+        service.logger.groupEnd('Loaded Controller: ' + controllerName);
       }
     } else if (_.isObject(route.controller)) {
       if (route.controller.hasOwnProperty('module') && route.controller.hasOwnProperty('instance')) {
@@ -503,7 +515,7 @@ ServiceManager.prototype._setupController = function (service, route) {
       }
     } else {
       // error
-      logger.warn('Service "' + service.name + '" controller (' + route.controller + ') invalid');
+      service.logger.warn('Controller (' + route.controller + ') invalid');
       return;
     }
   }
@@ -523,7 +535,7 @@ ServiceManager.prototype._setupController = function (service, route) {
       var module = {
         '$service': ['value', service.instance],
         '$options': ['value', service.options[controllerName]],
-        '$logger': ['value', util.logger(service.name + ' - ' + controllerName)] // TODO: add logger to controller object
+        '$logger': ['value', service.logger]
       };
 
       var InjectedModule = this.injectionDependency(module, service, service.controller[controllerName]);

@@ -16,8 +16,8 @@ var stumpy = require('stumpy');
 var Transfuser = require('transfuser');
 
 // singleton logger
-var _logger = null;
-var _loggerOptions = {};
+// var _logger = null;
+// var _loggerOptions = {};
 var _currentVersion = require('../package.json').version;
 
 function capitalize(string) {
@@ -72,22 +72,22 @@ function buildUri(options, path) {
   return uri;
 }
 
-function logger(options) {
+function logger(options, parent) {
+  var normOptions = {};
+
   if (_.isString(options)) {
-    _loggerOptions.name = options;
+    normOptions.name = options;
   } else if (_.isObject(options)) {
-    _loggerOptions = _.merge(_loggerOptions, options);
+    normOptions = _.merge(normOptions, options);
   }
 
-  if (!_logger) {
-    _logger = stumpy(_loggerOptions);
-    return _logger;
-  } else {
-    // TODO: better way to copy options from logger to logger
-    var opt = _logger.getOptions();
-    _loggerOptions.env = opt.env;
+  if (parent) {
+    var parentOptions = _.cloneDeep(parent.getOptions());
+    normOptions = _.merge(parentOptions, normOptions);
 
-    return _logger.shadow(_loggerOptions);
+    return parent.shadow(normOptions);
+  } else {
+    return stumpy(normOptions);
   }
 }
 
