@@ -189,11 +189,11 @@ HttpFrameworkExpress.prototype.addMethodFunction = function (method, middlewareL
   this._app[method](routeStr, handler);
 };
 
-HttpFrameworkExpress.prototype.addStaticDir = function (staticDir, staticRoute) {
+HttpFrameworkExpress.prototype.addStaticDir = function (staticDir, staticRoute, staticOptions) {
   if (staticRoute) {
-    return this._app.use(staticRoute, express.static(staticDir));
+    return this._app.use(staticRoute, express.static(staticDir, staticOptions));
   } else {
-    return this._app.use(express.static(staticDir));
+    return this._app.use(express.static(staticDir, staticOptions));
   }
 };
 

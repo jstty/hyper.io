@@ -136,22 +136,29 @@ var DefaultRoutes = function (_ServiceMiddleware) {
   }, {
     key: '_addStaticRoute',
     value: function _addStaticRoute(service, staticContent, route) {
+      var staticOptions = {};
       if (!_.isArray(staticContent) && _.isObject(staticContent)) {
         var staticRoute = staticContent;
 
-        if (staticRoute.hasOwnProperty('from') && staticRoute.hasOwnProperty('to')) {
+        if (staticRoute.hasOwnProperty('from')) {
           staticContent = staticRoute.from;
+        }
+        if (staticRoute.hasOwnProperty('to')) {
           route = staticRoute.to;
-        } else {
-          if (staticRoute.hasOwnProperty('root')) {
-            service.directory.service = staticRoute.root;
-          }
-          if (staticRoute.hasOwnProperty('cache')) {
-            // TODO
-          }
-          if (staticRoute.hasOwnProperty('list')) {
-            staticContent = staticRoute.list;
-          }
+        }
+        if (staticRoute.hasOwnProperty('root')) {
+          service.directory.service = staticRoute.root;
+        }
+        if (staticRoute.hasOwnProperty('cache')) {}
+        // TODO
+
+        // this oversides "from"
+        if (staticRoute.hasOwnProperty('list')) {
+          staticContent = staticRoute.list;
+        }
+
+        if (staticRoute.hasOwnProperty('options') && _.isObject(staticRoute.options)) {
+          staticOptions = staticRoute.options;
         }
       }
 
@@ -177,7 +184,7 @@ var DefaultRoutes = function (_ServiceMiddleware) {
               // logger.log("Adding Static Dir Content -", staticContent);
               logger.log('Static Dir Route:', staticContent, '->', route || '/');
 
-              this._httpFramework.addStaticDir(staticContent, route);
+              this._httpFramework.addStaticDir(staticContent, route, staticOptions);
               return true;
             } else {
               // logger.log("Adding Static File -", staticContent);
