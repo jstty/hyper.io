@@ -126,7 +126,7 @@ function Hyper(options) {
 
   // add catch all, just in case
   process.on('uncaughtException', function (err) {
-    this._logger.error('Uncaught Error -', err, ', stack:', err.stack);
+    console.error('Uncaught Error -', err, ', stack:', err.stack);
   });
 }
 
