@@ -1,5 +1,5 @@
 <!-- # hyper.io - go plaid -->
-<center>![logo](./logo.png)</center>
+<center id="top"><img src="./logo.png" /></center>
 
 [![Build Status](https://secure.travis-ci.org/jstty/hyper.io.png?branch=master)](http://travis-ci.org/jstty/hyper.io)
 [![bitHound Score](https://www.bithound.io/github/jstty/hyper.io/badges/score.svg?branch=master)](https://www.bithound.io/github/jstty/hyper.io)

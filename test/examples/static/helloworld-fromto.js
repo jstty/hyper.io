@@ -58,7 +58,7 @@ module.exports = [
       request(server)
         .get('/hello')
         .expect('Content-Type', /html/)
-        .expect(303)
+        .expect(301)
         .end(function (err, res) {
           expect(err).to.be.null;
 
