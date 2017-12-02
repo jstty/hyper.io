@@ -74,7 +74,7 @@
     "freeport": "~1.0.5",
     "is-es6": "~1.0.0",
     "istanbul": "~0.4.5",
-    "mocha": "~4.0.1",
+    "mocha": "~3.5.3",
     "shelljs": "~0.7.8",
     "supertest": "~3.0.0"
   },
