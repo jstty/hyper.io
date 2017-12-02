@@ -23,7 +23,8 @@ var app = hyper
             },
             {
               from: 'site2',
-              to:   '/world'
+              to:   '/world',
+              default: 'site2/index.html'
             }
           ]
         }

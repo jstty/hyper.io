@@ -2,5 +2,6 @@
   "name": "examples",
   "version": "0.0.1",
   "dependencies": {
+    "hyper.io-ejs": "^0.1.0"
   }
 }

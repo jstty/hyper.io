@@ -28,18 +28,6 @@ function Middleware(options) {
 /* ---------------------------------------------------
  * Public Functions
  * --------------------------------------------------- */
-/*
- Middleware.use('ejs');
- Middleware.use('template', 'ejs');
- Middleware.use('template', './lib/middleware/ejs.js');
- Middleware.use(require('./lib/middleware/ejs.js'));
-
- var ejs = require('ejs');
- Middleware.use(new ejs());
-
- Middleware.use('template', 'handlebars', 'default'); // set default
-*/
-
 Middleware.prototype.use = function (MiddlewareGroup, MiddlewareName, option) {
   if (_.isString(option) && option === 'default') {
     // check if already default
@@ -61,25 +49,17 @@ Middleware.prototype.use = function (MiddlewareGroup, MiddlewareName, option) {
   }
 
   var Middleware = null;
-  // Middleware.use('ejs');
   if (_.isString(MiddlewareGroup) && !MiddlewareName) {
     // find Middleware file, load it
     Middleware = this._loadMiddlewareFile(null, MiddlewareName);
+  } else if (_.isString(MiddlewareGroup) && _.isString(MiddlewareName)) {
+    // find Middleware file, load it
+    Middleware = this._loadMiddlewareFile(MiddlewareGroup, MiddlewareName);
+  } else if (_.isFunction(MiddlewareGroup) || _.isObject(MiddlewareGroup)) {
+    Middleware = this._setMiddleware(MiddlewareGroup);
+  } else {
+    logger.warn('Middleware (' + MiddlewareGroup + ', ' + MiddlewareName + ') invalid');
   }
-  // Middleware.use('template', 'ejs');
-  // Middleware.use('template', './lib/middleware/ejs.js');
-  else if (_.isString(MiddlewareGroup) && _.isString(MiddlewareName)) {
-      // find Middleware file, load it
-      Middleware = this._loadMiddlewareFile(MiddlewareGroup, MiddlewareName);
-    }
-    // Middleware.use(require('./lib/middleware/ejs.js'));
-    // var ejs = require('ejs');
-    // Middleware.use(new ejs());
-    else if (_.isFunction(MiddlewareGroup) || _.isObject(MiddlewareGroup)) {
-        Middleware = this._setMiddleware(MiddlewareGroup);
-      } else {
-        logger.warn('Middleware (' + MiddlewareGroup + ', ' + MiddlewareName + ') invalid');
-      }
 
   if (!Middleware) {
     logger.info('Problem loading Middleware (' + MiddlewareGroup + ', ' + MiddlewareName + ')');

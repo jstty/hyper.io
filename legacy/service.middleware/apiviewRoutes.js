@@ -450,7 +450,7 @@ var ApiViewRoutes = function (_ServiceMiddleware) {
           this._middleware.install([{
             group: 'template',
             name: 'ejs',
-            package: 'hyper.io-ejs@0.0.x',
+            package: 'hyper.io-ejs',
             factory: function factory(Ejs) {
               return new Ejs();
             }

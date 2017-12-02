@@ -43,6 +43,7 @@ module.exports = {
   'static': {
     'helloworld-basic':     'app',
     'helloworld-fromto':    'app',
+    'helloworld-multisite': 'app',
     'helloworld-otherwise': 'app'
   },
   'export': {

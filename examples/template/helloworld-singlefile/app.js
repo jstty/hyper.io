@@ -12,6 +12,9 @@ catch (err) {}
 // Load config and routes
 var hyper = new Hyper(options);
 
+// var ejs = require('hyper.io-ejs');
+// hyper.use(ejs);
+
 // load routes
 var app = hyper.start({
   routes: [

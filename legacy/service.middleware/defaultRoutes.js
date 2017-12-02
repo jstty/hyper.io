@@ -137,6 +137,8 @@ var DefaultRoutes = function (_ServiceMiddleware) {
     key: '_addStaticRoute',
     value: function _addStaticRoute(service, staticContent, route) {
       var staticOptions = {};
+      var staticDefaultFile = null;
+
       if (!_.isArray(staticContent) && _.isObject(staticContent)) {
         var staticRoute = staticContent;
 
@@ -159,6 +161,13 @@ var DefaultRoutes = function (_ServiceMiddleware) {
 
         if (staticRoute.hasOwnProperty('options') && _.isObject(staticRoute.options)) {
           staticOptions = staticRoute.options;
+        }
+
+        if (staticRoute.hasOwnProperty('default')) {
+          staticDefaultFile = staticRoute.default;
+        }
+        if (staticRoute.hasOwnProperty('onMissing')) {
+          staticDefaultFile = staticRoute.onMissing;
         }
       }
 
@@ -184,7 +193,7 @@ var DefaultRoutes = function (_ServiceMiddleware) {
               // logger.log("Adding Static Dir Content -", staticContent);
               logger.log('Static Dir Route:', staticContent, '->', route || '/');
 
-              this._httpFramework.addStaticDir(staticContent, route, staticOptions);
+              this._httpFramework.addStaticDir(staticContent, route, staticOptions, staticDefaultFile);
               return true;
             } else {
               // logger.log("Adding Static File -", staticContent);
