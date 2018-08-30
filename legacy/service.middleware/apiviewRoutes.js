@@ -303,6 +303,11 @@ var ApiViewRoutes = function (_ServiceMiddleware) {
   }, {
     key: '_handlerWrapper',
     value: function _handlerWrapper(handlerFunc, resolved, skipOnError, service, controller, orgOutput) {
+      // do nothing if a response has already been sent
+      if (resolved['$rawResponse'].finished) {
+        return when.resolve({});
+      }
+
       if (!orgOutput) {
         orgOutput = { out: null, code: 200, headers: null };
       }
