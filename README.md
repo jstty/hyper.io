@@ -2,7 +2,6 @@
 <center id="top"><img src="./logo.png" /></center>
 
 [![Build Status](https://secure.travis-ci.org/jstty/hyper.io.png?branch=master)](http://travis-ci.org/jstty/hyper.io)
-[![bitHound Score](https://www.bithound.io/github/jstty/hyper.io/badges/score.svg?branch=master)](https://www.bithound.io/github/jstty/hyper.io)
 [![Coverage Status](https://coveralls.io/repos/jstty/hyper.io/badge.svg?branch=master&service=github)](https://coveralls.io/github/jstty/hyper.io?branch=master)
 ![License](https://img.shields.io/npm/l/hyper.io.svg)
 [![Dependency Status](https://david-dm.org/jstty/hyper.io.png?theme=shields.io&branch=master)](https://david-dm.org/jstty/hyper.io)

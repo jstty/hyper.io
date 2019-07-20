@@ -1,6 +1,6 @@
 {
   "name": "hyper.io",
-  "version": "0.7.5",
+  "version": "0.7.7",
   "description": "MicroServices so fast they've gone plaid!",
   "homepage": "https://github.com/jstty/hyper.io#readme",
   "keywords": [
@@ -37,25 +37,25 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "body-parser": "~1.18.2",
+    "body-parser": "^1.18.3",
     "callsite": "~1.0.0",
     "co": "~4.6.0",
-    "compression": "~1.7.1",
-    "cookie-parser": "~1.4.3",
-    "di": "https://github.com/jstty/node-di",
-    "errorhandler": "~1.5.0",
-    "express": "~5.0.0-alpha.1",
-    "express-session": "^1.15.4",
-    "glob": "~7.1.2",
-    "lodash": "~4.17.4",
+    "compression": "^1.7.4",
+    "cookie-parser": "^1.4.4",
+    "di": "git+https://github.com/jstty/node-di.git",
+    "errorhandler": "^1.5.1",
+    "express": "^5.0.0-alpha.7",
+    "express-session": "^1.16.2",
+    "glob": "^7.1.4",
+    "lodash": "^4.17.15",
     "method-override": "~2.3.10",
-    "mime": "~2.0.3",
-    "morgan": "~1.9.0",
+    "mime": "^2.0.5",
+    "morgan": "^1.9.1",
     "request": "~2.83.0",
     "stumpy": "~0.7.1",
-    "transfuser": "~0.2.x",
+    "transfuser": "^0.2.7",
     "when": "~3.7.8",
-    "yanpm": "~1.1.x"
+    "yanpm": "^1.2.0"
   },
   "devDependencies": {
     "babel-cli": "~6.26.0",
@@ -66,15 +66,15 @@
     "babel-register": "~6.26.0",
     "babel-runtime": "~6.26.0",
     "chai": "~4.1.2",
-    "cheerio": "~1.0.0-rc.2",
-    "coveralls": "~3.0.0",
+    "cheerio": "^1.0.0-rc.3",
+    "coveralls": "^3.0.5",
     "eslint": "~4.12.1",
     "eslint-config-standard": "~10.2.1",
     "eslint-plugin-standard": "~3.0.1",
     "freeport": "~1.0.5",
     "is-es6": "~1.0.0",
     "istanbul": "~0.4.5",
-    "mocha": "~3.5.3",
+    "mocha": "^6.2.0",
     "shelljs": "~0.7.8",
     "supertest": "~3.0.0"
   },
@@ -89,7 +89,7 @@
     "coveralls": "cat ./test/.coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
   },
   "engines": {
-    "node": ">=0.12.0"
+    "node": ">=6"
   },
   "babel": {
     "presets": [
