@@ -85,7 +85,7 @@
     "clean": "find examples -name 'node_modules' -print0 | xargs -0 rm -rf",
     "prepublish": "npm run-script compile",
     "pretest": "npm run-script compile",
-    "test": "NODE_ENV=production && istanbul --config=test/.istanbul.yml cover _mocha -- --prof -t 5000 -b -R spec test/tests.js",
+    "test": "NODE_ENV=production && istanbul --config=test/.istanbul.yml cover _mocha -- --exit --prof -t 5000 -b -R spec test/tests.js",
     "coveralls": "cat ./test/.coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
   },
   "engines": {
