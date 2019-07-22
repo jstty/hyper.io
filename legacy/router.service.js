@@ -121,3 +121,16 @@ ServiceRouter.prototype.find = function (name) {
     return service.adapter;
   }
 };
+
+// only update if host '127.0.0.1' and port == 0
+// this is to fix and issue with port set to zero, the http server will auto set the port to a random free port
+ServiceRouter.prototype.updateInternalZeroPort = function (port) {
+  _.forEach(this._services, function (service) {
+    if (service.options.hostname == '127.0.0.1' && service.options.port == 0) {
+      service.options.port = port;
+    }
+    if (service.adapter._options.hostname == '127.0.0.1' && service.adapter._options.port == 0) {
+      service.adapter._options.port = port;
+    }
+  });
+};

@@ -1,6 +1,5 @@
 var _        = require('lodash');
 var path     = require('path');
-var freeport = require('freeport');
 var isES6    = require('is-es6');
 var shell    = require('shelljs');
 
@@ -39,56 +38,54 @@ _.forEach(list, function (testList, item) {
 
         // initialize server for test
         before(function (done) {
-          freeport(function (err, port) {
-            if (err) {
-              console.error('freeport Error:', err);
-            }
+          var d = path.join(rootDir,
+                          '..' + path.sep + '..' + path.sep + 'examples' + path.sep +
+                          item + path.sep + name);
 
-            var d = path.join(rootDir,
-                            '..' + path.sep + '..' + path.sep + 'examples' + path.sep +
-                            item + path.sep + name);
+          // console.log("example dir:", d, "\n");
+          process.chdir(d);
+          shell.exec('npm install', { silent: true });
+          // console.log("cwd:", process.cwd(), "\n");
 
-            // console.log("example dir:", d, "\n");
-            process.chdir(d);
-            shell.exec('npm install', { silent: true });
-            // console.log("cwd:", process.cwd(), "\n");
+          server = {};
+          server.config = {
+            appName: appName,
+            env:     'dev',
+            silent:  true,
+            port:    0 // random free port
+          };
 
-            server = {};
-            server.config = {
-              appName: appName,
-              env:     'dev',
-              silent:  true,
-              port:    port
-            };
+          process.env.HYPER_OPTIONS = JSON.stringify(server.config);
+          // console.log(process.env.HYPER_OPTIONS);
 
-            process.env.HYPER_OPTIONS = JSON.stringify(server.config);
+          var app = null;
+          // try to load app.js file
+          try {
+            var appFile = path.resolve('.' + path.sep + appName + '.js');
+            // console.log("appFile:", appFile, "\n");
+            app = require(appFile);
+          }
+          catch (err) {
+            expect(err).not.to.be.null;
+            console.error(err);
+          }
 
-            var app = null;
-            // try to load app.js file
-            try {
-              var appFile = path.resolve('.' + path.sep + appName + '.js');
-              // console.log("appFile:", appFile, "\n");
-              app = require(appFile);
-            }
-            catch (err) {
-              expect(err).not.to.be.null;
-              console.error(err);
-            }
-
-            // console.log("app:", !!app, "\n");
-            expect(app).not.to.be.null;
-            if (app) {
-              expect(app.then).not.to.be.null;
-              app.then(function (_app) {
-                server.app = _app;
-                server.httpFrameworkApp = _app.httpFramework().app();
-                done();
-              });
-            }
-            else {
+          // console.log("app:", !!app, "\n");
+          expect(app).not.to.be.null;
+          if (app) {
+            expect(app.then).not.to.be.null;
+            app.then(function (_app) {
+              server.app = _app;
+              server.httpFrameworkApp = _app.httpFramework().app();
               done();
-            }
-          });
+            })
+            // .catch(function (err) {
+            //   console.log("App Error:", err);
+            // });
+          }
+          else {
+            done();
+          }
         });
 
         after(function (done) {

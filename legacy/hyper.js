@@ -152,7 +152,10 @@ Hyper.prototype._normalizeOptions = function (options) {
     options.httpFramework.env = options.env;
     delete options.env;
   }
-  if (options.port) {
+  if (_.isString(options.port)) {
+    options.port = parseInt(options.port);
+  }
+  if (_.isInteger(options.port) && options.port >= 0) {
     options.httpFramework.port = options.port;
     delete options.port;
   }
@@ -254,7 +257,10 @@ Hyper.prototype.httpServerListen = function () {
   return when.promise(function (resolve, reject) {
     // ------------------------------------------------
 
-    this._httpServer.listen(this._httpFramework.port(), function () {
+    var listener = this._httpServer.listen(this._httpFramework.port(), function () {
+      // set http framework internal port to match the port that is really running
+      // for example, if port set to 0 (zero) the http server will randomlly assign a free port
+      this._httpFramework.port(listener.address().port);
       this._logger.log('Listening on port %d', this._httpFramework.port());
       resolve();
     }.bind(this));
@@ -269,6 +275,10 @@ Hyper.prototype._start = function () {
   return this._serviceManager.loadServices().then(function () {
     return this.httpServerListen();
   }.bind(this)).then(function () {
+    // only update if host '127.0.0.1' and port == 0
+    // this is to fix and issue with port set to zero, the http server will auto set the port to a random free port
+    this._serviceManager.getServiceRouter().updateInternalZeroPort(this._httpFramework.port());
+
     return this._serviceManager.postStartInit();
   }.bind(this)).then(function () {
     this._logger.log('---------------------------------------------');
