@@ -95,6 +95,10 @@ function Hyper(options) {
   configs.push('~/' + this._defaultAppName + '.config.custom.json'); // home dir
   configs.push('~/' + this._defaultAppName + '.config.custom.js'); // home dir
 
+  if (options.serverless) {
+    configs = []; // don't laod any configs
+  }
+
   // if options has configs array
   if (_.isArray(options.configs)) {
     // add configs array to end of list to merge
@@ -329,6 +333,10 @@ Hyper.prototype.httpServer = function () {
 
 Hyper.prototype.services = function () {
   return this._serviceManager.getServiceRouter();
+};
+
+Hyper.prototype.serviceManager = function () {
+  return this._serviceManager;
 };
 
 Hyper.prototype._initHttpFramework = function () {
